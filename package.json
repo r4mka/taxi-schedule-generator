@@ -1,0 +1,16 @@
+{
+  "name": "taxi_prawobrzeze_scheduler",
+  "version": "1.0.0",
+  "description": "Scheduler generator for taxi drivers.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Ramski",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.16.6",
+    "nedb": "^1.8.0",
+    "pdfmake": "^0.1.18"
+  }
+}
