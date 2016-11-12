@@ -37,6 +37,7 @@ module.exports = {
 	  let document = {}
 	  document.docType = 'driver'
 	  document.id = driver.id
+	  document.active = true
 	  document.scheduleHistory = []
 
 	  db.insert(document, (err, doc) => {

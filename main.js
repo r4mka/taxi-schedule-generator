@@ -94,12 +94,14 @@ function makeScheduler (year, month, drivers) {
 
 	// adds schedule for next month
 	drivers.map(function (driver) {
-		let driverSchedule = []
-		for (let i = 0; i < daysInMonth; i++) {
-			driverSchedule.push('') // tmp
+		if (driver.active) {
+			let driverSchedule = []
+			for (let i = 0; i < daysInMonth; i++) {
+				driverSchedule.push('') // tmp
+			}
+			driverSchedule.unshift(driver.id.toString())
+			body.push(driverSchedule)
 		}
-		driverSchedule.unshift(driver.id.toString())
-		body.push(driverSchedule)
 
 		if (_.findIndex(driver.scheduleHistory, {year: year, month: month}) === -1 ||
 				_.isEmpty(driver.scheduleHistory)) {
@@ -109,7 +111,7 @@ function makeScheduler (year, month, drivers) {
 				schedule: []
 			}
 			for (let i = 0; i < daysInMonth; i++) {
-				schedule.schedule.push(' ')
+				schedule.schedule.push('')
 			}
 			driver.scheduleHistory.push(schedule)
 		}	
@@ -162,10 +164,13 @@ function makeScheduler (year, month, drivers) {
 				//				check if is it first day in month and
 				//				if is, check last day from previous month
 				body[i][dayOfTheMonth] = 'N'
-				let _index = -1
-				_index = _.findIndex(drivers[i - 3].scheduleHistory, {year: year, month: month})
-				if (_index !== -1) {
-					drivers[i - 3].scheduleHistory[_index].schedule[dayOfTheMonth - 1] = 'N'
+				
+				let driver_id = _.findIndex(drivers, {id: parseInt(body[i][0])})
+				if (driver_id !== -1) {
+					let schedule_id = _.findIndex(drivers[driver_id].scheduleHistory, {year: year, month: month})
+					if (schedule_id !== -1) {
+						drivers[driver_id].scheduleHistory[schedule_id].schedule[dayOfTheMonth - 1] = 'N'
+					}
 				}
 				
 				assignedNs++
@@ -205,12 +210,14 @@ function makeScheduler (year, month, drivers) {
 			} else {
 				body[i][dayOfTheMonth] = 'D'
 			}
-			let _index = -1
-			_index = _.findIndex(drivers[i - 3].scheduleHistory, {year: year, month: month})
-			if (_index !== -1) {
-				drivers[i - 3].scheduleHistory[_index].schedule[dayOfTheMonth - 1] = 'D'
+			let driver_id = _.findIndex(drivers, {id: parseInt(body[i][0])})
+			if (driver_id !== -1) {
+				let schedule_id = _.findIndex(drivers[driver_id].scheduleHistory, {year: year, month: month})
+				if (schedule_id !== -1) {
+					drivers[driver_id].scheduleHistory[schedule_id].schedule[dayOfTheMonth - 1] = 'D'
+				}
 			}
-			
+				
 			assignedDs++
 			if (assignedDs === daysNum) {
 				assignedDs = 0
