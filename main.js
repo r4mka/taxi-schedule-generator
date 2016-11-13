@@ -48,10 +48,34 @@ Utils.getDrivers(db, function (result) {
 
 /*______________________________________________________________________________________*/
 
-function createHeader (daysInMonth) {
+function createHeader (year, month, daysInMonth) {
 	let header = []
 
-	let title = [{colSpan: (daysInMonth + 1), text: 'HARMONOGRAM', alignment: 'center'}]
+	let infoBar = [
+		{
+			colSpan: 8,
+			text: 'HARMONOGRAM DYŻURÓW:\n' + Utils.monthToString(month - 1) + ' ' + year,
+			alignment: 'center',
+			fontSize: 6
+		}, '','','','','','','','', {
+			colSpan: (daysInMonth - 17),
+			text: 'Dyżury niedzielne: parzyste 06:00-06:15, nieparzyste: 10:00-10:15',
+			alignment: 'center',
+			fontSize: 6
+		}]
+	  
+	for (let i = 0; i < (daysInMonth - 17); i++) {
+		infoBar.push('')
+	}
+  
+  infoBar = infoBar.concat([{
+		colSpan: 8,
+		text: 'Kontakt z dyspozytornią:\n508 550 111',
+		alignment: 'center',
+		fontSize: 6
+	}, '','','','','','','' ])
+
+	let title = [{colSpan: (daysInMonth + 1), text: 'HARMONOGRAM', alignment: 'center', fontSize: 7}]
 	let daysNums = []
 	let daysNames = []
 
@@ -70,7 +94,7 @@ function createHeader (daysInMonth) {
 	}
 	daysNames.unshift('')
 	
-	header.push(title, daysNums, daysNames)
+	header.push(infoBar, title, daysNums, daysNames)
 	return header
 }
 
@@ -87,7 +111,7 @@ function makeScheduler (year, month, drivers) {
 	}
 
 	console.log('month ' + month + ' in ' + year + ' year, has ' + daysInMonth + ' days')
-	header = createHeader(daysInMonth)
+	header = createHeader(year, month, daysInMonth)
 	body = header
 	// const dayName		 = new Date(year, (month - 1), 0).getDay()
 	// console.log('first day in month is: ' + dayName)
@@ -149,14 +173,14 @@ function makeScheduler (year, month, drivers) {
 		while (true) {
 			if (assignedNs === 0) {
 				i++
-				dayOfTheMonth = _.indexOf(body[2], day, fromIndex)
+				dayOfTheMonth = _.indexOf(body[3], day, fromIndex)
 				if (dayOfTheMonth === -1) {
 					break
 				}
 				// console.log(i + ' ' + day + ' is on ' + dayOfTheMonth)
 				fromIndex = dayOfTheMonth + 1
 			} else {
-				startFromIndex = 3
+				startFromIndex = 4
 			}
 
 			for (let i = startFromIndex; i < body.length; i++) {
@@ -188,7 +212,7 @@ function makeScheduler (year, month, drivers) {
 	let daysNum = 20
 	let assignedDs = 0
 	dayOfTheMonth = 0
-	startFromIndex = 3
+	startFromIndex = 4
 	
 	// populates schedule with Ds
 	while (dayOfTheMonth < (body[2].length - 1)) {
@@ -196,7 +220,7 @@ function makeScheduler (year, month, drivers) {
 			dayOfTheMonth++
 			// console.log('compute ' + dayOfTheMonth + ' day of the month')
 		} else {
-			startFromIndex = 3
+			startFromIndex = 4
 		}
 
 		for (let i = startFromIndex; i < body.length; i++) {
@@ -236,11 +260,12 @@ function makeScheduler (year, month, drivers) {
 	})
 
 	var docDefinition = {
+		pageMargins: [ 40, 5, 40, 5 ],
 	  content: [
 	    {
 	    	style: 'custom',
 	      table: {
-	        headerRows: 1,
+	        // headerRows: 1,
 	        widths: colsWidth,
 	 
 	        body: body
@@ -249,7 +274,8 @@ function makeScheduler (year, month, drivers) {
 	  ],
 	  styles: {
 	  	custom: {
-	  		fontSize: 5
+	  		fontSize: 5,
+	  		bold: true
 	  	}
   	}
 	}
