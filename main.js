@@ -10,6 +10,8 @@ const year 			 = process.argv[2]
 const month 		 = process.argv[3]
 const db				 = new Datastore({ filename: './resources/datastore.bin', autoload: true })
 
+const additionalInfo = "Przypominam, że dyżury dzienne są od godz. 6-tej rano a dyżury nocne od godz. 22-tej, tylko za pozwoleniem dyspozytora można zakończyć dyżur przed czasem."
+
 const Roboto = {
 	Roboto: {
 		normal: 'fonts/Roboto-Regular.ttf',
@@ -260,7 +262,7 @@ function makeScheduler (year, month, drivers) {
 	})
 
 	var docDefinition = {
-		pageMargins: [ 40, 5, 40, 5 ],
+		pageMargins: [ 20, 5, 20, 5 ],
 	  content: [
 	    {
 	    	style: 'custom',
@@ -270,11 +272,17 @@ function makeScheduler (year, month, drivers) {
 	 
 	        body: body
 	      }
+	    },
+	    {
+	    	text: additionalInfo,
+	    	fontSize: 8,
+	    	bold: true,
+	    	margin: [0, 10, 0, 0]
 	    }
 	  ],
 	  styles: {
 	  	custom: {
-	  		fontSize: 5,
+	  		fontSize: 6,
 	  		bold: true
 	  	}
   	}
