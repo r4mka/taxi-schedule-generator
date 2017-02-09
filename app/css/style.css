@@ -6,6 +6,10 @@ body {
   background-size: cover;
 }
 
+a {
+	font-size: 18px;
+}
+
 .navbar, .navbar-default {
   background-image: none;
   background-color: #FFFFFF;
@@ -14,6 +18,11 @@ body {
   height: 73px;
 }
 
+.navbar-default .navbar-brand {
+	padding-top: 28px;
+	color: #D0011B;
+	font-size: 24px;
+}
 
 .nav-pills>li>a {
 	border-radius: 0;
@@ -36,6 +45,6 @@ body {
 .navbar-default .navbar-nav>.active>a:hover {
 	color: #D0011B;
 	background-color: unset;
-	border-top: 3px solid #D0011B;
-	padding-top: 25px;
+	border-top: 4px solid #D0011B;
+	padding-top: 24px;
 }
