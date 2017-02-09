@@ -48,3 +48,13 @@ a {
 	border-top: 4px solid #D0011B;
 	padding-top: 24px;
 }
+
+#footer {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 40px;
+	background: #FFFFFF;
+	box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
+}
