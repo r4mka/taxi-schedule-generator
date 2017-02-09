@@ -10,7 +10,7 @@ let mainWindow
 function createWindow () {
   let modalPath = path.join('file://', __dirname, 'index.html')
 
-  mainWindow = new BrowserWindow({width: 1500, height: 900})
+  mainWindow = new BrowserWindow({width: 960, height: 682})
   mainWindow.webContents.openDevTools()
   mainWindow.loadURL(modalPath)
   mainWindow.on('closed', () => {
