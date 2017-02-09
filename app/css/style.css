@@ -5,9 +5,18 @@ body {
   -o-background-size: cover;
   background-size: cover;
 }
-
+h3 {
+  color: #000000;
+  font-size: 13px;
+  letter-spacing: 0;
+  margin: 0 0 8px 0;
+}
 a {
 	font-size: 18px;
+}
+hr {
+  margin-top: 15px;
+  margin-bottom: 16px;
 }
 
 .navbar, .navbar-default {
@@ -57,4 +66,14 @@ a {
 	height: 40px;
 	background: #FFFFFF;
 	box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
+}
+
+#schedulePage {
+	height: 455px;
+	width: 379px;
+	margin: 100px auto;
+  padding: 33px 27px 27px 27px;
+  background: #FFFFFF;
+	box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
+	border-radius: 2px;
 }

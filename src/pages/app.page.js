@@ -7,7 +7,7 @@ export default class AppPage extends React.Component {
   render () {
     return (
       <div>
-        <Navbar>
+        <Navbar fixedTop>
           <Navbar.Header>
             <Navbar.Brand>
               <a href='#'>Taxi Prawobrzeże</a>
