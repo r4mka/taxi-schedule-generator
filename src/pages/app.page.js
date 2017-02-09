@@ -1,6 +1,5 @@
 import config            from 'config'
 import React             from 'react'
-// import { IndexLink }     from 'react-router'
 import { Navbar, Nav, NavItem }  from 'react-bootstrap'
 import { IndexLinkContainer } from 'react-router-bootstrap'
 
@@ -42,6 +41,3 @@ export default class AppPage extends React.Component {
     )
   }
 }
-
-// <IndexLink activeStyle={{color: '#53acff'}} to={config.routes.app}>Drivers</IndexLink>&nbsp;
-// <IndexLink activeStyle={{color: '#53acff'}} to={config.routes.schedule}>Schedule</IndexLink>&nbsp;
