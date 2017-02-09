@@ -11,4 +11,31 @@ body {
   background-color: #FFFFFF;
   box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
   border-radius: 0;
+  height: 73px;
+}
+
+
+.nav-pills>li>a {
+	border-radius: 0;
+}
+.navbar-default .navbar-nav>li>a {
+	color: #4A4A4A;
+	height: 73px;
+	padding-top: 28px;
+}
+.navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-nav>li>a:hover {
+	color: #D0011B;
+}
+.navbar-default .navbar-nav>.active>a {
+	background-image: none;
+	box-shadow: none;
+}
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a:hover {
+	color: #D0011B;
+	background-color: unset;
+	border-top: 3px solid #D0011B;
+	padding-top: 25px;
 }
