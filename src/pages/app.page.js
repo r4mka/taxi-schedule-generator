@@ -20,9 +20,19 @@ export default class AppPage extends React.Component {
                 Kierowcy
               </NavItem>
             </IndexLinkContainer>
+            <IndexLinkContainer to={{pathname: config.routes.payments}}>
+              <NavItem>
+                Płatności
+              </NavItem>
+            </IndexLinkContainer>
+            <IndexLinkContainer to={{pathname: config.routes.advertisement}}>
+              <NavItem>
+                Reklama
+              </NavItem>
+            </IndexLinkContainer>
             <IndexLinkContainer to={{pathname: config.routes.schedule}}>
               <NavItem>
-                Grafiki
+                Grafik
               </NavItem>
             </IndexLinkContainer>
           </Nav>

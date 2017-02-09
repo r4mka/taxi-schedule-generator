@@ -1,6 +1,8 @@
 {
   "routes": {
-    "app":      "/",
-    "schedule": "/schedule"
+    "app":      		 "/",
+    "payments": 		 "/payments",
+    "advertisement": "/advertisement",
+    "schedule": 		 "/schedule"
   }
 }
