@@ -10,14 +10,16 @@
   "author": "Adam Ramski",
   "license": "ISC",
   "dependencies": {
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0",
-    "react-router": "^2.0.0",
     "flux": "^2.1.1",
     "keymirror": "^0.1.1",
     "lodash": "^4.16.6",
     "nedb": "^1.8.0",
-    "pdfmake": "^0.1.18"
+    "pdfmake": "^0.1.18",
+    "react": "^15.0.0",
+    "react-bootstrap": "^0.30.7",
+    "react-dom": "^15.0.0",
+    "react-router": "^2.0.0",
+    "react-router-bootstrap": "^0.23.1"
   },
   "devDependencies": {
     "babel-core": "^6.5.1",

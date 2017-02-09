@@ -1,0 +1,14 @@
+body {
+  background: url(../assets/bg.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.navbar, .navbar-default {
+  background-image: none;
+  background-color: #FFFFFF;
+  box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
+  border-radius: 0;
+}
