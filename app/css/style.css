@@ -19,6 +19,10 @@ hr {
   margin-bottom: 16px;
 }
 
+#contentPage {
+  padding-top:73px;
+}
+
 .navbar, .navbar-default {
   background-image: none;
   background-color: #FFFFFF;
@@ -70,10 +74,29 @@ hr {
 
 #schedulePage {
 	height: 455px;
-	width: 379px;
-	margin: 100px auto;
+	width: 399px;
+	margin: 27px auto;
   padding: 33px 27px 27px 27px;
   background: #FFFFFF;
 	box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
 	border-radius: 2px;
+}
+.dutyText {
+  font-size: 12px;
+  color: rgba(0,0,0,0.87);
+  letter-spacing: 0;
+  display: inline-block;
+}
+.form-control {
+  width: 93px;
+  height: 24px;
+  margin-right: 8px;
+  display: inline-block;
+  border-radius: 0;
+  border-bottom-left-radius: 0;
+}
+textarea.form-control {
+  width: 345px;
+  height: 95px;
+  margin: 0;
 }

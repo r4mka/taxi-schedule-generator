@@ -36,7 +36,9 @@ export default class AppPage extends React.Component {
             </IndexLinkContainer>
           </Nav>
         </Navbar>
-        {this.props.children}
+        <div id='contentPage'>
+          {this.props.children}
+        </div>
       </div>
     )
   }
