@@ -18,6 +18,9 @@ hr {
   margin-top: 15px;
   margin-bottom: 16px;
 }
+img {
+  vertical-align: inherit;
+}
 
 #contentPage {
   padding-top:73px;
@@ -61,7 +64,70 @@ hr {
 	border-top: 4px solid #D0011B;
 	padding-top: 24px;
 }
-
+#driversPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
+.driverPane {
+  margin: 100px;
+  height: 80px;
+  border-radius: 2px;
+  background-color: #FFFFFF;
+  box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
+}
+.driverPaneLeft {
+  width: 80px;
+  height: 80px;
+  float: left;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.driverPaneRight {
+  width: 173px;
+  height: 80px;
+  float: right;
+  background: rgba(0,0,0,0.04);
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+  padding: 29px 20px 29px 20px;
+}
+.driverNumber {
+  font-family: PTSans-Regular;
+  font-size: 24px;
+  color: #D0011B;
+  letter-spacing: 0;
+}
+.switch {
+  width: 34px;
+  height: 14px;
+  border: none;
+  background: #9B9B9B;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.switch.on {
+  background: #D0011B;
+}
+.switch-toggle {
+  width: 20px;
+  height: 20px;
+  top: -3px;
+  left: -4px;
+  border: none;
+  border-radius: 20px;
+  background: #F1F1F1;
+  box-shadow: 0 0 1px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24);
+}
+.switch.on .switch-toggle {
+  left: 18px;
+}
+.driverPanelIcon {
+  display: inline-block;
+}
 #footer {
 	position: absolute;
 	left: 0;
