@@ -1,8 +1,12 @@
 {
   "routes": {
-    "app":      "/",
-    "payments": "/payments",
+    "app":           "/",
+    "payments":      "/payments",
     "advertisement": "/advertisement",
-    "schedule": "/schedule"
+    "schedule":      "/schedule"
+  },
+  "db": {
+    "filename": "./resources/datastore.bin",
+    "autoload": true
   }
 }
