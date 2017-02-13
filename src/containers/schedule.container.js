@@ -1,17 +1,18 @@
-import React               from 'react'
+import React                from 'react'
 import { Form, FormControl,
-         FormGroup }    from 'react-bootstrap'
+         FormGroup }        from 'react-bootstrap'
 
-export default class SchedulePage extends React.Component {
+export default class ScheduleContainer extends React.Component {
   render () {
     return (
       <div id='schedulePage'>
         <Form>
-          <FormGroup controlId='formControlsSelect'>
+          <FormGroup>
             <h3>
               Miesiąc na który ma zostać utworzony grafik
             </h3>
             <FormControl
+              className='scheduleFormControl'
               componentClass='select'
               placeholder='select'
               style={{width: 113}}>
@@ -23,6 +24,7 @@ export default class SchedulePage extends React.Component {
               Kierowca który zamykał grafik w ubiegłym miesiącu
             </h3>
             <FormControl
+              className='scheduleFormControl'
               componentClass='select'
               placeholder='select'
               style={{width: 113}}>
@@ -38,6 +40,7 @@ export default class SchedulePage extends React.Component {
               DYŻURY DZIENNE
             </p>
             <FormControl
+              className='scheduleFormControl'
               componentClass='select'
               placeholder='select'
               style={{width: 93}}>
@@ -49,6 +52,7 @@ export default class SchedulePage extends React.Component {
               DYŻURY NOCNE
             </p>
             <FormControl
+              className='scheduleFormControl'
               componentClass='select'
               placeholder='select'
               style={{width: 80}}>
@@ -56,6 +60,7 @@ export default class SchedulePage extends React.Component {
               <option value='other'>...</option>
             </FormControl>
             <FormControl
+              className='scheduleFormControl'
               componentClass='select'
               placeholder='select'
               style={{width: 67}}>
@@ -63,6 +68,7 @@ export default class SchedulePage extends React.Component {
               <option value='other'>...</option>
             </FormControl>
             <FormControl
+              className='scheduleFormControl'
               componentClass='select'
               placeholder='select'
               style={{width: 72, marginRight: 0}}>
@@ -75,6 +81,7 @@ export default class SchedulePage extends React.Component {
             </h3>
             <FormControl
               componentClass='textarea'
+              className='scheduleTextarea'
               placeholder='Maksymalnie 220 znaków' />
           </FormGroup>
         </Form>

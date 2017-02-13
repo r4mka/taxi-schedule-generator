@@ -1,22 +1,22 @@
 import { Router,
          Route,
          hashHistory,
-         IndexRoute }    from 'react-router'
-import { render }        from 'react-dom'
-import React             from 'react'
-import config            from 'config'
-import AppPage           from './pages/app.page'
-import DriversPage       from './pages/drivers.page'
-import PaymentsPage      from './pages/payments.page'
-import AdvertisementPage from './pages/advertisement.page'
-import SchedulePage      from './pages/schedule.page'
+         IndexRoute }         from 'react-router'
+import { render }             from 'react-dom'
+import React                  from 'react'
+import config                 from 'config'
+import AppContainer           from './containers/app.container'
+import DriversContainer       from './containers/drivers.container'
+import PaymentsContainer      from './containers/payments.container'
+import AdvertisementContainer from './containers/advertisement.container'
+import ScheduleContainer      from './containers/schedule.container'
 
 const routes = (
-  <Route path={config.routes.app} component={AppPage}>
-    <IndexRoute component={DriversPage} />
-    <Route path={config.routes.payments} component={PaymentsPage} />
-    <Route path={config.routes.advertisement} component={AdvertisementPage} />
-    <Route path={config.routes.schedule} component={SchedulePage} />
+  <Route path={config.routes.app} component={AppContainer}>
+    <IndexRoute component={DriversContainer} />
+    <Route path={config.routes.payments} component={PaymentsContainer} />
+    <Route path={config.routes.advertisement} component={AdvertisementContainer} />
+    <Route path={config.routes.schedule} component={ScheduleContainer} />
   </Route>
 )
 
