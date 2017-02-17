@@ -32,6 +32,41 @@ hr {
 img {
   vertical-align: inherit;
 }
+label {
+  margin: 0;
+}
+.togglePanelContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+.control input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+.control {
+  position: relative;
+  display: inline-block;
+  /*margin-right: 20px;*/
+  cursor: pointer;
+}
+.control_indicator_img {
+  opacity: 0.2;
+  vertical-align: middle;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* Checked state of image checkboxes */
+.control input:checked ~ .control_indicator_img {
+  opacity: 1;
+}
 
 #contentPage {
   padding-top:110px;
@@ -103,7 +138,7 @@ img {
   background: rgba(0,0,0,0.04);
   border-bottom-right-radius: 2px;
   border-top-right-radius: 2px;
-  padding: 29px 20px 29px 20px;
+  padding: 29px 15px 29px 15px;
 }
 .driverNumber {
   font-family: PTSans-Regular;

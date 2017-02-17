@@ -1,5 +1,5 @@
-import React  from 'react'
-import Switch from 'react-toggle-switch'
+import React             from 'react'
+import DriverTogglePanel from './DriverTogglePanel'
 
 export default class DriverPanel extends React.Component {
   render () {
@@ -9,25 +9,7 @@ export default class DriverPanel extends React.Component {
           <span className='driverNumber'>001</span>
         </div>
         <div className='driverPaneRight'>
-          <Switch />
-          <label>
-            <img
-              src='app/assets/sunny.svg'
-              className='driverPanelIcon'
-              style={{marginLeft: 15}} />
-          </label>
-          <label>
-            <img
-              src='app/assets/moon.svg'
-              className='driverPanelIcon'
-              style={{marginLeft: 20, marginTop: 3, marginBottom: 3}} />
-          </label>
-          <label>
-            <img
-              src='app/assets/info.svg'
-              className='driverPanelIcon'
-              style={{marginLeft: 12, marginTop: 4, marginBottom: 4}} />
-          </label>
+          <DriverTogglePanel />
         </div>
       </div>
     )
