@@ -35,6 +35,21 @@ img {
 label {
   margin: 0;
 }
+#footer {
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  background: #FFFFFF;
+  box-shadow: 0 -19px 38px 0 rgba(0,0,0,0.30);
+  justify-content: center;
+}
+div#footer label {
+  margin-left: 6px;
+  margin-right: 6px;
+}
 .togglePanelContainer {
   display: flex;
   flex-direction: row;
@@ -297,49 +312,6 @@ textarea.driverTextarea {
   box-shadow: none;
   background-color: #D0011B;
   background-position: initial;
-}
-/*.btn-attribute {
-  opacity: 0.2;
-  background: transparent;
-  border: 1px solid #4A4A4A;
-  border-radius: 4px;
-  font-family: PTSans-Regular;
-  font-size: 12px;
-  color: #4A4A4A;
-  letter-spacing: 0;
-  padding: 5px 8px 3px 8px;
-}
-.btn-attribute.active, .btn-attribute:active {
-  font-family: PTSans-Regular;
-  opacity: 1;
-  border: 1px solid #D0011B;
-  color: #D0011B;
-  box-shadow: none;
-}
-.btn-attribute.active.focus,
-.btn-attribute.active:focus,
-.btn-attribute.focus,
-.btn-attribute:active.focus,
-.btn-attribute:active:focus,
-.btn-attribute:focus {
-  opacity: 1;
-  outline: none;
-  color: #D0011B;
-  border: 1px solid #D0011B;
-  box-shadow: none;
-}*/
-#footer {
-  position: fixed;
-	z-index: 2;
-  left: 0;
-	right: 0;
-	bottom: 0;
-	height: 60px;
-	background: #FFFFFF;
-	box-shadow: 0 -19px 38px 0 rgba(0,0,0,0.30);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 #schedulePage {
