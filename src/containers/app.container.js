@@ -19,7 +19,7 @@ export default class AppContainer extends React.Component {
     return (
       <div>
         <Header />
-        <div id='contentPage'>
+        <div id='content-page'>
           {this.props.children}
         </div>
       </div>

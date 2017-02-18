@@ -5,112 +5,87 @@
 @font-face {
   font-family: TrebuchetMS;
   src: url(../fonts/TrebuchetMS.ttf);
-  font-weight: lighter;
 }
 body {
+  font-family: PTSans-Regular;
   background: url(../assets/bg.png)
   no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-}
-h3 {
-  color: #000000;
-  font-size: 13px;
-  letter-spacing: 0;
-  margin: 0 0 8px 0;
+  line-height: initial;
 }
 a {
 	font-size: 18px;
 }
 hr {
   margin: 0;
-  /*margin-top: 15px;
-  margin-bottom: 16px;*/
+  border-top: 1px solid #000000;
+  opacity: 0.2;
+}
+h3 {
+  font-size: 18px;
+  color: #000000;
+  letter-spacing: 0;
+  margin-bottom: 12px;
+  font-weight: 100;
 }
 img {
   vertical-align: inherit;
 }
 label {
   margin: 0;
+  font-weight: 100;
 }
-#footer {
-  position: fixed;
-  z-index: 2;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 60px;
-  background: #FFFFFF;
-  box-shadow: 0 -19px 38px 0 rgba(0,0,0,0.30);
-  justify-content: center;
-}
-div#footer label {
-  margin-left: 6px;
-  margin-right: 6px;
-}
-.togglePanelContainer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-  align-items: center;
-}
-.control input {
-  position: absolute;
-  z-index: -1;
-  opacity: 0;
-}
-/* This is what we will style to look like
-   checkboxes/radio buttons. */
-.control__indicator {
+textarea {
+  resize: none;
+  border-radius: 2px;
+  border: 1px solid #9B9B9B;
   font-family: PTSans-Regular;
-  display: inline-block;
-  opacity: 0.2;
-  border: 1px solid #4A4A4A;
-  border-radius: 4px;  
-  padding: 5px 8px 3px 8px;
-  font-size: 12px;
-  text-transform: uppercase;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  font-size: 16px;
+  color: #000000;
+  letter-spacing: 0;
+  padding: 9px 16px;
 }
-/* Checked state */
-.control input:checked ~ .control__indicator {
+input {
+  border-radius: 2px;
+  border: 1px solid #9B9B9B;
+  font-family: PTSans-Regular;
+  font-size: 16px;
+  color: #000000;
+  letter-spacing: 0;
+}
+input:focus,
+textarea:focus,
+keygen:focus,
+select:focus {
+  outline: none;
   border: 1px solid #D0011B;
-  color: #D0011B;
-  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(208,1,26,0.15);
 }
-.control {
-  position: relative;
-  display: inline-block;
-  /*margin-right: 20px;*/
-  cursor: pointer;
-}
-.control_indicator_img {
-  opacity: 0.2;
-  vertical-align: middle;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-/* Checked state of image checkboxes */
-.control input:checked ~ .control_indicator_img {
-  opacity: 1;
-}
-
-#contentPage {
+/* ------------------------------------------------------- */
+/* Subpages ---------------------------------------------- */
+#content-page {
   padding-top:110px;
 }
-
+#drivers-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  margin: 100px;
+}
+#schedule-page {
+  height: 682px;
+  width: 568px;
+  margin: 27px auto;
+  padding: 50px 40px 40px 40px;
+  background: #FFFFFF;
+  box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
+  border-radius: 2px;
+}
+/* ------------------------------------------------------- */
+/* Custom Bootstrap navbar ------------------------------- */
 .navbar, .navbar-default {
   background-image: none;
   background-color: #FFFFFF;
@@ -118,12 +93,10 @@ div#footer label {
   border-radius: 0;
   height: 73px;
 }
-
 .navbar-default .navbar-brand {
 	margin-top: 17px;
   padding: 0;
 }
-
 .nav-pills>li>a {
 	border-radius: 0;
 }
@@ -148,19 +121,14 @@ div#footer label {
 	border-top: 4px solid #D0011B;
 	padding-top: 24px;
 }
-#driversPage {
-  display: flex;
-  justify-content: center;
-  align-items: center;  
-  margin: 100px;
-}
-.driverPane {
-  height: 80px;
+/* ------------------------------------------------------- */
+/* Driver panel ------------------------------------------ */
+.driver-panel {
   border-radius: 2px;
   background-color: #FFFFFF;
   box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
 }
-.driverPaneLeft {
+.driver-panel .left {
   width: 80px;
   height: 80px;
   float: left;
@@ -170,7 +138,7 @@ div#footer label {
   justify-content: center;
   align-items: center;
 }
-.driverPaneRight {
+.driver-panel .right {
   width: 173px;
   height: 80px;
   float: right;
@@ -179,12 +147,51 @@ div#footer label {
   border-top-right-radius: 2px;
   padding: 29px 15px 29px 15px;
 }
-.driverNumber {
+.driver-panel .number {
   font-family: PTSans-Regular;
   font-size: 24px;
   color: #D0011B;
   letter-spacing: 0;
 }
+/* ------------------------------------------------------- */
+/* driver subpage footer --------------------------------- */
+#footer {
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  background: #FFFFFF;
+  box-shadow: 0 -19px 38px 0 rgba(0,0,0,0.30);
+  justify-content: center;
+}
+div#footer label {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+/* ------------------------------------------------------- */
+/* Driver details ---------------------------------------- */
+.driver-details {
+  width: 300px;
+  height: 513px;
+  padding: 40px;
+  padding-bottom: 30px;
+  background: #FFFFFF;
+  box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
+  border-radius: 2px;
+}
+form.driver-details .text-input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 7px 16px 7px; 
+}
+form.driver-details textarea {
+  width: 220px;
+  height: 108px;
+}
+/* ------------------------------------------------------- */
+/* Custom switch component ------------------------------- */
 .switch {
   width: 34px;
   height: 14px;
@@ -211,74 +218,8 @@ div#footer label {
 .switch.on .switch-toggle {
   left: 18px;
 }
-.driverPanelIcon {
-  display: inline-block;
-  cursor: pointer;
-}
-.driverDetails {
-  width: 300px;
-  height: 513px;
-  padding: 40px;
-  padding-bottom: 30px;
-  background: #FFFFFF;
-  box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
-  border-radius: 2px;
-}
-.driverFormControl {
-  margin-bottom: 12px;
-  padding-top: 9px;
-  padding-left: 16px;
-  padding-bottom: 7px;
-}
-textarea.driverTextarea {
-  width: 220px;
-  height: 108px;
-}
-.btn-dual-state {
-  opacity: 0.2;
-  outline: none !important;
-  background: transparent !important;
-  border: 1px solid #4A4A4A !important;
-  border-radius: 4px;
-  font-family: PTSans-Regular;
-  font-size: 12px;
-  color: #4A4A4A;
-  letter-spacing: 0;
-  padding: 5px 8px 3px 8px;
-  box-shadow: none;
-}
-.btn-dual-state:hover,
-.btn-dual-state.active:hover {
-  background: transparent;
-  border-color: inherit;
-  outline: none !important;
-  box-shadow: none;
-}
-.btn-dual-state.active:hover {
-  color: #D0011B;
-}
-.btn-dual-state.active, .btn-dual-state:active {
-  font-family: PTSans-Regular;
-  opacity: 1;
-  border: 1px solid #D0011B !important;
-  color: #D0011B;
-  box-shadow: none;
-  background: transparent;
-  outline: none !important;
-}
-.btn-dual-state.active.focus,
-.btn-dual-state.active:focus,
-.btn-dual-state.focus,
-.btn-dual-state:active.focus,
-.btn-dual-state:active:focus {
-  opacity: 1;
-  outline: none !important;
-  color: #D0011B;
-  border: 1px solid #D0011B;
-  box-shadow: none;
-  background: transparent;
-}
-
+/* ------------------------------------------------------- */
+/* Custom button ----------------------------------------- */
 .regular-btn {
   text-shadow: none;
   background: #D0011B;
@@ -290,55 +231,131 @@ textarea.driverTextarea {
   color: #FFFFFF;
   letter-spacing: 0.16px;
   padding: 7px 12px 4px 12px;
+  text-transform: uppercase;
 }
-.regular-btn.active,
-.regular-btn:active {
-  font-family: TrebuchetMS;
-  outline: none;
-  border: 1px solid #AB0014;
-  color: #FFFFFF;
-  box-shadow: none;
-}
-.regular-btn.active.focus,
-.regular-btn.active:focus,
-.regular-btn.focus,
-.regular-btn:active.focus,
-.regular-btn:active:focus,
-.regular-btn:focus,
-.regular-btn:hover {
-  outline: none;
-  color: #FFFFFF;
+.regular-btn:focus {
   border: 1px solid #AB0014;
   box-shadow: none;
-  background-color: #D0011B;
-  background-position: initial;
 }
-
-#schedulePage {
-	height: 455px;
-	width: 399px;
-	margin: 27px auto;
-  padding: 33px 27px 27px 27px;
-  background: #FFFFFF;
-	box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
-	border-radius: 2px;
+/* ------------------------------------------------------- */
+/* Custom checkboxes section ----------------------------- */
+.toggle-panel-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
 }
-.dutyText {
+.control input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+/* This is what we will style to look like
+   checkboxes/radio buttons. */
+.control__indicator {
+  font-family: PTSans-Regular;
+  display: inline-block;
+  opacity: 0.2;
+  border: 1px solid #4A4A4A;
+  border-radius: 4px;  
+  padding: 4px 8px 3px 8px;
   font-size: 12px;
+  line-height: initial;text-transform: uppercase;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* Checked state */
+.control input:checked ~ .control__indicator {
+  border: 1px solid #D0011B;
+  color: #D0011B;
+  opacity: 1;
+}
+.control {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.control_indicator_img {
+  opacity: 0.2;
+  vertical-align: middle;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* Checked state of image checkboxes */
+.control input:checked ~ .control_indicator_img {
+  opacity: 1;
+}
+/* ------------------------------------------------------- */
+/* Selectors on schedule page ---------------------------- */
+div#schedule-page hr {
+  margin-bottom: 24.7px;
+}
+.selector {
+  margin-bottom: 23px;
+}
+div.selector label {
+  font-size: 16px;
   color: rgba(0,0,0,0.87);
   letter-spacing: 0;
+  text-transform: uppercase;
+}
+.select.inline {
   display: inline-block;
 }
-.scheduleFormControl {
-  width: 93px;
-  height: 24px;
-  margin-right: 8px;
+.select {
+  position: relative;
   display: inline-block;
-  border-radius: 0;
-  border-bottom-left-radius: 0;
+  height: 36px;
 }
-textarea.scheduleTextarea {
-  width: 345px;
-  height: 95px;
-  margin: 0;
+.select select {
+  font-size: 12.5px;
+  display: inline-block;
+  width: 100%;
+  padding: 9px 36px 9px 16px;
+  cursor: pointer;
+  color: #000000;
+  outline: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  border: 1px solid #9B9B9B;
+  border-radius: 2px;
+}
+.select select:focus {
+  border: 1px solid #D0011B;
+}
+.select select::-ms-expand {
+  display: none;
+}
+.select-arrow {
+  position: absolute;
+  top: 9px;
+  right: 12px;
+  pointer-events: none;
+}
+select:invalid {
+  color: #B6B6B6;
+}
+/* ------------------------------------------------------- */
+::-webkit-input-placeholder {
+  color: #B6B6B6;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #B6B6B6;  
+}
+::-moz-placeholder {  /* Firefox 19+ */
+  color: #B6B6B6;  
+}
+:-ms-input-placeholder {  
+  color: #B6B6B6;  
 }

@@ -6,7 +6,7 @@ import DriverFooter  from '../views/DriverFooter'
 export default class DriversContainer extends React.Component {
   render () {
     return (
-      <div id='driversPage'>
+      <div id='drivers-page'>
         <DriverPanel />
         <DriverDetails />
         <DriverFooter />

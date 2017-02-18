@@ -4,7 +4,7 @@ import Switch from 'react-toggle-switch'
 export default class DriverTogglePanel extends React.Component {
   render () {
     return (
-      <div className='togglePanelContainer'>
+      <div className='toggle-panel-container'>
         <Switch
           style={{marginRight: 12}} />
         <label className='control'>

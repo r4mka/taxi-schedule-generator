@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="18px" viewBox="0 0 10 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>strzalki</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="platnosci" transform="translate(-1044.000000, -199.000000)" fill="#D0011B">
+            <path d="M1048.6,201.8 L1051.8,205 L1053.2,203.6 L1048.6,199 L1044,203.6 L1045.4,205 L1048.6,201.8 L1048.6,201.8 Z M1048.6,214.2 L1045.4,211 L1044,212.4 L1048.6,217 L1053.2,212.4 L1051.8,211 L1048.6,214.2 L1048.6,214.2 Z" id="strzalki"></path>
+        </g>
+    </g>
+</svg>
