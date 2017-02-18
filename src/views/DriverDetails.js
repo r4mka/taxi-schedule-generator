@@ -1,5 +1,6 @@
 import React                 from 'react'
 import DriverTogglePanel     from './DriverTogglePanel'
+import DriverRadioPanel      from './DriverRadioPanel'
 import { Form, FormControl,
          FormGroup, Button } from 'react-bootstrap'
 
@@ -30,21 +31,7 @@ export default class DriverDetails extends React.Component {
             </div>
             <hr />
             <div style={{padding: '20px 10px'}}>
-              <Button
-                style={{marginRight: 12}}
-                className='btn-dual-state'>
-                PRACUJE
-              </Button>
-              <Button
-                style={{marginRight: 12}}
-                className='btn-dual-state'>
-                URLOP
-              </Button>
-              <Button
-                className='btn-dual-state'>
-                AWARIA
-              </Button>
-              
+              <DriverRadioPanel />
             </div>
             <FormControl
               componentClass='textarea'

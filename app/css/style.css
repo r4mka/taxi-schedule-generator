@@ -47,6 +47,30 @@ label {
   z-index: -1;
   opacity: 0;
 }
+/* This is what we will style to look like
+   checkboxes/radio buttons. */
+.control__indicator {
+  font-family: PTSans-Regular;
+  display: inline-block;
+  opacity: 0.2;
+  border: 1px solid #4A4A4A;
+  border-radius: 4px;  
+  padding: 5px 8px 3px 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* Checked state */
+.control input:checked ~ .control__indicator {
+  border: 1px solid #D0011B;
+  color: #D0011B;
+  opacity: 1;
+}
 .control {
   position: relative;
   display: inline-block;
