@@ -3,7 +3,7 @@ import React  from 'react'
 export default class DriverFooter extends React.Component {
   render () {
     return (
-      <div id='footer' className='togglePanelContainer'>
+      <div id='footer' className='toggle-panel-container'>
         <label className='control control--radio'>
           <input type='checkbox' checked='checked' />
           <div className='control__indicator'>wszyscy</div>
