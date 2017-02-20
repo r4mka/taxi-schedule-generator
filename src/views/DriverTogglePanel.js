@@ -35,7 +35,7 @@ export default class DriverTogglePanel extends React.Component {
       <div className='toggle-panel-container'>
         <Toggle
           on={this.props.generalActivity}
-          onClick={() => AppActions.toggleGeneralActivity(this.props.driverId)} />
+          onClick={() => AppActions.toggleDriverGeneralActivity(this.props.driverId)} />
         <label className='control'>
           <input
             type='checkbox'

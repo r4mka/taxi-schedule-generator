@@ -12,6 +12,7 @@ class StorageService {
   }
 
   addDriver (driver, cb) {
+    console.log('addDriver()')
     // driver data model:
     const document = {
       docType:           'driver',
@@ -34,6 +35,7 @@ class StorageService {
   }
 
   updateDriver (id, data, cb) {
+    console.log('updateDriver()')
     this.database.update(
     {docType: 'driver', id: id},
     {$set: data},
@@ -49,6 +51,7 @@ class StorageService {
   }
 
   getDrivers (cb) {
+    console.log('getDrivers()')
     this.database.find({docType: 'driver'}, (err, doc) => {
       if (err) {
         return cb(err)
