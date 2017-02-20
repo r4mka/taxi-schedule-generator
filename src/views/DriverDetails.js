@@ -23,6 +23,10 @@ export default class DriverDetails extends React.Component {
         <hr />
         <div style={{padding: '20px 40px 20px 39px'}}>
           <DriverTogglePanel
+            driverId={this.props.driverId}
+            generalActivity={this.props.generalActivity}
+            dailyActivity={this.props.dailyActivity}
+            nocturnalActivity={this.props.nocturnalActivity}
             infoBtn={false}
             deleteBtn={true} />
         </div>

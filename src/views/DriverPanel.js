@@ -6,12 +6,21 @@ export default class DriverPanel extends React.Component {
     return (
       <div className='driver-panel'>
         <div className='left'>
-          <span className='number'>001</span>
+          <span className='number'>{this.props.driver.id}</span>
         </div>
         <div className='right'>
-          <DriverTogglePanel />
+          <DriverTogglePanel
+            driverId={this.props.driver.id}
+            generalActivity={this.props.driver.generalActivity}
+            dailyActivity={this.props.driver.dailyActivity}
+            nocturnalActivity={this.props.driver.nocturnalActivity} />
         </div>
       </div>
     )
   }
+}
+
+// maybe better object validation is required here?
+DriverPanel.propTypes = {
+  driver: React.PropTypes.object.isRequired
 }

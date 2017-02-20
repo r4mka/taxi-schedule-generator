@@ -10,6 +10,7 @@ import DriversContainer       from './containers/drivers.container'
 import PaymentsContainer      from './containers/payments.container'
 import AdvertisementContainer from './containers/advertisement.container'
 import ScheduleContainer      from './containers/schedule.container'
+import StorageService         from './services/StorageService'
 
 const routes = (
   <Route path={config.routes.app} component={AppContainer}>
@@ -19,6 +20,25 @@ const routes = (
     <Route path={config.routes.schedule} component={ScheduleContainer} />
   </Route>
 )
+
+// temporary initialization
+// for (let i = 1; i < 5; i++) {
+//   let driver = {
+//     docType:           'driver',
+//     id:                i,
+//     generalActivity:   true,
+//     dailyActivity:     true,
+//     nocturnalActivity: true,
+//     scheduleHistory:   []
+//   }
+//   StorageService.addDriver(driver, (err, driver) => {
+//     if (err) {
+//       console.log(err)
+//     } else {
+//       console.log(driver)
+//     }
+//   })
+// }
 
 render(
   <Router history={hashHistory} routes={routes} />,

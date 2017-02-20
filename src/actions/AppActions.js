@@ -8,22 +8,22 @@ const Actions = {
       drivers:    drivers
     })
   },
-  toggleDriverGeneralActivity (driverId) {
+  toggleDriverGeneralActivity (id) {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.TOGGLE_GENERAL_ACTIVITY,
-      driverId:   driverId
+      driverId:   id
     })
   },
-  toggleDriverDailyActivity (driverId) {
+  toggleDriverDailyActivity (id) {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.TOGGLE_DAILY_ACTIVITY,
-      driverId:   driverId
+      driverId:   id
     })
   },
-  toggleDriverNocturnalActivity (driverId) {
+  toggleDriverNocturnalActivity (id) {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.TOGGLE_NOCTURNAL_ACTIVITY,
-      driverId:   driverId
+      driverId:   id
     })
   }
 }

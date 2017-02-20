@@ -11,30 +11,44 @@ class StorageService {
     console.log(this.database)
   }
 
-  updateDriver (id, data, cb) {
-    if (!cb) return
-    this.database.update(
-    {docType: 'driver', id: id},
-    {$set: data},
-    {returnUpdatedDocs: true},
-    (err, numReplaced, affectedDocument) => {
+  addDriver (driver, cb) {
+    // driver data model:
+    const document = {
+      docType:           'driver',
+      id:                driver.id,
+      generalActivity:   driver.generalActivity,
+      dailyActivity:     driver.dailyActivity,
+      nocturnalActivity: driver.nocturnalActivity,
+      scheduleHistory:   []
+    }
+
+    this.database.insert(document, (err, doc) => {
       if (err) {
         console.log(err)
         return cb(err)
-      }
-      if (numReplaced > 0) {
-        // console.log('driver (id: ' + id + ') updated')
-        // console.log(affectedDocument.scheduleHistory[0].schedule)
-        cb(null, affectedDocument)
       } else {
-        let err = new Error('No record was updated')
-        cb(err)
+        console.log('Driver added')
+        cb(null, doc)
       }
     })
   }
 
+  updateDriver (id, data, cb) {
+    this.database.update(
+    {docType: 'driver', id: id},
+    {$set: data},
+    {returnUpdatedDocs: true},
+    (err, numReplaced, doc) => {
+      if (err) {
+        console.log(err)
+        return cb(err)
+      }
+      console.log('Driver updated')
+      cb(null, doc)
+    })
+  }
+
   getDrivers (cb) {
-    if (!cb) return
     this.database.find({docType: 'driver'}, (err, doc) => {
       if (err) {
         return cb(err)
