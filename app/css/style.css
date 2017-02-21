@@ -77,7 +77,7 @@ select:focus {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin: 100px;
+  margin: 0 150px 100px 150px;
 }
 #schedule-page {
   height: 682px;

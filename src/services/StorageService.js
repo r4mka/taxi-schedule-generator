@@ -28,7 +28,7 @@ class StorageService {
         console.log(err)
         return cb(err)
       } else {
-        console.log('Driver added')
+        // console.log('Driver added')
         cb(null, doc)
       }
     })

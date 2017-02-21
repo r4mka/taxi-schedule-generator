@@ -11,7 +11,6 @@ export default class AppContainer extends React.Component {
         console.error(err)
         return
       }
-      console.log(drivers)
       AppActions.loadDrivers(drivers)
     })
   }

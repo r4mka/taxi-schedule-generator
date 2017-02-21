@@ -13,7 +13,7 @@ export default class DriverTogglePanel extends React.Component {
     const name   = target.name
 
     switch (name) {
-      case 'dailyAcitivty':
+      case 'dailyActivity':
         console.log('dailyActivity: ' + target.checked)
         AppActions.toggleDriverDailyActivity(this.props.driverId)
         break
@@ -39,8 +39,8 @@ export default class DriverTogglePanel extends React.Component {
         <label className='control'>
           <input
             type='checkbox'
-            name='dailyAcitivty'
-            checked={this.props.dailyAcitivty}
+            name='dailyActivity'
+            checked={this.props.dailyActivity}
             onChange={this.handleInputChange} />
           <img
             className='control_indicator_img'
@@ -87,7 +87,7 @@ export default class DriverTogglePanel extends React.Component {
 DriverTogglePanel.propTypes = {
   driverId:          React.PropTypes.number.isRequired,
   generalActivity:   React.PropTypes.bool,
-  dailyAcitivty:     React.PropTypes.bool,
+  dailyActivity:     React.PropTypes.bool,
   nocturnalAcitivty: React.PropTypes.bool,
   deleteBtn:         React.PropTypes.bool,
   infoBtn:           React.PropTypes.bool
@@ -95,7 +95,7 @@ DriverTogglePanel.propTypes = {
 
 DriverTogglePanel.defaultProps = {
   generalActivity:   true,
-  dailyAcitivty:     true,
+  dailyActivity:     true,
   nocturnalAcitivty: true,
   deleteBtn:         false,
   infoBtn:           true

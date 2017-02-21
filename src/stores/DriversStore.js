@@ -17,10 +17,11 @@ class DriversStore extends BaseStore {
   _registerToActions (action) {
     switch (action.actionType) {
       case AppActionTypes.LOAD_DRIVERS:
-        this._drivers = action.drivers
+        this._drivers = _.sortBy(action.drivers, ['id'])
+
         this.emitChange()
         break
-      
+
       case AppActionTypes.TOGGLE_GENERAL_ACTIVITY:
         this._toggleDriverProperty(action.driverId, 'generalActivity')
         this.emitChange()
