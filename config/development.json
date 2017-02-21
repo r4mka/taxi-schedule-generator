@@ -6,7 +6,7 @@
     "schedule": 		 "/schedule"
   },
   "db": {
-    "filename": "./resources/datastore.bin",
+    "filename": "./app/resources/datastore.bin",
     "autoload": true
   }
 }
