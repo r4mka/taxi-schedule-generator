@@ -3,6 +3,7 @@ import DriverPanel      from '../views/DriverPanel'
 import DriverDetails    from '../views/DriverDetails'
 import DriverFooter     from '../views/DriverFooter'
 import DriversStore     from '../stores/DriversStore'
+import AppActions       from '../actions/AppActions'
 
 export default class DriversContainer extends React.Component {
   constructor (props) {
@@ -25,7 +26,17 @@ export default class DriversContainer extends React.Component {
 
   getDriversState () {
     return {
-      drivers: DriversStore.drivers
+      drivers:           DriversStore.drivers,
+      selectedDriver:    DriversStore.selectedDriver,
+      showDriverDetails: DriversStore.showDriverDetails
+    }
+  }
+
+  renderDriverDetails () {
+    if (this.state.showDriverDetails) {
+      return <DriverDetails driver={this.state.selectedDriver} />
+    } else {
+      return null
     }
   }
 
@@ -34,10 +45,13 @@ export default class DriversContainer extends React.Component {
       <div id='drivers-page'>
         {
           this.state.drivers.map((driver) =>
-            <DriverPanel key={driver.id} driver={driver} />
+            <DriverPanel
+              key={driver.id}
+              driver={driver}
+              onClick={() => AppActions.showDriverDetails(driver)} />
           )
-          // <DriverDetails />
         }
+        {this.renderDriverDetails()}
         <DriverFooter />
       </div>
     )

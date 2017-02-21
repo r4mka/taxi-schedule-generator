@@ -17,6 +17,9 @@ class StorageService {
     const document = {
       docType:           'driver',
       id:                driver.id,
+      name:              driver.name,
+      phone:             driver.phone,
+      notes:             driver.notes,
       generalActivity:   driver.generalActivity,
       dailyActivity:     driver.dailyActivity,
       nocturnalActivity: driver.nocturnalActivity,

@@ -25,6 +25,23 @@ const Actions = {
       actionType: AppActionTypes.TOGGLE_NOCTURNAL_ACTIVITY,
       driverId:   id
     })
+  },
+  showDriverDetails (driver) {
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SHOW_DRIVER_DETAILS,
+      driver:     driver
+    })
+  },
+  hideDriverDetails () {
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.HIDE_DRIVER_DETAILS
+    })
+  },
+  saveDriverDetails (driver) {
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SAVE_DRIVER_DETAILS,
+      driver:     driver
+    })
   }
 }
 

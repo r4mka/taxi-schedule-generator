@@ -26,6 +26,9 @@ const routes = (
 //   let driver = {
 //     docType:           'driver',
 //     id:                i,
+//     name:              'Adam Ramski',
+//     phone:             '696 595 327',
+//     notes:             'blablabla baslalal',
 //     generalActivity:   true,
 //     dailyActivity:     true,
 //     nocturnalActivity: true,

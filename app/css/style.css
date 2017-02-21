@@ -187,6 +187,7 @@ div#footer label {
   background: #FFFFFF;
   box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
   border-radius: 2px;
+  z-index: 100;
 }
 form.driver-details .text-input {
   width: 100%;

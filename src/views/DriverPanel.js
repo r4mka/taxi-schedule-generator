@@ -17,7 +17,9 @@ export default class DriverPanel extends React.Component {
   render () {
     return (
       <div className='driver-panel'>
-        <div className='left'>
+        <div
+          className='left'
+          onClick={() => this.props.onClick()}>
           <span className='number'>{this.padNumber(this.props.driver.id)}</span>
         </div>
         <div className='right'>
@@ -34,5 +36,10 @@ export default class DriverPanel extends React.Component {
 
 // maybe better object validation is required here?
 DriverPanel.propTypes = {
-  driver: React.PropTypes.object.isRequired
+  driver:  React.PropTypes.object.isRequired,
+  onClick: React.PropTypes.func
+}
+
+DriverPanel.defaultProps = {
+  onClick: () => {}
 }
