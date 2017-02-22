@@ -20,6 +20,7 @@ class StorageService {
       name:              driver.name,
       phone:             driver.phone,
       notes:             driver.notes,
+      status:            driver.status,
       generalActivity:   driver.generalActivity,
       dailyActivity:     driver.dailyActivity,
       nocturnalActivity: driver.nocturnalActivity,

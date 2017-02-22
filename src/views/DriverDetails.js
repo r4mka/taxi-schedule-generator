@@ -8,13 +8,9 @@ export default class DriverDetails extends React.Component {
   constructor (props) {
     super(props)
     if (this.props.driver) {
-      this.state = {
-        driver: this.props.driver
-      }
+      this.state = this.props.driver
     } else {
-      this.state = {
-        driver: this.getDefaultDetails()
-      }
+      this.state = this.getDefaultDetails()
     }
     this.handleFormChange = this.handleFormChange.bind(this)
     this.handleFormSubmit = this.handleFormSubmit.bind(this)
@@ -25,81 +21,93 @@ export default class DriverDetails extends React.Component {
   }
 
   handleFormChange (event) {
-    const target = event.target
-    const name   = target.name
+    if (event) {
+      const target = event.target
+      const name   = target.name
+      const value  = target.type === 'checkbox' ? target.checked : target.value
 
-    this.setState({
-      driver: {
-        [name]: target.value
-      }
-    })
+      this.setState({
+        [name]: value
+      })
+    } else {
+      // Toggle.js is not regular input element
+      // and must be handled this way
+      this.setState((prevState) => ({
+        generalActivity: !prevState.generalActivity
+      }))
+    }
   }
 
-  handleFormSubmit (event) {
-    event.preventDefault()
-    AppActions.saveDriverDetails(this.state.driver)
+  handleFormSubmit () {
+    console.log('handleFormSubmit')
+    AppActions.saveDriverDetails(this.state)
     AppActions.hideDriverDetails()
   }
 
   render () {
+    console.log(this.state)
     return (
-      <form
-        className='driver-details' >
-        <input
-          type='text'
-          name='id'
-          className='text-input'
-          value={this.state.driver.id}
-          onChange={this.handleFormChange}
-          placeholder='Numer wywoławczy' />
-        <input
-          type='text'
-          name='name'
-          className='text-input'
-          value={this.state.driver.name}
-          onChange={this.handleFormChange}
-          placeholder='Imię i nazwisko' />
-        <input
-          type='text'
-          name='phone'
-          className='text-input'
-          style={{marginBottom: 20}}
-          value={this.state.driver.phone}
-          onChange={this.handleFormChange}
-          placeholder='Telefon' />
-        <hr />
-        <div style={{padding: '20px 40px 20px 39px'}}>
-          <DriverTogglePanel
-            driverId={this.state.driver.id}
-            generalActivity={this.state.driver.generalActivity}
-            dailyActivity={this.state.driver.dailyActivity}
-            nocturnalActivity={this.state.driver.nocturnalActivity}
-            infoBtn={false}
-            deleteBtn={true} />
+      <div className='modal'>
+        <div style={{position: 'relative', width: '100%', height: '100%'}}>
+          <form
+            className='driver-details' >
+            <input
+              type='text'
+              name='id'
+              className='text-input'
+              value={this.state.id}
+              onChange={this.handleFormChange}
+              placeholder='Numer wywoławczy' />
+            <input
+              type='text'
+              name='name'
+              className='text-input'
+              value={this.state.name}
+              onChange={this.handleFormChange}
+              placeholder='Imię i nazwisko' />
+            <input
+              type='text'
+              name='phone'
+              className='text-input'
+              style={{marginBottom: 20}}
+              value={this.state.phone}
+              onChange={this.handleFormChange}
+              placeholder='Telefon' />
+            <hr />
+            <div style={{padding: '20px 40px 20px 39px'}}>
+              <DriverTogglePanel
+                generalActivity={this.state.generalActivity}
+                dailyActivity={this.state.dailyActivity}
+                nocturnalActivity={this.state.nocturnalActivity}
+                onToggle={this.handleFormChange} />
+            </div>
+            <hr />
+            <div style={{padding: '20px 10px'}}>
+              <DriverRadioPanel
+                status={this.state.status}
+                onChange={this.handleFormChange} />
+            </div>
+            <NotePad
+              name='notes'
+              value={this.state.notes}
+              onChange={this.handleFormChange}
+              placeholder='Notatki' />
+            <div style={{padding: '20px 32px 0 32px'}}>
+              <input
+                type='button'
+                style={{marginRight: 12}}
+                className='regular-btn'
+                value='ANULUJ'
+                onClick={() => AppActions.hideDriverDetails()} />
+              <input
+                type='button'
+                className='regular-btn'
+                value='ZAPISZ'
+                onClick={this.handleFormSubmit} />
+            </div>
+          </form>
         </div>
-        <hr />
-        <div style={{padding: '20px 10px'}}>
-          <DriverRadioPanel />
-        </div>
-        <NotePad
-          name='notes'
-          value={this.state.driver.notes}
-          onChange={this.handleFormChange}
-          placeholder='Notatki' />
-        <div style={{padding: '20px 32px 0 32px'}}>
-          <input
-            type='button'
-            style={{marginRight: 12}}
-            className='regular-btn'
-            value='ANULUJ'
-            onClick={() => AppActions.hideDriverDetails()} />
-          <input
-            type='button'
-            className='regular-btn'
-            value='ZAPISZ'
-            onClick={() => this.handleFormSubmit} />
-        </div>
-      </form>
+      </div>
     )
   }
 }

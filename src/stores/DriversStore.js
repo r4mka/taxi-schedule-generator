@@ -13,10 +13,13 @@ class DriversStore extends BaseStore {
 
   _toggleDriverProperty (id, property) {
     const driver = _.find(this._drivers, {id: id})
-    driver[property] = !driver[property]
+    if (driver) {
+      driver[property] = !driver[property]
+    }
   }
 
   _saveDriverDetails (updatedDriver) {
+    console.log('save')
     const driver = _.find(this._drivers, {id: updatedDriver.id})
     for (let property in driver) {
       if (driver.hasOwnProperty(property) &&

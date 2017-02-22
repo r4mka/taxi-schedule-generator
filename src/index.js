@@ -22,6 +22,7 @@ const routes = (
 )
 
 // temporary initialization
+
 // for (let i = 1; i < 45; i++) {
 //   let driver = {
 //     docType:           'driver',
@@ -29,6 +30,7 @@ const routes = (
 //     name:              'Adam Ramski',
 //     phone:             '696 595 327',
 //     notes:             'blablabla baslalal',
+//     status:            'pracuje',
 //     generalActivity:   true,
 //     dailyActivity:     true,
 //     nocturnalActivity: true,

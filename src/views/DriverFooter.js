@@ -5,7 +5,7 @@ export default class DriverFooter extends React.Component {
     return (
       <div id='footer' className='toggle-panel-container'>
         <label className='control control--radio'>
-          <input type='checkbox' checked='checked' />
+          <input type='checkbox' defaultChecked />
           <div className='control__indicator'>wszyscy</div>
         </label>
         <label className='control control--radio'>
