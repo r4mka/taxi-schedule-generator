@@ -135,15 +135,30 @@ select:focus {
   background-color: #FFFFFF;
   box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
 }
+.driver-status {
+  border: 1px solid #D0011B;
+  color: #FFFFFF;
+  background: #D0011B;
+  font-family: PTSans-Regular;
+  font-size: 8px;
+  display: inline-block;
+  border-radius: 4px;
+  padding: 4px 8px 3px 8px;
+  line-height: initial;
+  text-transform: uppercase;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .driver-panel .left {
   width: 80px;
   height: 80px;
+  cursor: pointer;
   float: left;
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
 }
 .driver-panel .right {
   width: 173px;
@@ -159,6 +174,10 @@ select:focus {
   font-size: 24px;
   color: #D0011B;
   letter-spacing: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 /* ------------------------------------------------------- */
 /* driver subpage footer --------------------------------- */

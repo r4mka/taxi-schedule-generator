@@ -79,7 +79,8 @@ export default class DriverDetails extends React.Component {
                 generalActivity={this.state.generalActivity}
                 dailyActivity={this.state.dailyActivity}
                 nocturnalActivity={this.state.nocturnalActivity}
-                onToggle={this.handleFormChange} />
+                onToggle={this.handleFormChange}
+                deleteBtn />
             </div>
             <hr />
             <div style={{padding: '20px 10px'}}>

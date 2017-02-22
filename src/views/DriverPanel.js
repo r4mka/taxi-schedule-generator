@@ -35,11 +35,6 @@ export default class DriverPanel extends React.Component {
           console.log('nocturnalActivity: ' + target.checked)
           AppActions.toggleDriverNocturnalActivity(this.props.driver.id)
           break
-
-        case 'remove':
-          console.log('removeActivity: ' + target.checked)
-          // not specified how should work
-          break
       }
     } else {
       AppActions.toggleDriverGeneralActivity(this.props.driver.id)
@@ -52,14 +47,27 @@ export default class DriverPanel extends React.Component {
         <div
           className='left'
           onClick={() => this.props.onClick()}>
-          <span className='number'>{this.padNumber(this.props.driver.id)}</span>
+          <span
+            className='number'
+            style={this.props.driver.generalActivity === false ? {color: '#9B9B9B'} : {}}>
+            {this.padNumber(this.props.driver.id)}
+          </span>
+          <div
+            className='driver-status'
+            style={this.props.driver.status !== 'pracuje'
+            ? {}
+            : {display: 'none'}}>
+            {this.props.driver.status}
+          </div>
         </div>
         <div className='right'>
           <DriverTogglePanel
             generalActivity={this.props.driver.generalActivity}
             dailyActivity={this.props.driver.dailyActivity}
             nocturnalActivity={this.props.driver.nocturnalActivity}
-            onToggle={this.handleInputChange} />
+            driverNotes={this.props.driver.notes}
+            onToggle={this.handleInputChange}
+            infoTooltip />
         </div>
       </div>
     )

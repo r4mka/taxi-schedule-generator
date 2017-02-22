@@ -1,9 +1,49 @@
-import React      from 'react'
-import Toggle     from './Toggle'
+import React                     from 'react'
+import Toggle                    from './Toggle'
+import {Tooltip, OverlayTrigger} from 'react-bootstrap'
 // import AppActions from '../actions/AppActions'
 
 export default class DriverTogglePanel extends React.Component {
   render () {
+    let tip         = null
+    let infoTooltip = null
+    let deleteBtn   = null
+
+    if (this.props.infoTooltip) {
+      tip = (
+        <Tooltip id='tooltip'>{this.props.driverNotes}</Tooltip>
+      )
+      if (this.props.driverNotes.trim().length > 0) {
+        infoTooltip = (
+          <OverlayTrigger placement='right' overlay={tip}>
+            <img
+              className=''
+              src='app/assets/info.svg' />
+          </OverlayTrigger>
+        )
+      } else {
+        infoTooltip = (
+          <img
+            style={{opacity: '0.2'}}
+            src='app/assets/info.svg' />
+        )
+      }
+    }
+
+    if (this.props.deleteBtn) {
+      deleteBtn = (
+        <label className='control'>
+          <input
+            type='button'
+            name='deleteDriver'
+            onChange={(e) => this.props.onToggle(e)} />
+          <img
+            className='control_indicator_img'
+            src='app/assets/delete.svg' />
+        </label>
+      )
+    }
+
     return (
       <div className='toggle-panel-container'>
         <Toggle
@@ -30,19 +70,21 @@ export default class DriverTogglePanel extends React.Component {
             className='control_indicator_img'
             src='app/assets/moon.svg' />
         </label>
-
+        {infoTooltip}
+        {deleteBtn}
       </div>
     )
   }
 }
 
 DriverTogglePanel.propTypes = {
-  generalActivity:   React.PropTypes.bool,
-  dailyActivity:     React.PropTypes.bool,
-  nocturnalAcitivty: React.PropTypes.bool,
+  generalActivity:   React.PropTypes.bool.isRequired,
+  dailyActivity:     React.PropTypes.bool.isRequired,
+  nocturnalAcitivty: React.PropTypes.bool.isRequired,
+  onToggle:          React.PropTypes.func.isRequired,
   deleteBtn:         React.PropTypes.bool,
-  infoBtn:           React.PropTypes.bool,
-  onToggle:          React.PropTypes.func.isRequired
+  infoTooltip:       React.PropTypes.bool,
+  driverNotes:       React.PropTypes.string
 }
 
 DriverTogglePanel.defaultProps = {
@@ -50,5 +92,5 @@ DriverTogglePanel.defaultProps = {
   dailyActivity:     true,
   nocturnalAcitivty: true,
   deleteBtn:         false,
-  infoBtn:           true
+  infoTooltip:       false
 }
