@@ -1,8 +1,8 @@
-import React                 from 'react'
-import DriverTogglePanel     from './DriverTogglePanel'
-import DriverRadioPanel      from './DriverRadioPanel'
-import NotePad               from './NotePad'
-import AppActions            from '../actions/AppActions'
+import React             from 'react'
+import DriverTogglePanel from './DriverTogglePanel'
+import DriverRadioPanel  from './DriverRadioPanel'
+import NotePad           from './NotePad'
+import AppActions        from '../actions/AppActions'
 
 export default class DriverDetails extends React.Component {
   constructor (props) {
@@ -96,7 +96,7 @@ export default class DriverDetails extends React.Component {
             <div style={{padding: '20px 32px 0 32px'}}>
               <input
                 type='button'
-                style={{marginRight: 12}}
+                // style={{marginRight: 12}}
                 className='regular-btn'
                 value='ANULUJ'
                 onClick={() => AppActions.hideDriverDetails()} />

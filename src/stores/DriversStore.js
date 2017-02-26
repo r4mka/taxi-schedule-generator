@@ -20,12 +20,16 @@ class DriversStore extends BaseStore {
 
   _saveDriverDetails (updatedDriver) {
     console.log('save')
-    const driver = _.find(this._drivers, {id: updatedDriver.id})
-    for (let property in driver) {
-      if (driver.hasOwnProperty(property) &&
-          updatedDriver.hasOwnProperty(property)) {
-        driver[property] = updatedDriver[property]
+    const driver = _.find(this._drivers, {_id: updatedDriver._id})
+    if (driver) {
+      for (let property in driver) {
+        if (driver.hasOwnProperty(property) &&
+            updatedDriver.hasOwnProperty(property)) {
+          driver[property] = updatedDriver[property]
+        }
       }
+    } else {
+      this._drivers.push(updatedDriver)
     }
   }
 
@@ -48,7 +52,6 @@ class DriversStore extends BaseStore {
         break
 
       case AppActionTypes.SHOW_DRIVER_DETAILS:
-        console.log('!!!!!!!!!')
         this._selectedDriver = action.driver
         this._showDriverDetails = true
         break
@@ -65,7 +68,6 @@ class DriversStore extends BaseStore {
       default:
         return
     }
-    console.log('emit change')
     this.emitChange()
   }
 

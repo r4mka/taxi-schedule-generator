@@ -1,5 +1,6 @@
 import AppDispatcher  from '../dispatcher/AppDispatcher'
 import AppActionTypes from '../constants/AppActionTypes'
+import _              from 'lodash'
 
 const Actions = {
   loadDrivers (drivers) {
@@ -41,6 +42,17 @@ const Actions = {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.SAVE_DRIVER_DETAILS,
       driver:     driver
+    })
+  },
+  showPopup (popup) {
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SHOW_POPUP,
+      popup:      popup
+    })
+  },
+  hidePopup () {
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.HIDE_POPUP
     })
   }
 }
