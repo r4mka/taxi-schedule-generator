@@ -1,5 +1,6 @@
 import AppActionTypes from '../constants/AppActionTypes'
 import BaseStore      from './BaseStore'
+import AppActions     from '../actions/AppActions'
 import _              from 'lodash'
 
 class AppStore extends BaseStore {
@@ -13,7 +14,7 @@ class AppStore extends BaseStore {
       hint:            '',
       handleCancelBtn: null,
       cancelBtnLabel:  '',
-      handleSubmitBtn: null,
+      handleSubmitBtn: () => AppActions.hidePopup(),
       submitBtnLabel:  ''
     }
   }
@@ -25,7 +26,7 @@ class AppStore extends BaseStore {
         break
 
       case AppActionTypes.HIDE_POPUP:
-        _.assign(this._popup, {
+        this._popup = {
           isOpen:          false,
           header:          '',
           description:     '',
@@ -34,7 +35,7 @@ class AppStore extends BaseStore {
           cancelBtnLabel:  '',
           handleSubmitBtn: null,
           submitBtnLabel:  ''
-        })
+        }
         break
 
       default:

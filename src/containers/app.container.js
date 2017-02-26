@@ -26,11 +26,10 @@ export default class AppContainer extends React.Component {
 
     // Welcome popup
     // AppActions.showPopup({
-    //   header:          'To jest testowy nagłówek',
-    //   description:     'Tutaj będzie jakiś dłuższy opis. Tutaj będzie jakiś dłuższy opis',
-    //   hint:            'Miejsce na podpowiedź',
-    //   submitBtnLabel:  'Ok',
-    //   handleSubmitBtn: () => AppActions.hidePopup()
+    //   header:         'To jest testowy nagłówek',
+    //   description:    'Tutaj będzie jakiś dłuższy opis. Tutaj będzie jakiś dłuższy opis',
+    //   hint:           'Miejsce na podpowiedź',
+    //   submitBtnLabel: 'Ok'
     // })
   }
 
