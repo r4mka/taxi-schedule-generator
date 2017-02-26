@@ -41,7 +41,7 @@ export default class Popup extends React.Component {
           {this.props.hint
             ? <p style={{opacity: 0.5, fontSize: 14}}>{this.props.hint}</p>
             : null }
-          <div>
+          <div className='centered-div'>
             { cancelBtn }
             { submitBtn }
           </div>

@@ -93,10 +93,9 @@ export default class DriverDetails extends React.Component {
               value={this.state.notes}
               onChange={this.handleFormChange}
               placeholder='Notatki' />
-            <div style={{padding: '20px 32px 0 32px'}}>
+            <div className='centered-div' style={{marginTop: '20px'}}>
               <input
                 type='button'
-                // style={{marginRight: 12}}
                 className='regular-btn'
                 value='ANULUJ'
                 onClick={() => AppActions.hideDriverDetails()} />

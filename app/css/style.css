@@ -224,6 +224,12 @@ div#footer label {
   border-radius: 2px;
   z-index: 100;
 }
+.centered-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
 form.driver-details .text-input {
   width: 100%;
   margin-bottom: 12px;
@@ -260,10 +266,6 @@ form.driver-details textarea {
 }
 .popup div {
   margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
 }
 /* ------------------------------------------------------- */
 /* Custom switch component ------------------------------- */
@@ -308,6 +310,7 @@ form.driver-details textarea {
   letter-spacing: 0.16px;
   padding: 7px 12px 4px 12px;
   text-transform: uppercase;
+  min-width: 77px;
 }
 .regular-btn:focus {
   border: 1px solid #AB0014;

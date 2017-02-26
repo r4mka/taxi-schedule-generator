@@ -19,7 +19,6 @@ class DriversStore extends BaseStore {
   }
 
   _saveDriverDetails (updatedDriver) {
-    console.log('save')
     const driver = _.find(this._drivers, {_id: updatedDriver._id})
     if (driver) {
       for (let property in driver) {
