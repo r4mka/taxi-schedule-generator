@@ -1,56 +1,60 @@
 import AppDispatcher  from '../dispatcher/AppDispatcher'
 import AppActionTypes from '../constants/AppActionTypes'
-import _              from 'lodash'
 
 const Actions = {
   loadDrivers (drivers) {
+    console.log('loadDrivers')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.LOAD_DRIVERS,
       drivers:    drivers
     })
   },
-  toggleDriverGeneralActivity (id) {
+  addDriver (driver) {
+    driver.id = parseInt(driver.id)
+    console.log('addDriver ' + driver)
     AppDispatcher.dispatch({
-      actionType: AppActionTypes.TOGGLE_GENERAL_ACTIVITY,
-      driverId:   id
-    })
-  },
-  toggleDriverDailyActivity (id) {
-    AppDispatcher.dispatch({
-      actionType: AppActionTypes.TOGGLE_DAILY_ACTIVITY,
-      driverId:   id
-    })
-  },
-  toggleDriverNocturnalActivity (id) {
-    AppDispatcher.dispatch({
-      actionType: AppActionTypes.TOGGLE_NOCTURNAL_ACTIVITY,
-      driverId:   id
-    })
-  },
-  showDriverDetails (driver) {
-    AppDispatcher.dispatch({
-      actionType: AppActionTypes.SHOW_DRIVER_DETAILS,
+      actionType: AppActionTypes.ADD_DRIVER,
       driver:     driver
     })
   },
+  updateDriver (driver) {
+    driver.id = parseInt(driver.id)
+    console.log('updateDriver ' + driver)
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.UPDATE_DRIVER,
+      driver:     driver
+    })
+  },
+  deleteDriver (id) {
+    id = parseInt(id)
+    console.log('deleteDriver ' + id)
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.DELETE_DRIVER,
+      driverId:   id
+    })
+  },
+  showDriverDetails (id) {
+    console.log('showDriverDetails')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SHOW_DRIVER_DETAILS,
+      driverId:   id
+    })
+  },
   hideDriverDetails () {
+    console.log('hideDriverDetails')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.HIDE_DRIVER_DETAILS
     })
   },
-  saveDriverDetails (driver) {
-    AppDispatcher.dispatch({
-      actionType: AppActionTypes.SAVE_DRIVER_DETAILS,
-      driver:     driver
-    })
-  },
   showPopup (popup) {
+    console.log('showPopup')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.SHOW_POPUP,
       popup:      popup
     })
   },
   hidePopup () {
+    console.log('hidePopup')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.HIDE_POPUP
     })

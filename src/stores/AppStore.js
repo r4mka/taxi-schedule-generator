@@ -33,7 +33,7 @@ class AppStore extends BaseStore {
           hint:            '',
           handleCancelBtn: null,
           cancelBtnLabel:  '',
-          handleSubmitBtn: null,
+          handleSubmitBtn: () => AppActions.hidePopup(),
           submitBtnLabel:  ''
         }
         break

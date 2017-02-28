@@ -3,6 +3,7 @@ import DriverTogglePanel from './DriverTogglePanel'
 import DriverRadioPanel  from './DriverRadioPanel'
 import NotePad           from './NotePad'
 import AppActions        from '../actions/AppActions'
+import DriversStore      from '../stores/DriversStore'
 
 export default class DriverDetails extends React.Component {
   constructor (props) {
@@ -13,18 +14,27 @@ export default class DriverDetails extends React.Component {
       this.state = this.getDefaultDetails()
     }
     this.handleFormChange = this.handleFormChange.bind(this)
-    this.handleFormSubmit = this.handleFormSubmit.bind(this)
   }
 
   getDefaultDetails () {
-    // generate default driver details
+    return {
+      id:                DriversStore.getUniqueId(),
+      name:              '',
+      phone:             '',
+      notes:             '',
+      status:            'pracuje',
+      generalActivity:   true,
+      dailyActivity:     true,
+      nocturnalActivity: true,
+      scheduleHistory:   []
+    }
   }
 
   handleFormChange (event) {
     if (event) {
       const target = event.target
       const name   = target.name
-      const value  = target.type === 'checkbox' ? target.checked : target.value
+      let value  = target.type === 'checkbox' ? target.checked : target.value
 
       this.setState({
         [name]: value
@@ -38,14 +48,7 @@ export default class DriverDetails extends React.Component {
     }
   }
 
-  handleFormSubmit () {
-    console.log('handleFormSubmit')
-    AppActions.saveDriverDetails(this.state)
-    AppActions.hideDriverDetails()
-  }
-
   render () {
-    console.log(this.state)
     return (
       <div className='modal'>
         <div style={{position: 'relative', width: '100%', height: '100%'}}>
@@ -103,15 +106,11 @@ export default class DriverDetails extends React.Component {
                 type='button'
                 className='regular-btn'
                 value='ZAPISZ'
-                onClick={this.handleFormSubmit} />
+                onClick={() => this.props.handleSaveBtn(this.state)} />
             </div>
           </form>
         </div>
       </div>
     )
   }
-}
-
-DriverDetails.propTypes = {
-  driver: React.PropTypes.object
 }

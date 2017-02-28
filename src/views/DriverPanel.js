@@ -1,6 +1,7 @@
 import React             from 'react'
 import DriverTogglePanel from './DriverTogglePanel'
 import AppActions        from '../actions/AppActions'
+import _                 from 'lodash'
 
 export default class DriverPanel extends React.Component {
   constructor (props) {
@@ -21,24 +22,24 @@ export default class DriverPanel extends React.Component {
   }
 
   handleInputChange (event) {
+    const driver = _.cloneDeep(this.props.driver)
     if (event) {
       const target = event.target
       const name   = target.name
 
       switch (name) {
         case 'dailyActivity':
-          console.log('dailyActivity: ' + target.checked)
-          AppActions.toggleDriverDailyActivity(this.props.driver.id)
+          driver.dailyActivity = !this.props.driver.dailyActivity
           break
 
         case 'nocturnalActivity':
-          console.log('nocturnalActivity: ' + target.checked)
-          AppActions.toggleDriverNocturnalActivity(this.props.driver.id)
+          driver.nocturnalActivity = !this.props.driver.nocturnalActivity
           break
       }
     } else {
-      AppActions.toggleDriverGeneralActivity(this.props.driver.id)
+      driver.generalActivity = !this.props.driver.generalActivity
     }
+    AppActions.updateDriver(driver)
   }
 
   render () {

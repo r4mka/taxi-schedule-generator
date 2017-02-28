@@ -73,7 +73,13 @@ select:focus {
   width: 100%;
   height: 100%;
   z-index: 1050;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.6);
+}
+.centered-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 .col {
   margin-bottom: 15px;
@@ -84,10 +90,6 @@ select:focus {
   padding-top:110px;
 }
 #drivers-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
   margin: 0 150px 100px 150px;
 }
 #schedule-page {
@@ -224,12 +226,6 @@ div#footer label {
   border-radius: 2px;
   z-index: 100;
 }
-.centered-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-}
 form.driver-details .text-input {
   width: 100%;
   margin-bottom: 12px;
@@ -249,7 +245,7 @@ form.driver-details textarea {
   margin: -130px 0 0 -222px;
   padding: 40px 60px;
   background-color: #FAFAFA;
-  
+  z-index: 200;
   overflow-y: scroll;
   /*background-image: linear-gradient(-180deg, #FAFAFA 0%, #F1F1F1 100%);*/
   box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
@@ -315,6 +311,26 @@ form.driver-details textarea {
 .regular-btn:focus {
   border: 1px solid #AB0014;
   box-shadow: none;
+}
+.round-btn {
+  width: 56px;
+  height: 56px;
+  position: fixed;
+  right: 94px;
+  margin-top: 22px;
+  background: #FFFFFF;
+  box-shadow: 0 0 6px 0 rgba(0,0,0,0.12), 0 6px 6px 0 rgba(0,0,0,0.24);
+  border-radius: 56px;
+  border: none;
+}
+.round-btn:focus {
+  outline: none;
+}
+.round-btn img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 /* ------------------------------------------------------- */
 /* Custom checkboxes section ----------------------------- */

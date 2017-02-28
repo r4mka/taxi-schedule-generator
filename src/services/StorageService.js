@@ -1,9 +1,12 @@
+import config         from 'config'
+import AppDispatcher  from '../dispatcher/AppDispatcher'
+import AppActionTypes from '../constants/AppActionTypes'
 const Datastore = require('nedb')
-import config from 'config'
 
 class StorageService {
   constructor () {
     console.log('open database connection')
+    this.dispatchToken = AppDispatcher.register(this.registerToActions.bind(this))
     this.database = new Datastore({
       filename: config.db.filename,
       autoload: config.db.autoload
@@ -12,7 +15,6 @@ class StorageService {
   }
 
   addDriver (driver, cb) {
-    console.log('addDriver()')
     // driver data model:
     const document = {
       docType:           'driver',
@@ -28,40 +30,57 @@ class StorageService {
     }
 
     this.database.insert(document, (err, doc) => {
-      if (err) {
-        console.log(err)
-        return cb(err)
-      } else {
-        // console.log('Driver added')
-        cb(null, doc)
-      }
+      if (err) return cb(err)
+      cb(null, doc)
     })
   }
 
-  updateDriver (id, data, cb) {
-    console.log('updateDriver()')
+  updateDriver (driver, cb) {
     this.database.update(
-    {docType: 'driver', id: id},
-    {$set: data},
+    {docType: 'driver', id: driver.id},
+    {$set: driver},
     {returnUpdatedDocs: true},
     (err, numReplaced, doc) => {
-      if (err) {
-        console.log(err)
-        return cb(err)
-      }
-      console.log('Driver updated')
+      if (err) return cb(err)
+      if (!doc) return cb(new Error('Cannot update driver ' + JSON.stringify(driver)))
       cb(null, doc)
     })
+  }
+
+  deleteDriver (driver, cb) {
+    // todo
   }
 
   getDrivers (cb) {
-    console.log('getDrivers()')
     this.database.find({docType: 'driver'}, (err, doc) => {
-      if (err) {
-        return cb(err)
-      }
+      if (err) return cb(err)
+      if (!doc) return cb(new Error('Cannot retrieve drivers from database'))
       cb(null, doc)
     })
+  }
+
+  registerToActions (action) {
+    switch (action.actionType) {
+      case AppActionTypes.ADD_DRIVER:
+        this.addDriver(action.driver, (err) => {
+          if (err) {
+            console.error('An error occurred while adding driver to database: ' + err)
+          }
+        })
+        break
+
+      case AppActionTypes.UPDATE_DRIVER:
+        this.updateDriver(action.driver, (err) => {
+          if (err) {
+            console.error('An error occurred while updating driver to database ' + err)
+          }
+        })
+        break
+
+      case AppActionTypes.DELETE_DRIVER:
+        // this.deleteDriver() todo
+        break
+    }
   }
 }
 

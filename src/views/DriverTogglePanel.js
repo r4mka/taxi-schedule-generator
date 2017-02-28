@@ -1,7 +1,6 @@
 import React                     from 'react'
 import Toggle                    from './Toggle'
 import {Tooltip, OverlayTrigger} from 'react-bootstrap'
-// import AppActions from '../actions/AppActions'
 
 export default class DriverTogglePanel extends React.Component {
   render () {

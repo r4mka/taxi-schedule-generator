@@ -30,8 +30,8 @@ export default class Popup extends React.Component {
     }
 
     return (
-      <div className='modal'>
-        <div className='popup'>
+      <div className='modal' style={{zIndex: 2000}}>
+        <div className='popup' style={{zIndex: 3000}}>
           {this.props.header
             ? <h3>{this.props.header}</h3>
             : null }

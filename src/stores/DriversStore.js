@@ -7,61 +7,56 @@ class DriversStore extends BaseStore {
     super()
     this.subscribe(() => this._registerToActions.bind(this))
     this._drivers = []
-    this._selectedDriver = {}
+    this._selectedDriverId = null
     this._showDriverDetails = false
   }
 
-  _toggleDriverProperty (id, property) {
-    const driver = _.find(this._drivers, {id: id})
-    if (driver) {
-      driver[property] = !driver[property]
-    }
+  _addDriver (driver) {
+    this._drivers.push(driver)
   }
 
-  _saveDriverDetails (updatedDriver) {
-    const driver = _.find(this._drivers, {_id: updatedDriver._id})
+  _updateDriver (updatedDriver) {
+    const driver = _.find(this._drivers, {id: updatedDriver.id})
     if (driver) {
-      for (let property in driver) {
+      for (let property in updatedDriver) {
         if (driver.hasOwnProperty(property) &&
             updatedDriver.hasOwnProperty(property)) {
           driver[property] = updatedDriver[property]
         }
       }
-    } else {
-      this._drivers.push(updatedDriver)
     }
+  }
+  
+  _deleteDriver (id) {
+    this._drivers = _.remove(this._drivers, {id: id})
   }
 
   _registerToActions (action) {
     switch (action.actionType) {
       case AppActionTypes.LOAD_DRIVERS:
-        this._drivers = _.sortBy(action.drivers, ['id'])
+        this._drivers = action.drivers
         break
-
-      case AppActionTypes.TOGGLE_GENERAL_ACTIVITY:
-        this._toggleDriverProperty(action.driverId, 'generalActivity')
+      
+      case AppActionTypes.ADD_DRIVER:
+        this._addDriver(action.driver)
         break
-
-      case AppActionTypes.TOGGLE_DAILY_ACTIVITY:
-        this._toggleDriverProperty(action.driverId, 'dailyActivity')
+      
+      case AppActionTypes.UPDATE_DRIVER:
+        this._updateDriver(action.driver)
         break
-
-      case AppActionTypes.TOGGLE_NOCTURNAL_ACTIVITY:
-        this._toggleDriverProperty(action.driverId, 'nocturnalActivity')
+      
+      case AppActionTypes.DELETE_DRIVER:
+        this._deleteDriver(action.driverId)
         break
 
       case AppActionTypes.SHOW_DRIVER_DETAILS:
-        this._selectedDriver = action.driver
+        this._selectedDriverId = action.driverId
         this._showDriverDetails = true
         break
 
       case AppActionTypes.HIDE_DRIVER_DETAILS:
-        this._selectedDriver = {}
+        this._selectedDriverId = null
         this._showDriverDetails = false
-        break
-
-      case AppActionTypes.SAVE_DRIVER_DETAILS:
-        this._saveDriverDetails(action.driver)
         break
 
       default:
@@ -70,12 +65,31 @@ class DriversStore extends BaseStore {
     this.emitChange()
   }
 
-  get drivers () {
-    return this._drivers
+  getUniqueId () {
+    this._drivers = _.sortBy(this._drivers, ['id'])
+    if (this._drivers.length) {
+      let id = this._drivers[this._drivers.length - 1].id
+      return (parseInt(id) + 1)
+    } else {
+      return 1
+    }
   }
 
-  get selectedDriver () {
-    return this._selectedDriver
+  isIdUnique (id) {
+    let driver = _.find(this._drivers, {id: parseInt(id)})
+    if (driver && driver.id !== this._selectedDriverId) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  get drivers () {
+    return (this._drivers = _.sortBy(this._drivers, ['id']))
+  }
+
+  get selectedDriverId () {
+    return this._selectedDriverId
   }
 
   get showDriverDetails () {
