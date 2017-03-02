@@ -98,7 +98,9 @@ export default class DriversContainer extends React.Component {
           onClick={() => AppActions.showDriverDetails(null)}>
           <img src='app/assets/icon_dodaj.svg' />
         </button>
-        <div className='centered-div' style={{flexWrap: 'wrap'}}>
+        <div
+          className='centered-div'
+          style={{flexWrap: 'wrap'}}>
           {
             this.state.drivers.map((driver) =>
               <DriverPanel

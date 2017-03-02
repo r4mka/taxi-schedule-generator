@@ -16,7 +16,7 @@ class DriversStore extends BaseStore {
   }
 
   _updateDriver (updatedDriver) {
-    const driver = _.find(this._drivers, {id: updatedDriver.id})
+    const driver = _.find(this._drivers, {_id: updatedDriver._id})
     if (driver) {
       for (let property in updatedDriver) {
         if (driver.hasOwnProperty(property) &&
@@ -28,7 +28,7 @@ class DriversStore extends BaseStore {
   }
   
   _deleteDriver (id) {
-    this._drivers = _.remove(this._drivers, {id: id})
+    _.remove(this._drivers, {_id: id})
   }
 
   _registerToActions (action) {

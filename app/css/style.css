@@ -312,6 +312,14 @@ form.driver-details textarea {
   border: 1px solid #AB0014;
   box-shadow: none;
 }
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.icon-btn:focus {
+  outline: none;
+}
 .round-btn {
   width: 56px;
   height: 56px;

@@ -37,7 +37,7 @@ class StorageService {
 
   updateDriver (driver, cb) {
     this.database.update(
-    {docType: 'driver', id: driver.id},
+    {docType: 'driver', _id: driver._id},
     {$set: driver},
     {returnUpdatedDocs: true},
     (err, numReplaced, doc) => {
@@ -47,8 +47,11 @@ class StorageService {
     })
   }
 
-  deleteDriver (driver, cb) {
-    // todo
+  deleteDriver (id, cb) {
+    this.database.remove({docType: 'driver', _id: id}, {}, (err) => {
+      if (err) return cb(err)
+      cb(null)
+    })
   }
 
   getDrivers (cb) {
@@ -78,7 +81,11 @@ class StorageService {
         break
 
       case AppActionTypes.DELETE_DRIVER:
-        // this.deleteDriver() todo
+        this.deleteDriver(action.driverId, (err) => {
+          if (err) {
+            console.error('An error occurred while deleting driver from database ' + err)
+          }
+        })
         break
     }
   }

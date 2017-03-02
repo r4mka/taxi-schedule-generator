@@ -11,7 +11,7 @@ const Actions = {
   },
   addDriver (driver) {
     driver.id = parseInt(driver.id)
-    console.log('addDriver ' + driver)
+    console.log('addDriver')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.ADD_DRIVER,
       driver:     driver
@@ -19,14 +19,14 @@ const Actions = {
   },
   updateDriver (driver) {
     driver.id = parseInt(driver.id)
-    console.log('updateDriver ' + driver)
+    console.log('updateDriver')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.UPDATE_DRIVER,
       driver:     driver
     })
   },
   deleteDriver (id) {
-    id = parseInt(id)
+    // id = parseInt(id)
     console.log('deleteDriver ' + id)
     AppDispatcher.dispatch({
       actionType: AppActionTypes.DELETE_DRIVER,

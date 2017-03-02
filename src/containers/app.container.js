@@ -23,14 +23,6 @@ export default class AppContainer extends React.Component {
       }
       AppActions.loadDrivers(drivers)
     })
-
-    // Welcome popup
-    // AppActions.showPopup({
-    //   header:         'To jest testowy nagłówek',
-    //   description:    'Tutaj będzie jakiś dłuższy opis. Tutaj będzie jakiś dłuższy opis',
-    //   hint:           'Miejsce na podpowiedź',
-    //   submitBtnLabel: 'Ok'
-    // })
   }
 
   componentWillUnmount () {

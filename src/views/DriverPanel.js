@@ -1,12 +1,14 @@
-import React             from 'react'
-import DriverTogglePanel from './DriverTogglePanel'
-import AppActions        from '../actions/AppActions'
-import _                 from 'lodash'
+import React                     from 'react'
+import AppActions                from '../actions/AppActions'
+import ToggleSwitch              from './ToggleSwitch'
+import ToggleBtn                 from './ToggleBtn'
+import {Tooltip, OverlayTrigger} from 'react-bootstrap'
 
 export default class DriverPanel extends React.Component {
   constructor (props) {
     super(props)
-    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleToggleSwitch = this.handleToggleSwitch.bind(this)
+    this.handleToggleBtn = this.handleToggleBtn.bind(this)
   }
 
   padNumber (num) {
@@ -21,28 +23,54 @@ export default class DriverPanel extends React.Component {
     }
   }
 
-  handleInputChange (event) {
-    const driver = _.cloneDeep(this.props.driver)
-    if (event) {
-      const target = event.target
-      const name   = target.name
-
-      switch (name) {
-        case 'dailyActivity':
-          driver.dailyActivity = !this.props.driver.dailyActivity
-          break
-
-        case 'nocturnalActivity':
-          driver.nocturnalActivity = !this.props.driver.nocturnalActivity
-          break
-      }
-    } else {
-      driver.generalActivity = !this.props.driver.generalActivity
+  handleToggleSwitch () {
+    const driver = {
+      id:              this.props.driver.id,
+      generalActivity: !this.props.driver.generalActivity
     }
     AppActions.updateDriver(driver)
   }
 
+  handleToggleBtn (event) {
+    const target = event.target
+    const name   = target.name
+    const driver = {
+      id: this.props.driver.id
+    }
+    
+    switch (name) {
+      case 'dailyActivity':
+        driver.dailyActivity = !this.props.driver.dailyActivity
+        break
+
+      case 'nocturnalActivity':
+        driver.nocturnalActivity = !this.props.driver.nocturnalActivity
+        break
+    }
+
+    AppActions.updateDriver(driver)
+  }
+
   render () {
+    const tip = <Tooltip id='tooltip'>{this.props.driver.notes}</Tooltip>
+    let infoTooltip
+
+    if (this.props.driver.notes.trim().length > 0) {
+      infoTooltip = (
+        <OverlayTrigger placement='right' overlay={tip}>
+          <img
+            className=''
+            src='app/assets/info.svg' />
+        </OverlayTrigger>
+      )
+    } else {
+      infoTooltip = (
+        <img
+          style={{opacity: '0.2'}}
+          src='app/assets/info.svg' />
+      )
+    }
+
     return (
       <div className='driver-panel'>
         <div
@@ -61,14 +89,21 @@ export default class DriverPanel extends React.Component {
             {this.props.driver.status}
           </div>
         </div>
-        <div className='right'>
-          <DriverTogglePanel
-            generalActivity={this.props.driver.generalActivity}
-            dailyActivity={this.props.driver.dailyActivity}
-            nocturnalActivity={this.props.driver.nocturnalActivity}
-            driverNotes={this.props.driver.notes}
-            onToggle={this.handleInputChange}
-            infoTooltip />
+        <div className='right toggle-panel-container'>
+          <ToggleSwitch
+            toggle={this.props.driver.generalActivity}
+            onToggle={this.handleToggleSwitch} />
+          <ToggleBtn
+            name='dailyActivity'
+            icon='app/assets/sunny.svg'
+            toggle={this.props.driver.dailyActivity}
+            onToggle={this.handleToggleBtn} />
+          <ToggleBtn
+            name='nocturnalActivity'
+            icon='app/assets/moon.svg'
+            toggle={this.props.driver.nocturnalActivity}
+            onToggle={this.handleToggleBtn} />
+          {infoTooltip}
         </div>
       </div>
     )
