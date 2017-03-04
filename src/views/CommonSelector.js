@@ -3,22 +3,27 @@ import React from 'react'
 export default class CommonSelector extends React.Component {
   render () {
     return (
-      <div className='selector'>
-        <h3>
-          {this.props.header}
-        </h3>
-        <div className='select'>
-          <select required>
-            <option disabled selected hidden
-              value=''>
-              {this.props.placeholder}
-            </option>
-            <option>First select</option>
-            <option>Option</option>
-            <option>Option</option>
-          </select>
-          <img src='./app/assets/strzalki.svg' className='select-arrow' />
-        </div>
+      <div className='select'>
+        <select
+          required
+          value={this.props.value}
+          onChange={(e) => this.props.onChange(e.target.value)}>
+          <option disabled selected hidden value=''>
+            {this.props.placeholder}
+          </option>
+          {
+            this.props.options.map((option) =>
+              <option
+                key={option}
+                value={option}>
+                {option}
+              </option>
+            )
+          }
+        </select>
+        <img
+          src='./app/assets/strzalki.svg'
+          className='select-arrow' />
       </div>
     )
   }
