@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class ToggleSwitch extends React.Component {
+export default class ToggleSwitch extends React.PureComponent {
   render () {
     const className = [
       'switch',
@@ -8,7 +8,7 @@ export default class ToggleSwitch extends React.Component {
     ].join(' ')
     
     return (
-      <div className={className} onClick={() => this.props.onToggle()}>
+      <div className={className} onClick={(e) => this.props.onToggle(e)}>
         <div className='switch-toggle' />
       </div>
     )

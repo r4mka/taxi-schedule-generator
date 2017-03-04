@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class ToggleBtn extends React.Component {
+export default class ToggleBtn extends React.PureComponent {
   render () {
     return (
       <label className='control'>

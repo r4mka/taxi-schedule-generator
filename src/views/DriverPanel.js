@@ -23,21 +23,22 @@ export default class DriverPanel extends React.Component {
     }
   }
 
-  handleToggleSwitch () {
+  handleToggleSwitch (event) {
+    event.preventDefault()
     const driver = {
-      id:              this.props.driver.id,
+      _id:             this.props.driver._id,
       generalActivity: !this.props.driver.generalActivity
     }
     AppActions.updateDriver(driver)
   }
 
   handleToggleBtn (event) {
+    event.preventDefault()
     const target = event.target
     const name   = target.name
     const driver = {
-      id: this.props.driver.id
+      _id: this.props.driver._id
     }
-    
     switch (name) {
       case 'dailyActivity':
         driver.dailyActivity = !this.props.driver.dailyActivity

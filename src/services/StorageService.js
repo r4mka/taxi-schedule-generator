@@ -6,7 +6,7 @@ const Datastore = require('nedb')
 class StorageService {
   constructor () {
     console.log('open database connection')
-    this.dispatchToken = AppDispatcher.register(this.registerToActions.bind(this))
+    // this.dispatchToken = AppDispatcher.register(this.registerToActions.bind(this))
     this.database = new Datastore({
       filename: config.db.filename,
       autoload: config.db.autoload
@@ -42,13 +42,13 @@ class StorageService {
     {returnUpdatedDocs: true},
     (err, numReplaced, doc) => {
       if (err) return cb(err)
-      if (!doc) return cb(new Error('Cannot update driver ' + JSON.stringify(driver)))
+      if (!numReplaced) return cb(null, null)
       cb(null, doc)
     })
   }
 
-  deleteDriver (id, cb) {
-    this.database.remove({docType: 'driver', _id: id}, {}, (err) => {
+  deleteDriver (_id, cb) {
+    this.database.remove({docType: 'driver', _id: _id}, {}, (err) => {
       if (err) return cb(err)
       cb(null)
     })
@@ -62,33 +62,33 @@ class StorageService {
     })
   }
 
-  registerToActions (action) {
-    switch (action.actionType) {
-      case AppActionTypes.ADD_DRIVER:
-        this.addDriver(action.driver, (err) => {
-          if (err) {
-            console.error('An error occurred while adding driver to database: ' + err)
-          }
-        })
-        break
+  // registerToActions (action) {
+  //   switch (action.actionType) {
+  //     case AppActionTypes.ADD_DRIVER:
+  //       this.addDriver(action.driver, (err) => {
+  //         if (err) {
+  //           console.error('An error occurred while adding driver to database: ' + err)
+  //         }
+  //       })
+  //       break
 
-      case AppActionTypes.UPDATE_DRIVER:
-        this.updateDriver(action.driver, (err) => {
-          if (err) {
-            console.error('An error occurred while updating driver to database ' + err)
-          }
-        })
-        break
+  //     case AppActionTypes.UPDATE_DRIVER:
+  //       this.updateDriver(action.driver, (err) => {
+  //         if (err) {
+  //           console.error('An error occurred while updating driver to database ' + err)
+  //         }
+  //       })
+  //       break
 
-      case AppActionTypes.DELETE_DRIVER:
-        this.deleteDriver(action.driverId, (err) => {
-          if (err) {
-            console.error('An error occurred while deleting driver from database ' + err)
-          }
-        })
-        break
-    }
-  }
+  //     case AppActionTypes.DELETE_DRIVER:
+  //       this.deleteDriver(action._id, (err) => {
+  //         if (err) {
+  //           console.error('An error occurred while deleting driver from database ' + err)
+  //         }
+  //       })
+  //       break
+  //   }
+  // }
 }
 
 export default new StorageService()

@@ -10,7 +10,6 @@ const Actions = {
     })
   },
   addDriver (driver) {
-    driver.id = parseInt(driver.id)
     console.log('addDriver')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.ADD_DRIVER,
@@ -18,26 +17,31 @@ const Actions = {
     })
   },
   updateDriver (driver) {
-    driver.id = parseInt(driver.id)
     console.log('updateDriver')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.UPDATE_DRIVER,
       driver:     driver
     })
   },
-  deleteDriver (id) {
-    // id = parseInt(id)
-    console.log('deleteDriver ' + id)
+  deleteDriver (_id) {
+    console.log('deleteDriver')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.DELETE_DRIVER,
-      driverId:   id
+      _id:        _id
     })
   },
-  showDriverDetails (id) {
+  updateDriverDetails (driver) {
+    console.log('updateDriverDetails')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.UPDATE_DRIVER_DETAILS,
+      driver:     driver
+    })
+  },
+  showDriverDetails (driver) {
     console.log('showDriverDetails')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.SHOW_DRIVER_DETAILS,
-      driverId:   id
+      driver:     driver
     })
   },
   hideDriverDetails () {

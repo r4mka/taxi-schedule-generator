@@ -16,6 +16,7 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+  BrowserWindow.addDevToolsExtension('/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0')
 }
 
 app.on('ready', createWindow)

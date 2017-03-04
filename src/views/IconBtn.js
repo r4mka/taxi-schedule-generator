@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class IconBtn extends React.Component {
+export default class IconBtn extends React.PureComponent {
   render () {
     return (
       <button
