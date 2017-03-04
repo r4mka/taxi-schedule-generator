@@ -169,6 +169,14 @@ class DriversStore extends BaseStore {
   get isDriverNew () {
     return this._isDriverNew
   }
+
+  get selectableDriversIds () {
+    const driverIds = []
+    this._drivers.forEach((driver) => {
+      driverIds.push(driver.id)
+    })
+    return driverIds
+  }
 }
 
 export default new DriversStore()
