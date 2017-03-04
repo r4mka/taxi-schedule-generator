@@ -5,7 +5,7 @@ import ToggleSwitch      from './ToggleSwitch'
 import ToggleBtn         from './ToggleBtn'
 import IconBtn           from './IconBtn'
 import AppActions        from '../actions/AppActions'
-import DriversStore  from '../stores/DriversStore'
+import DriversStore      from '../stores/DriversStore'
 
 export default class DriverDetails extends React.Component {
   constructor (props) {

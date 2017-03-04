@@ -1,4 +1,5 @@
-import React from 'react'
+import React      from 'react'
+import AppActions from '../actions/AppActions'
 
 export default class DutySelector extends React.Component {
   render () {
@@ -7,21 +8,18 @@ export default class DutySelector extends React.Component {
         <h3>
           {this.props.header}
         </h3>
-        
         <div style={{marginTop: 12}}>
           <label style={{marginRight: 12}}>
             dyżury dzienne
           </label>
           <div className='select inline'>
-            <select required>
-              <option disabled selected hidden value=''>
-                Cały tydzień
-              </option>
-              <option>First</option>
-              <option>Option</option>
-              <option>Option</option>
-            </select>
-            <img src='./app/assets/strzalki.svg' className='select-arrow' />
+            <input
+              type='number'
+              min='0'
+              className='text-input'
+              value={this.props.numberOfDriversPerAllDays}
+              onChange={(e) => AppActions.setNumberOfDriversPerAllDays(e.target.value)}
+              placeholder='Cały tydzień' />
           </div>
         </div>
 
@@ -30,37 +28,31 @@ export default class DutySelector extends React.Component {
             dyżury nocne
           </label>
           <div className='select inline' style={{marginRight: 12}}>
-            <select required>
-              <option disabled selected hidden value=''>
-                W tygodniu
-              </option>
-              <option>First</option>
-              <option>Option</option>
-              <option>Option</option>
-            </select>
-            <img src='./app/assets/strzalki.svg' className='select-arrow' />
+            <input
+              type='number'
+              min='0'
+              className='text-input'
+              value={this.props.numberOfDriversPerFridayNight}
+              onChange={(e) => AppActions.setNumberOfDriversPerFridayNight(e.target.value)}
+              placeholder='W piątki' />
           </div>
           <div className='select inline' style={{marginRight: 12}}>
-            <select required>
-              <option disabled selected hidden value=''>
-                W piątki
-              </option>
-              <option>First</option>
-              <option>Option</option>
-              <option>Option</option>
-            </select>
-            <img src='./app/assets/strzalki.svg' className='select-arrow' />
+            <input
+              type='number'
+              min='0'
+              className='text-input'
+              value={this.props.numberOfDriversPerSaturdayNight}
+              onChange={(e) => AppActions.setNumberOfDriversPerSaturdayNight(e.target.value)}
+              placeholder='W soboty' />
           </div>
           <div className='select inline'>
-            <select required>
-              <option disabled selected hidden value=''>
-                W soboty
-              </option>
-              <option>First</option>
-              <option>Option</option>
-              <option>Option</option>
-            </select>
-            <img src='./app/assets/strzalki.svg' className='select-arrow' />
+            <input
+              type='number'
+              min='0'
+              className='text-input'
+              value={this.props.numberOfDriversPerOtherNights}
+              onChange={(e) => AppActions.setNumberOfDriversPerOtherNights(e.target.value)}
+              placeholder='W tygodniu' />
           </div>
         </div>
       </div>
