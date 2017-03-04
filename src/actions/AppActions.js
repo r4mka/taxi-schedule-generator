@@ -63,11 +63,18 @@ const Actions = {
       actionType: AppActionTypes.HIDE_POPUP
     })
   },
-  setScheduleDate (date) {
+  setScheduleYear (year) {
     console.log('setScheduleDate')
     AppDispatcher.dispatch({
-      actionType: AppActionTypes.SET_SCHEDULE_DATE,
-      date:       date
+      actionType: AppActionTypes.SET_SCHEDULE_YEAR,
+      year:       year
+    })
+  },
+  setScheduleMonth (month) {
+    console.log('setScheduleDate')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SET_SCHEDULE_MONTH,
+      month:       month
     })
   },
   setScheduleMsg (msg) {
@@ -98,7 +105,7 @@ const Actions = {
       numberOfDrivers: number
     })
   },
-  setNumberOfDriversPerOthersNights (number) {
+  setNumberOfDriversPerOtherNights (number) {
     console.log('hidePopup')
     AppDispatcher.dispatch({
       actionType:      AppActionTypes.SET_DRIVERS_PER_OTHERS_NIGHTS,
