@@ -64,52 +64,59 @@ const Actions = {
     })
   },
   setScheduleYear (year) {
-    console.log('setScheduleDate')
+    console.log('setScheduleYear')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.SET_SCHEDULE_YEAR,
       year:       year
     })
   },
   setScheduleMonth (month) {
-    console.log('setScheduleDate')
+    console.log('setScheduleMonth')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.SET_SCHEDULE_MONTH,
-      month:       month
+      month:      month
     })
   },
   setScheduleMsg (msg) {
-    console.log('hidePopup')
+    console.log('setScheduleMsg')
     AppDispatcher.dispatch({
       actionType: AppActionTypes.SET_SCHEDULE_MSG,
       msg:        msg
     })
   },
   setNumberOfDriversPerAllDays (number) {
-    console.log('hidePopup')
+    console.log('setNumberOfDriversPerAllDays')
     AppDispatcher.dispatch({
       actionType:      AppActionTypes.SET_DRIVERS_PER_ALL_DAYS,
       numberOfDrivers: number
     })
   },
   setNumberOfDriversPerFridayNight (number) {
-    console.log('hidePopup')
+    console.log('setNumberOfDriversPerFridayNight')
     AppDispatcher.dispatch({
       actionType:      AppActionTypes.SET_DRIVERS_PER_FRI_NIGHT,
       numberOfDrivers: number
     })
   },
   setNumberOfDriversPerSaturdayNight (number) {
-    console.log('hidePopup')
+    console.log('setNumberOfDriversPerSaturdayNight')
     AppDispatcher.dispatch({
       actionType:      AppActionTypes.SET_DRIVERS_PER_SAT_NIGHT,
       numberOfDrivers: number
     })
   },
   setNumberOfDriversPerOtherNights (number) {
-    console.log('hidePopup')
+    console.log('setNumberOfDriversPerOtherNights')
     AppDispatcher.dispatch({
       actionType:      AppActionTypes.SET_DRIVERS_PER_OTHERS_NIGHTS,
       numberOfDrivers: number
+    })
+  },
+  setPreviousScheduleDriver (id) {
+    console.log('setPreviousScheduleDriver')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SET_PREVIOUS_SCHEDULE_DRIVER,
+      driverId:   id
     })
   }
 }
