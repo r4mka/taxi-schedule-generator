@@ -62,6 +62,48 @@ const Actions = {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.HIDE_POPUP
     })
+  },
+  setScheduleDate (date) {
+    console.log('setScheduleDate')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SET_SCHEDULE_DATE,
+      date:       date
+    })
+  },
+  setScheduleMsg (msg) {
+    console.log('hidePopup')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SET_SCHEDULE_MSG,
+      msg:        msg
+    })
+  },
+  setNumberOfDriversPerAllDays (number) {
+    console.log('hidePopup')
+    AppDispatcher.dispatch({
+      actionType:      AppActionTypes.SET_DRIVERS_PER_ALL_DAYS,
+      numberOfDrivers: number
+    })
+  },
+  setNumberOfDriversPerFridayNight (number) {
+    console.log('hidePopup')
+    AppDispatcher.dispatch({
+      actionType:      AppActionTypes.SET_DRIVERS_PER_FRI_NIGHT,
+      numberOfDrivers: number
+    })
+  },
+  setNumberOfDriversPerSaturdayNight (number) {
+    console.log('hidePopup')
+    AppDispatcher.dispatch({
+      actionType:      AppActionTypes.SET_DRIVERS_PER_SAT_NIGHT,
+      numberOfDrivers: number
+    })
+  },
+  setNumberOfDriversPerOthersNights (number) {
+    console.log('hidePopup')
+    AppDispatcher.dispatch({
+      actionType:      AppActionTypes.SET_DRIVERS_PER_OTHERS_NIGHTS,
+      numberOfDrivers: number
+    })
   }
 }
 
