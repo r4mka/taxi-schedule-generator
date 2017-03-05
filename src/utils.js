@@ -48,7 +48,7 @@ module.exports = {
         break
       case 4:
         month = 'MAJ'
-        break 
+        break
       case 5:
         month = 'CZERWIEC'
         break
@@ -66,7 +66,7 @@ module.exports = {
         break
       case 10:
         month = 'LISTOPAD'
-        break 
+        break
       case 11:
         month = 'GRUDZIEŃ'
         break
@@ -74,61 +74,5 @@ module.exports = {
         return undefined
     }
     return month
-  },
-
-  addDriver: function (driver, db, cb) {
-    if (!cb) return
-    let document = {}
-    document.docType = 'driver'
-    document.id = driver.id
-    document.active = true
-    document.scheduleHistory = []
-
-    db.insert(document, (err, doc) => {
-      if (err) {
-        console.log(err)
-        cb(null)
-      } else {
-        if (doc !== null) {
-          console.log('driver added')
-          cb(doc)
-        } else {
-          console.log('can not add driver')
-          cb(null)
-        }
-      }
-    })
-  },
-
-  updateDriver: function (id, data, db, cb) {
-    if (!cb) return
-    db.update({docType: 'driver', id: id}, {$set: data},
-      {returnUpdatedDocs: true},
-      function (err, numReplaced, affectedDocument) {
-      if (err) {
-        console.log(err)
-        cb(null)
-      } else {
-        if (numReplaced > 0) {
-          // console.log('driver (id: ' + id + ') updated')
-          // console.log(affectedDocument.scheduleHistory[0].schedule)
-          cb(affectedDocument)
-        } else {
-          cb(null)
-        }
-      }
-    })
-  },
-
-  getDrivers: function (db, cb) {
-    if (!cb) return
-    db.find({docType: 'driver'}, function (err, doc) {
-      if (err) {
-        console.log('err')
-        cb(null)
-      } else {
-        cb(doc)
-      }
-    })
   }
 }

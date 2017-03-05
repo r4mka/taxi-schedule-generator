@@ -108,6 +108,7 @@ function makeScheduler (year, month, drivers) {
   let body = []
   let days = []
 
+  // set columns width to 'auto'
   for (let i = 0; i < daysInMonth + 1; i++) {
     colsWidth.push('auto')
   }
@@ -121,11 +122,13 @@ function makeScheduler (year, month, drivers) {
   // adds schedule for next month
   drivers.map(function (driver) {
     if (driver.active) {
+      // create row with schedule for single driver
       let driverSchedule = []
       for (let i = 0; i < daysInMonth; i++) {
         driverSchedule.push('') // tmp
       }
       driverSchedule.unshift(driver.id.toString())
+      // add driver schedule (single row) to general schedule (table) - pdf document
       body.push(driverSchedule)
     }
 
@@ -145,11 +148,13 @@ function makeScheduler (year, month, drivers) {
 
   let fromIndex = 0
   let dayOfTheMonth = -1
+  // start from spiecified driver
   let startFromIndex = 61
   let assignedNs = 0
   let nightsNum = 0
   
   days = ['PT', 'SO', 'ND', 'PN', 'WT', 'SR', 'CZ']
+  
   // populates schedules with Ns
   days.forEach(function (day, id) {
     // console.log('search day: ' + day)
@@ -158,6 +163,7 @@ function makeScheduler (year, month, drivers) {
     assignedNs = 0
     nightsNum = 0
     
+    // the number of drivers per nights
     switch (day) {
       case 'PT':
         nightsNum = 20
@@ -173,6 +179,7 @@ function makeScheduler (year, month, drivers) {
     while (true) {
       if (assignedNs === 0) {
         // i++
+        // find index of selected day in days array (body[3])
         dayOfTheMonth = _.indexOf(body[3], day, fromIndex)
         if (dayOfTheMonth === -1) {
           break
@@ -180,12 +187,15 @@ function makeScheduler (year, month, drivers) {
         // console.log(i + ' ' + day + ' is on ' + dayOfTheMonth)
         fromIndex = dayOfTheMonth + 1
       } else {
+        // start from first driver in table
         startFromIndex = 4
       }
 
+      // iterate over all drivers in specified column (day) and add N to pdf document
       for (let i = startFromIndex; i < body.length; i++) {
         body[i][dayOfTheMonth] = 'N'
         
+        // add N to specified driver schedule in specified general schedule - databse
         let driverId = _.findIndex(drivers, {id: parseInt(body[i][0])})
         if (driverId !== -1) {
           let scheduleId = _.findIndex(drivers[driverId].scheduleHistory, {year: year, month: month})
