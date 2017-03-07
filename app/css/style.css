@@ -29,6 +29,7 @@ h3 {
   font-size: 18px;
   color: #000000;
   letter-spacing: 0;
+  margin-top: 0;
   margin-bottom: 12px;
   font-weight: 100;
 }
@@ -102,9 +103,8 @@ button[disabled] {
   margin: 0 150px 100px 150px;
 }
 #schedule-page {
-  height: 682px;
   width: 568px;
-  margin: 27px auto;
+  margin: 0 auto 27px;
   padding: 50px 40px 40px 40px;
   background: #FFFFFF;
   box-shadow: 0 19px 38px 0 rgba(0,0,0,0.30);
@@ -239,6 +239,7 @@ div#footer label {
   width: 100%;
   margin-bottom: 12px;
   padding: 7px 16px 7px;
+  height: 36px;
 }
 form.driver-details textarea {
   width: 220px;
@@ -414,7 +415,7 @@ div#schedule-page hr {
 .selector {
   margin-bottom: 23px;
 }
-div.selector label {
+div label{
   font-size: 16px;
   color: rgba(0,0,0,0.87);
   letter-spacing: 0;
@@ -426,13 +427,13 @@ div.selector label {
 .select {
   position: relative;
   display: inline-block;
-  height: 36px;
 }
 .select select {
-  font-size: 12.5px;
+  font-size: 15px;
   display: inline-block;
   width: 100%;
-  padding: 9px 36px 9px 16px;
+  height: 36px;
+  padding: 7px 36px 7px 16px;
   cursor: pointer;
   color: #000000;
   outline: 0;

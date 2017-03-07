@@ -3,8 +3,6 @@ import ScheduleStore  from '../stores/ScheduleStore'
 import DriversStore   from '../stores/DriversStore'
 import AppActions     from '../actions/AppActions'
 import CommonSelector from '../views/CommonSelector'
-import DutySelector   from '../views/DutySelector'
-import NotePad        from '../views/NotePad'
 
 export default class ScheduleContainer extends React.Component {
   constructor (props) {
@@ -42,27 +40,25 @@ export default class ScheduleContainer extends React.Component {
   }
 
   render () {
-    console.log(this.state.selectableDriversIds)
     return (
       <div id='schedule-page'>
         <form>
           <h3>Miesiąc na który ma zostać utworzony grafik</h3>
-          <div className='select inline'>
-            <input
-              type='number'
-              min='0'
-              style={{width: 110}}
-              className='text-input'
-              value={this.state.year}
-              onChange={(e) => AppActions.setScheduleYear(e.target.value)}
-              placeholder='Wybierz rok' />
-          </div>
+          <input
+            type='number'
+            min='0'
+            style={{width: 125, marginRight: 12}}
+            className='text-input'
+            value={this.state.year}
+            onChange={(e) => AppActions.setScheduleYear(e.target.value)}
+            placeholder='Wybierz rok' />
           <CommonSelector
             placeholder='Wybierz miesiąc'
             value={this.state.month}
             onChange={AppActions.setScheduleMonth}
             options={this.state.selectableMonths} />
           <hr />
+          
           <h3>Kierowca który zamykał grafik w ubiegłym miesiącu</h3>
           <CommonSelector
             placeholder='Wybierz kierowcę'
@@ -70,16 +66,57 @@ export default class ScheduleContainer extends React.Component {
             onChange={AppActions.setPreviousScheduleDriver}
             options={this.state.selectableDriversIds} />
           <hr />
-          <DutySelector
-            header='Liczba kierowców na poszczególnych dyżurach'
-            numberOfDriversPerAllDays={this.state.numberOfDriversPerAllDays}
-            numberOfDriversPerFridayNight={this.state.numberOfDriversPerFridayNight}
-            numberOfDriversPerSaturdayNight={this.state.numberOfDriversPerSaturdayNight}
-            numberOfDriversPerOtherNights={this.state.numberOfDriversPerOtherNights} />
+          
+          <h3>Liczba kierowców na poszczególnych dyżurach</h3>
+          <div style={{marginTop: 12}}>
+            <label style={{marginRight: 12}}>
+              dyżury dzienne
+            </label>
+            <input
+              type='number'
+              min='0'
+              style={{width: 140}}
+              className='text-input'
+              value={this.state.numberOfDriversPerAllDays}
+              onChange={(e) => AppActions.setNumberOfDriversPerAllDays(e.target.value)}
+              placeholder='Cały tydzień' />
+          </div>
+          <div style={{marginBottom: 11}}>
+            <label style={{marginRight: 24}}>
+              dyżury nocne
+            </label>
+            <input
+              type='number'
+              min='0'
+              style={{width: 120, marginRight: 12}}
+              className='text-input'
+              value={this.state.numberOfDriversPerOtherNights}
+              onChange={(e) => AppActions.setNumberOfDriversPerOtherNights(e.target.value)}
+              placeholder='W tygodniu' />
+            <input
+              type='number'
+              min='0'
+              style={{width: 100, marginRight: 12}}
+              className='text-input'
+              value={this.state.numberOfDriversPerFridayNight}
+              onChange={(e) => AppActions.setNumberOfDriversPerFridayNight(e.target.value)}
+              placeholder='W piątki' />
+            <input
+              type='number'
+              min='0'
+              style={{width: 108}}
+              className='text-input'
+              value={this.state.numberOfDriversPerSaturdayNight}
+              onChange={(e) => AppActions.setNumberOfDriversPerSaturdayNight(e.target.value)}
+              placeholder='W soboty' />
+          </div>
           <hr />
-          <NotePad
+
+          <h3>Wiadomość dla kierowców</h3>
+          <textarea
             style={{width: 488, height: 142}}
-            header='Wiadomość dla kierowców'
+            value={this.state.message}
+            onChange={(e) => AppActions.setScheduleMsg(e.target.value)}
             placeholder='Maksymalnie 220 znaków' />
         </form>
       </div>

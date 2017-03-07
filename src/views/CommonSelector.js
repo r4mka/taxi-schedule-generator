@@ -4,7 +4,7 @@ export default class CommonSelector extends React.Component {
   render () {
     return (
       <div
-        style={{marginBottom: 23}}
+        style={{marginBottom: 23.3}}
         className='select'>
         <select
           required
