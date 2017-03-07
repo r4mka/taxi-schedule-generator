@@ -3,7 +3,9 @@ import React from 'react'
 export default class CommonSelector extends React.Component {
   render () {
     return (
-      <div className='select'>
+      <div
+        style={{marginBottom: 23}}
+        className='select'>
         <select
           required
           value={this.props.value}

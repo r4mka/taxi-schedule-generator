@@ -42,10 +42,21 @@ export default class ScheduleContainer extends React.Component {
   }
 
   render () {
+    console.log(this.state.selectableDriversIds)
     return (
       <div id='schedule-page'>
         <form>
           <h3>Miesiąc na który ma zostać utworzony grafik</h3>
+          <div className='select inline'>
+            <input
+              type='number'
+              min='0'
+              style={{width: 110}}
+              className='text-input'
+              value={this.state.year}
+              onChange={(e) => AppActions.setScheduleYear(e.target.value)}
+              placeholder='Wybierz rok' />
+          </div>
           <CommonSelector
             placeholder='Wybierz miesiąc'
             value={this.state.month}

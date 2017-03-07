@@ -13,10 +13,10 @@ class ScheduleStore extends BaseStore {
     this._message = ''
     // how to determine ?
     this._previousScheduleDriver = 0
-    this._numberOfDriversPerAllDays = 20
-    this._numberOfDriversPerFridayNight = 20
-    this._numberOfDriversPerSaturdayNight = 28
-    this._numberOfDriversPerOtherNights = 10
+    this._numberOfDriversPerAllDays = ''
+    this._numberOfDriversPerFridayNight = ''
+    this._numberOfDriversPerSaturdayNight = ''
+    this._numberOfDriversPerOtherNights = ''
 
     this._selectableMonths = [
       'styczeń', 'luty', 'marzec',

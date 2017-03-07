@@ -16,6 +16,7 @@ export default class DutySelector extends React.Component {
             <input
               type='number'
               min='0'
+              style={{width: 140}}
               className='text-input'
               value={this.props.numberOfDriversPerAllDays}
               onChange={(e) => AppActions.setNumberOfDriversPerAllDays(e.target.value)}
@@ -31,28 +32,31 @@ export default class DutySelector extends React.Component {
             <input
               type='number'
               min='0'
+              style={{width: 120}}
               className='text-input'
-              value={this.props.numberOfDriversPerFridayNight}
-              onChange={(e) => AppActions.setNumberOfDriversPerFridayNight(e.target.value)}
-              placeholder='W piątki' />
+              value={this.props.numberOfDriversPerOtherNights}
+              onChange={(e) => AppActions.setNumberOfDriversPerOtherNights(e.target.value)}
+              placeholder='W tygodniu' />
           </div>
           <div className='select inline' style={{marginRight: 12}}>
             <input
               type='number'
               min='0'
+              style={{width: 100}}
               className='text-input'
-              value={this.props.numberOfDriversPerSaturdayNight}
-              onChange={(e) => AppActions.setNumberOfDriversPerSaturdayNight(e.target.value)}
-              placeholder='W soboty' />
+              value={this.props.numberOfDriversPerFridayNight}
+              onChange={(e) => AppActions.setNumberOfDriversPerFridayNight(e.target.value)}
+              placeholder='W piątki' />
           </div>
           <div className='select inline'>
             <input
               type='number'
               min='0'
+              style={{width: 108}}
               className='text-input'
-              value={this.props.numberOfDriversPerOtherNights}
-              onChange={(e) => AppActions.setNumberOfDriversPerOtherNights(e.target.value)}
-              placeholder='W tygodniu' />
+              value={this.props.numberOfDriversPerSaturdayNight}
+              onChange={(e) => AppActions.setNumberOfDriversPerSaturdayNight(e.target.value)}
+              placeholder='W soboty' />
           </div>
         </div>
       </div>

@@ -59,7 +59,7 @@ input {
   border-radius: 2px;
   border: 1px solid #9B9B9B;
   font-family: PTSans-Regular;
-  font-size: 16px;
+  font-size: 15px;
   color: #000000;
   letter-spacing: 0;
 }
@@ -235,7 +235,7 @@ div#footer label {
   border-radius: 2px;
   z-index: 100;
 }
-form.driver-details .text-input {
+.text-input {
   width: 100%;
   margin-bottom: 12px;
   padding: 7px 16px 7px;
@@ -427,7 +427,6 @@ div.selector label {
   position: relative;
   display: inline-block;
   height: 36px;
-  margin-bottom: 23px;
 }
 .select select {
   font-size: 12.5px;
