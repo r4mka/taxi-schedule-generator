@@ -42,7 +42,7 @@ export default class ScheduleContainer extends React.Component {
   render () {
     return (
       <div id='schedule-page'>
-        <form>
+        <form id='schedule-form'>
           <h3>Miesiąc na który ma zostać utworzony grafik</h3>
           <input
             type='number'
@@ -119,6 +119,11 @@ export default class ScheduleContainer extends React.Component {
             onChange={(e) => AppActions.setScheduleMsg(e.target.value)}
             placeholder='Maksymalnie 220 znaków' />
         </form>
+        <button
+          className='round-btn'
+          onClick={() => AppActions.showDriverDetails(null)}>
+          <img src='app/assets/icon_drukuj.svg' />
+        </button>
       </div>
     )
   }
