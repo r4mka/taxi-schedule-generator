@@ -1,12 +1,10 @@
-import config         from 'config'
-import AppDispatcher  from '../dispatcher/AppDispatcher'
-import AppActionTypes from '../constants/AppActionTypes'
+import config from 'config'
+import _      from 'lodash'
 const Datastore = require('nedb')
 
 class StorageService {
   constructor () {
     console.log('open database connection')
-    // this.dispatchToken = AppDispatcher.register(this.registerToActions.bind(this))
     this.database = new Datastore({
       filename: config.db.filename,
       autoload: config.db.autoload
@@ -16,7 +14,7 @@ class StorageService {
 
   addDriver (driver, cb) {
     // driver data model:
-    const document = {
+    const driverDoc = {
       docType:           'driver',
       id:                driver.id,
       name:              driver.name,
@@ -29,7 +27,7 @@ class StorageService {
       scheduleHistory:   []
     }
 
-    this.database.insert(document, (err, doc) => {
+    this.database.insert(driverDoc, (err, doc) => {
       if (err) return cb(err)
       cb(null, doc)
     })
@@ -62,33 +60,85 @@ class StorageService {
     })
   }
 
-  // registerToActions (action) {
-  //   switch (action.actionType) {
-  //     case AppActionTypes.ADD_DRIVER:
-  //       this.addDriver(action.driver, (err) => {
-  //         if (err) {
-  //           console.error('An error occurred while adding driver to database: ' + err)
-  //         }
-  //       })
-  //       break
+  prepareScheduleDocument (options, done) {
+    const scheduleDoc = {}
+    scheduleDoc.docType = 'schedule'
+    scheduleDoc.date = {
+      year:        options.year,
+      month:       options.month,
+      daysInMonth: options.daysInMonth
+    }
+    scheduleDoc.options = {
+      previousDriver:   options.previousScheduleDriver,
+      allDaysNum:       options.numberOfDriversPerAllDays,
+      fridayNightNum:   options.numberOfDriversPerFridayNight,
+      saturdayNightNum: options.numberOfDriversPerSaturdayNight,
+      otherNightsNum:   options.numberOfDriversPerOtherNights
+    }
+    scheduleDoc.schedule = []
+    // console.log(scheduleDoc.schedule)
+    // get active drivers
+    this.database.find({
+      docType:         'driver',
+      generalActivity: true,
+      status:          'pracuje'
+    }, (err, drivers) => {
+      if (err) return done(err)
+      if (!drivers) {
+        return done(new Error('Cannot retrieve drivers from database'))
+      }
+      
+      // add schedule table for each driver
+      const driverSchedule = []
+      for (let i = 0; i < options.daysInMonth; i++) {
+        driverSchedule.push('')
+      }
+      // console.log('_____')
+      // console.log(scheduleDoc.schedule)
+      drivers.forEach((driver) => {
+        const schedule = {
+          driverId:       driver.id,
+          driverSchedule: _.cloneDeep(driverSchedule)
+        }
 
-  //     case AppActionTypes.UPDATE_DRIVER:
-  //       this.updateDriver(action.driver, (err) => {
-  //         if (err) {
-  //           console.error('An error occurred while updating driver to database ' + err)
-  //         }
-  //       })
-  //       break
+        scheduleDoc.schedule.push(schedule)
+        // console.log(scheduleDoc.schedule)
+      })
+      // console.log(scheduleDoc)
+      return done(null, scheduleDoc)
+    })
+  }
 
-  //     case AppActionTypes.DELETE_DRIVER:
-  //       this.deleteDriver(action._id, (err) => {
-  //         if (err) {
-  //           console.error('An error occurred while deleting driver from database ' + err)
-  //         }
-  //       })
-  //       break
-  //   }
-  // }
+  addSchedule (schedule, done) {
+    // check if schedule for given month exists
+    this.database.find({
+      'docType':    'schedule',
+      'date.year':  schedule.year,
+      'date.month': schedule.month
+    }, (err, docs) => {
+      if (err) return done(err)
+      // if there is no schedule - add new one
+      if (_.isEmpty(docs)) {
+        this.database.insert(schedule, (err, doc) => {
+          if (err) return done(err)
+          return done(null, doc)
+        })
+      } else { // if there is already schedule - update it
+        this.database.update({
+          'docType':    'schedule',
+          'date.year':  schedule.year,
+          'date.month': schedule.month
+        },
+        {$set: schedule},
+        {returnUpdatedDocs: true},
+        (err, numReplaced, doc) => {
+          if (err) return done(err)
+          if (!numReplaced) return done(null, null)
+          return done(null, doc)
+        })
+      }
+    })
+  }
 }
 
 export default new StorageService()

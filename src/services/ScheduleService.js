@@ -1,0 +1,224 @@
+import StorageService from './StorageService'
+import utils          from '../utils'
+import _              from 'lodash'
+const ipcRenderer = window.require('electron').ipcRenderer
+
+module.exports = {
+  createSchedule: createSchedule
+}
+
+function createSchedule (options, done) {
+  const daysInMonth   = new Date(options.year, utils.monthToNum(options.month), 0).getDate()
+  options.daysInMonth = daysInMonth
+
+  StorageService.prepareScheduleDocument(options, (err, scheduleDocument) => {
+    if (err) return done(err)
+
+    console.log('schedule document prepared successfully')
+    // console.log(scheduleDocument)
+
+    _createScheduleTable(scheduleDocument, (err, scheduleTable, scheduleDocument) => {
+      if (err) return done(err)
+
+      console.log('schedule table created successfully')
+      StorageService.addSchedule(scheduleDocument, (err, scheduleDocument) => {
+        if (err) return done(err)
+
+        const pdfName  = 'grafik-' + options.year + '-' + options.month + '.pdf'
+
+        const colsWidth     = []
+
+        // set columns width to 'auto'
+        for (let i = 0; i < daysInMonth + 1; i++) {
+          colsWidth.push('auto')
+        }
+
+        const pdfDefinition = {
+          pageMargins: [ 20, 5, 20, 5 ],
+          content:     [
+            {
+              style: 'custom',
+              table: {
+                widths: colsWidth,
+                body:   scheduleTable
+              }
+            },
+            {
+              text:     options.message,
+              fontSize: 8,
+              bold:     true,
+              margin:   [0, 10, 0, 0]
+            }
+          ],
+          styles: {
+            custom: {
+              fontSize: 6,
+              bold:     true
+            }
+          }
+        }
+
+        ipcRenderer.on('generate-schedule-reply', (event, arg) => done())
+        console.log('generate-schedule')
+        ipcRenderer.send('generate-schedule', pdfDefinition, pdfName)
+      })
+    })
+  })
+}
+
+function _createScheduleTable (scheduleDocument, done) {
+  const year        = parseInt(scheduleDocument.date.year)
+  const month       = utils.monthToNum(scheduleDocument.date.month)
+  const daysInMonth = scheduleDocument.date.daysInMonth
+  const days        = ['PT', 'SO', 'ND', 'PN', 'WT', 'SR', 'CZ']
+
+  console.log('year: ' + year)
+  console.log('month: ' + month)
+  console.log('daysInMonth: ' + daysInMonth)
+  console.log('scheduledocument.schedule: ')
+  // console.log(scheduleDocument.schedule)
+
+  const body = _createScheduleHeader(year, month, daysInMonth)
+  scheduleDocument.schedule.forEach((_schedule) => {
+    const schedule = _.cloneDeep(_schedule)
+    schedule.driverSchedule.unshift(schedule.driverId)
+    body.push(schedule.driverSchedule)
+  })
+
+  // internal counters
+  let fromIndex     = 0
+  let assignedNs    = 0
+  let nightsNum     = 0
+  let dayOfTheMonth = -1
+
+  // start from spiecified driver
+  // todo: find real index on document list
+  let startFromIndex
+  const previousDriverId = scheduleDocument.options.previousDriver
+
+  for (let i = 4; i < body.length; i++) {
+    console.log(body[i][0])
+    if (body[i][0] == previousDriverId) {
+      startFromIndex = i
+      break
+    }
+  }
+  
+  console.log('startFromIndex: ' + startFromIndex)
+  console.log(body)
+
+  // populate schedule with Ns (nights)
+  days.forEach((day, id) => {
+    console.log('search day: ' + day)
+    fromIndex = 0
+    dayOfTheMonth = 0
+    assignedNs = 0
+    nightsNum = 0
+    
+    // the number of drivers per nights
+    switch (day) {
+      case 'PT':
+        nightsNum = scheduleDocument.options.fridayNightNum
+        break
+      case 'SO':
+        nightsNum = scheduleDocument.options.saturdayNightNum
+        break
+      default:
+        nightsNum = scheduleDocument.options.otherNightsNum
+    }
+
+    console.log('nightsNum: ' + nightsNum)
+    
+    while (true) {
+      console.log('dayOfTheMonth: ' + dayOfTheMonth)
+      if (assignedNs === 0) {
+        // find index of selected day in days row (body[3])
+        dayOfTheMonth = _.indexOf(body[3], day, fromIndex)
+        if (dayOfTheMonth === -1) break
+
+        fromIndex = dayOfTheMonth + 1
+      } else {
+        // start from first driver in table
+        startFromIndex = 4
+      }
+      // iterate over all drivers in specified column (day)
+      // and add N to pdf document
+      for (let i = startFromIndex; i < body.length; i++) {
+        body[i][dayOfTheMonth] = 'N'
+
+        // find schedule table for given driver in db
+        let driverSchedule = _.find(scheduleDocument.schedule, {driverId: body[i][0]})
+        if (driverSchedule) {
+          // add N to specified driver schedule
+          driverSchedule.driverSchedule[dayOfTheMonth - 1] = 'N'
+        }
+        // ?????
+        assignedNs++
+        if (assignedNs == nightsNum) {
+          assignedNs = 0
+          startFromIndex = i
+          startFromIndex++
+          console.log('should break')
+          break
+        }
+      }
+    }
+  })
+
+  done(null, body, scheduleDocument)
+}
+
+function _createScheduleHeader (year, month, daysInMonth) {
+  let header = []
+
+  let infoBar = [
+    {
+      colSpan:   8,
+      text:      'HARMONOGRAM DYŻURÓW:\n' + utils.monthToString(month - 1) + ' ' + year,
+      alignment: 'center',
+      fontSize:  6
+    }, '', '', '', '', '', '', '', '', {
+      colSpan:   (daysInMonth - 17),
+      text:      'Dyżury niedzielne: parzyste 06:00-06:15, nieparzyste: 10:00-10:15',
+      alignment: 'center',
+      fontSize:  6
+    }]
+    
+  for (let i = 0; i < (daysInMonth - 17); i++) {
+    infoBar.push('')
+  }
+  
+  infoBar = infoBar.concat([{
+    colSpan:   8,
+    text:      'Kontakt z dyspozytornią:\n508 550 111',
+    alignment: 'center',
+    fontSize:  6
+  }, '', '', '', '', '', '', '' ])
+
+  let title = [{
+    colSpan:   (daysInMonth + 1),
+    text:      'HARMONOGRAM',
+    alignment: 'center',
+    fontSize:  7
+  }]
+  let daysNums = []
+  let daysNames = []
+
+  for (let i = 0; i < daysInMonth; i++) {
+    title.push('')
+  }
+  for (let i = 1; i < daysInMonth + 1; i++) {
+    daysNums.push(i.toString())
+  }
+  daysNums.unshift({
+    rowSpan: 2,
+    text:    'NR WYW.'
+  })
+  for (let i = 0; i < daysInMonth; i++) {
+    daysNames.push(utils.numToDay(new Date(year, (month - 1), i).getDay()))
+  }
+  daysNames.unshift('')
+  
+  header.push(infoBar, title, daysNums, daysNames)
+  return header
+}

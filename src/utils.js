@@ -30,7 +30,6 @@ module.exports = {
     }
     return day
   },
-
   monthToString: function (num) {
     let month = ''
     switch (num) {
@@ -74,5 +73,49 @@ module.exports = {
         return undefined
     }
     return month
+  },
+  monthToNum: function (month) {
+    let monthNum = ''
+    switch (month) {
+      case 'styczeń':
+        monthNum = 0
+        break
+      case 'luty':
+        monthNum = 1
+        break
+      case 'marzec':
+        monthNum = 2
+        break
+      case 'kwiecień':
+        monthNum = 3
+        break
+      case 'maj':
+        monthNum = 4
+        break
+      case 'czerwiec':
+        monthNum = 5
+        break
+      case 'lipiec':
+        monthNum = 6
+        break
+      case 'sierpień':
+        monthNum = 7
+        break
+      case 'wrzesień':
+        monthNum = 8
+        break
+      case 'październik':
+        monthNum = 9
+        break
+      case 'listopad':
+        monthNum = 10
+        break
+      case 'grudzień':
+        monthNum = 11
+        break
+      default:
+        return undefined
+    }
+    return (monthNum + 1)
   }
 }

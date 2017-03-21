@@ -1,8 +1,12 @@
-const electron = require('electron')
-const path     = require('path')
+const electron  = require('electron')
+const path      = require('path')
+const PdfMake   = require('pdfmake')
+const fs        = require('fs')
 
+const ipcMain       = electron.ipcMain
 const app           = electron.app
 const BrowserWindow = electron.BrowserWindow
+const reactDevTools = '/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0'
 
 // reference to window object to prevent garbage collection
 let mainWindow
@@ -16,7 +20,7 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-  BrowserWindow.addDevToolsExtension('/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0')
+  BrowserWindow.addDevToolsExtension(reactDevTools)
 }
 
 app.on('ready', createWindow)
@@ -29,4 +33,25 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
+  console.log('receive msg in main process')
+
+  const Roboto = {
+    Roboto: {
+      normal:      './app/fonts/Roboto-Regular.ttf',
+      bold:        './app/fonts/Roboto-Medium.ttf',
+      italics:     './app/fonts/Roboto-Italic.ttf',
+      bolditalics: './app/fonts/Roboto-Italic.ttf'
+    }
+  }
+  
+  const printer  = new PdfMake(Roboto)
+  const schedule = printer.createPdfKitDocument(pdfDefinition)
+  schedule.pipe(fs.createWriteStream('./app/resources/' + pdfName))
+  schedule.end()
+
+  console.log('Schedule generated successfully')
+  event.sender.send('generate-schedule-reply', 'done')
 })

@@ -1,8 +1,9 @@
-import React          from 'react'
-import ScheduleStore  from '../stores/ScheduleStore'
-import DriversStore   from '../stores/DriversStore'
-import AppActions     from '../actions/AppActions'
-import CommonSelector from '../views/CommonSelector'
+import React           from 'react'
+import ScheduleStore   from '../stores/ScheduleStore'
+import ScheduleService from '../services/ScheduleService'
+import DriversStore    from '../stores/DriversStore'
+import AppActions      from '../actions/AppActions'
+import CommonSelector  from '../views/CommonSelector'
 
 export default class ScheduleContainer extends React.Component {
   constructor (props) {
@@ -10,6 +11,7 @@ export default class ScheduleContainer extends React.Component {
 
     this.state = this.getScheduleState()
     this._onChange = this._onChange.bind(this)
+    this.createSchedule = this.createSchedule.bind(this)
   }
 
   componentDidMount () {
@@ -37,6 +39,14 @@ export default class ScheduleContainer extends React.Component {
       selectableMonths:                ScheduleStore.selectableMonths,
       selectableDriversIds:            DriversStore.selectableDriversIds
     }
+  }
+
+  createSchedule (e) {
+    ScheduleService.createSchedule(this.state, (err) => {
+      if (err) {
+        console.log(err)
+      }
+    })
   }
 
   render () {
@@ -121,7 +131,7 @@ export default class ScheduleContainer extends React.Component {
         </form>
         <button
           className='round-btn'
-          onClick={() => AppActions.showDriverDetails(null)}>
+          onClick={this.createSchedule}>
           <img src='app/assets/icon_drukuj.svg' />
         </button>
       </div>
