@@ -127,6 +127,7 @@ function _createScheduleTable (scheduleDocument, done) {
         nightsNum = scheduleDocument.options.otherNightsNum
     }
 
+    nightsNum = parseInt(nightsNum)
     console.log('nightsNum: ' + nightsNum)
     
     while (true) {
@@ -144,20 +145,25 @@ function _createScheduleTable (scheduleDocument, done) {
       // iterate over all drivers in specified column (day)
       // and add N to pdf document
       for (let i = startFromIndex; i < body.length; i++) {
-        body[i][dayOfTheMonth] = 'N'
-
         // find schedule table for given driver in db
         let driverSchedule = _.find(scheduleDocument.schedule, {driverId: body[i][0]})
-        if (driverSchedule) {
+        if (driverSchedule && driverSchedule.nocturnalActivity) {
           // add N to specified driver schedule
           driverSchedule.driverSchedule[dayOfTheMonth - 1] = 'N'
+        } else {
+          continue
         }
-        // ?????
+        
+        body[i][dayOfTheMonth] = 'N'
+
         assignedNs++
-        if (assignedNs == nightsNum) {
+        if (assignedNs === nightsNum) {
           assignedNs = 0
           startFromIndex = i
           startFromIndex++
+          if (startFromIndex === body.length) {
+            startFromIndex = 4
+          }
           console.log('should break')
           break
         }

@@ -97,8 +97,10 @@ class StorageService {
       // console.log(scheduleDoc.schedule)
       drivers.forEach((driver) => {
         const schedule = {
-          driverId:       driver.id,
-          driverSchedule: _.cloneDeep(driverSchedule)
+          driverId:          driver.id,
+          dailyActivity:     driver.dailyActivity,
+          nocturnalActivity: driver.nocturnalActivity,
+          driverSchedule:    _.cloneDeep(driverSchedule)
         }
 
         scheduleDoc.schedule.push(schedule)
