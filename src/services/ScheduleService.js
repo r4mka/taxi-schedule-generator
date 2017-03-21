@@ -164,12 +164,57 @@ function _createScheduleTable (scheduleDocument, done) {
           if (startFromIndex === body.length) {
             startFromIndex = 4
           }
-          console.log('should break')
           break
         }
       }
     }
   })
+
+  const daysNum  = parseInt(scheduleDocument.options.allDaysNum)
+  let assignedDs = 0
+  startFromIndex = 4
+  dayOfTheMonth = 0
+  
+  while (dayOfTheMonth < daysInMonth) {
+    if (assignedDs === 0) {
+      dayOfTheMonth++
+    } else {
+      startFromIndex = 4
+    }
+
+    for (let i = startFromIndex; i < body.length; i++) {
+      const currentDriverId = parseInt(body[i][0])
+
+      let driverSchedule = _.find(scheduleDocument.schedule, {driverId: currentDriverId})
+      if (driverSchedule && driverSchedule.dailyActivity) {
+        if (dayOfTheMonth === 0) {
+          // check last day from previous month
+        } else {
+          // check if the current or previous day is not 'N'
+          // and if is, skip to next driver
+          if (body[i][dayOfTheMonth] === 'N' || body[i][dayOfTheMonth - 1] === 'N') {
+            continue
+          } else {
+            driverSchedule.driverSchedule[dayOfTheMonth - 1] = 'D'
+            body[i][dayOfTheMonth] = 'D'
+          }
+        }
+      } else {
+        continue
+      }
+
+      assignedDs++
+      if (assignedDs === daysNum) {
+        assignedDs = 0
+        startFromIndex = i
+        startFromIndex++
+        if (startFromIndex === body.length) {
+          startFromIndex = 4
+        }
+        break
+      }
+    }
+  }
 
   done(null, body, scheduleDocument)
 }
