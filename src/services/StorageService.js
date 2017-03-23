@@ -55,9 +55,41 @@ class StorageService {
   getDrivers (cb) {
     this.database.find({docType: 'driver'}, (err, doc) => {
       if (err) return cb(err)
-      if (!doc) return cb(new Error('Cannot retrieve drivers from database'))
+      if (!doc) return cb(null, [])
       cb(null, doc)
     })
+  }
+
+  getSchedules (cb) {
+    this.database.find({docType: 'schedule'}, (err, doc) => {
+      if (err) return cb(err)
+      // if (!doc) return cb(null, [])
+      cb(null, doc)
+    })
+  }
+
+  getScheduleByDate (year, month, cb) {
+    this.database.find({'docType': 'schedule', 'date.year': year, 'date.month': month},
+      (err, doc) => {
+        if (err) return cb(err)
+        cb(null, doc)
+      })
+  }
+
+  updateSchedule (schedule, cb) {
+    this.database.update(
+      {
+        'docType':    'schedule',
+        'date.year':  schedule.date.year,
+        'date.month': schedule.date.month
+      },
+      {$set: schedule},
+      {returnUpdatedDocs: true},
+      (err, numReplaced, doc) => {
+        if (err) return cb(err)
+        if (!numReplaced) return cb(null, null)
+        cb(null, doc)
+      })
   }
 
   prepareScheduleDocument (options, done) {
