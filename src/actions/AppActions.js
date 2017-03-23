@@ -118,6 +118,18 @@ const Actions = {
       actionType: AppActionTypes.SET_PREVIOUS_SCHEDULE_DRIVER,
       driverId:   id
     })
+  },
+  showPreviousMonthDrivers () {
+    console.log('showPreviousMonthDrivers')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SHOW_PREVIOUS_MONTH_DRIVERS
+    })
+  },
+  hidePreviousMonthDrivers () {
+    console.log('hidePreviousMonthDrivers')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.HIDE_PREVIOUS_MONTH_DRIVERS
+    })
   }
 }
 

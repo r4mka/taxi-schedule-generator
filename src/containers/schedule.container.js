@@ -6,6 +6,7 @@ import StorageService  from '../services/StorageService'
 import DriversStore    from '../stores/DriversStore'
 import AppActions      from '../actions/AppActions'
 import CommonSelector  from '../views/CommonSelector'
+import PreviousMonthDrivers from '../views/PreviousMonthDrivers'
 
 export default class ScheduleContainer extends React.Component {
   constructor (props) {
@@ -18,6 +19,12 @@ export default class ScheduleContainer extends React.Component {
       cancelBtnLabel:  'nie',
       handleSubmitBtn: this.createSchedule,
       submitBtnLabel:  'tak'
+    }
+
+    this.fillScheduleInputsPopup = {
+      header:          'Uwaga!',
+      description:     'Uzupełnij wszystkie pola!',
+      submitBtnLabel:  'zamknij'
     }
 
     this.state = this.getScheduleState()
@@ -49,11 +56,17 @@ export default class ScheduleContainer extends React.Component {
       numberOfDriversPerSaturdayNight: ScheduleStore.numberOfDriversPerSaturdayNight,
       numberOfDriversPerOtherNights:   ScheduleStore.numberOfDriversPerOtherNights,
       selectableMonths:                ScheduleStore.selectableMonths,
+      showPreviousMonthDrivers:        ScheduleStore.showPreviousMonthDrivers,
       selectableDriversIds:            DriversStore.selectableDriversIds
     }
   }
 
   prepareSchedule (e) {
+    const isValid = this._validateScheduleInputs()
+    if (!isValid) {
+      return AppActions.showPopup(this.fillScheduleInputsPopup)
+    }
+
     StorageService.getSchedules((err, schedules) => {
       if (err) {
         console.log(err)
@@ -64,7 +77,7 @@ export default class ScheduleContainer extends React.Component {
       // If there is no schedules in db
       if (!schedules.length) {
         // get list of users who performed night duty in last day of previous month
-
+        AppActions.showPreviousMonthDrivers()
       } else {
         console.log('check if schedule for selected date exists')
         const date = {
@@ -89,9 +102,49 @@ export default class ScheduleContainer extends React.Component {
     })
   }
 
+  _validateScheduleInputs () {
+    let isValid = true
+    let state   = this.state
+
+    if (state.year.trim().length === 0) {
+      isValid = false
+    }
+    
+    if (state.month.trim().length === 0) {
+      isValid = false
+    }
+    
+    if (!state.previousScheduleDriver) {
+      isValid = false
+    }
+    
+    if (state.numberOfDriversPerAllDays.trim().length === 0) {
+      isValid = false
+    }
+    
+    if (state.numberOfDriversPerFridayNight.trim().length === 0) {
+      isValid = false
+    }
+    
+    if (state.numberOfDriversPerSaturdayNight.trim().length === 0) {
+      isValid = false
+    }
+
+    if (state.numberOfDriversPerOtherNights.trim().length === 0) {
+      isValid = false
+    }
+
+    return isValid
+  }
+
   render () {
     return (
       <div id='schedule-page'>
+        {
+          this.state.showPreviousMonthDrivers
+          ? <PreviousMonthDrivers />
+          : null
+        }
         <form id='schedule-form'>
           <h3>Miesiąc na który ma zostać utworzony grafik</h3>
           <input
