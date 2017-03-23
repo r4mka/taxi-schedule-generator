@@ -103,8 +103,7 @@ export default class DriverDetails extends React.Component {
     return (
       <div className='modal'>
         <div style={{position: 'relative', width: '100%', height: '100%'}}>
-          <form
-            className='driver-details' >
+          <form className='driver-details'>
             <input
               type='number'
               min='1'
