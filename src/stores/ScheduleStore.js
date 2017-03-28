@@ -17,6 +17,7 @@ class ScheduleStore extends BaseStore {
     this._numberOfDriversPerSaturdayNight = ''
     this._numberOfDriversPerOtherNights = ''
     this._showPreviousMonthDrivers
+    this._previousMonthDrivers = new Set()
 
     this._selectableMonths = [
       'styczeń', 'luty', 'marzec',
@@ -68,6 +69,22 @@ class ScheduleStore extends BaseStore {
         this._showPreviousMonthDrivers = false
         break
 
+      case AppActionTypes.ADD_PREVIOUS_MONTH_DRIVER:
+        this._previousMonthDrivers.add(action.driverId)
+        break
+      
+      case AppActionTypes.TOGGLE_PREVIOUS_MONTH_DRIVER:
+        if (this._previousMonthDrivers.has(action.driverId)) {
+          this._previousMonthDrivers.delete(action.driverId)
+        } else {
+          this._previousMonthDrivers.add(action.driverId)
+        }
+        break
+
+      case AppActionTypes.CLEAR_PREVIOUS_MONTH_DRIVERS:
+        this._previousMonthDrivers.clear()
+        break
+
       default:
         return
     }
@@ -112,6 +129,10 @@ class ScheduleStore extends BaseStore {
 
   get showPreviousMonthDrivers () {
     return this._showPreviousMonthDrivers
+  }
+
+  get previousMonthDrivers () {
+    return this._previousMonthDrivers
   }
 }
 

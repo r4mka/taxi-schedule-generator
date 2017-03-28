@@ -83,6 +83,7 @@ export default class ScheduleContainer extends React.Component {
       // If there is no schedules in db
       if (!schedules.length) {
         // get list of users who performed night duty in last day of previous month
+        AppActions.clearPreviousMonthDrivers()
         AppActions.showPreviousMonthDrivers()
       } else {
         console.log('check if schedule for selected date exists')
@@ -168,26 +169,14 @@ export default class ScheduleContainer extends React.Component {
     }
   }
 
-  // browseSchedules () {
-  //   console.log('browseSchedules')
-  //   const options = {
-  //     defaultPath: 'app/resources/grafiki',
-  //     properties:  ['openFile', 'multiSelections']
-  //   }
-
-  //   dialog.showOpenDialog(options, (schedules) => {
-  //     if (!schedules) return
-  //     schedules.forEach(
-  //       (schedule) => ipcRenderer.send('open-schedule', schedule))
-  //   })
-  // }
-
   render () {
     return (
       <div id='schedule-page'>
         {
           this.state.showPreviousMonthDrivers
-          ? <PreviousMonthDrivers />
+          ? <PreviousMonthDrivers
+            drivers={DriversStore.drivers}
+            onSubmit={this.prepareSchedule} />
           : null
         }
         <form id='schedule-form'>

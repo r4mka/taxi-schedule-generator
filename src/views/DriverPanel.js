@@ -1,26 +1,15 @@
 import React                     from 'react'
+import {Tooltip, OverlayTrigger} from 'react-bootstrap'
 import AppActions                from '../actions/AppActions'
 import ToggleSwitch              from './ToggleSwitch'
 import ToggleBtn                 from './ToggleBtn'
-import {Tooltip, OverlayTrigger} from 'react-bootstrap'
+import utils                     from '../utils'
 
 export default class DriverPanel extends React.Component {
   constructor (props) {
     super(props)
     this.handleToggleSwitch = this.handleToggleSwitch.bind(this)
     this.handleToggleBtn = this.handleToggleBtn.bind(this)
-  }
-
-  padNumber (num) {
-    if (num < 100) {
-      if (num < 10) {
-        return '00' + num
-      } else {
-        return '0' + num
-      }
-    } else {
-      return num
-    }
   }
 
   handleToggleSwitch (event) {
@@ -80,7 +69,7 @@ export default class DriverPanel extends React.Component {
           <span
             className='number'
             style={this.props.driver.generalActivity === false ? {color: '#9B9B9B'} : {}}>
-            {this.padNumber(this.props.driver.id)}
+            {utils.padNumber(this.props.driver.id)}
           </span>
           <div
             className='driver-status'

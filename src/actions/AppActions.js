@@ -130,6 +130,19 @@ const Actions = {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.HIDE_PREVIOUS_MONTH_DRIVERS
     })
+  },
+  togglePreviousMonthDriver (id) {
+    console.log('togglePreviousMonthDriver')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.TOGGLE_PREVIOUS_MONTH_DRIVER,
+      driverId:   id
+    })
+  },
+  clearPreviousMonthDrivers () {
+    console.log('clearPreviousMonthDrivers')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.CLEAR_PREVIOUS_MONTH_DRIVERS
+    })
   }
 }
 

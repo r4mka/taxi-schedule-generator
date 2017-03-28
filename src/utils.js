@@ -30,6 +30,7 @@ module.exports = {
     }
     return day
   },
+
   monthToString: function (num) {
     let month = ''
     switch (num) {
@@ -74,6 +75,7 @@ module.exports = {
     }
     return month
   },
+
   monthToNum: function (month) {
     let monthNum = ''
     switch (month) {
@@ -117,5 +119,17 @@ module.exports = {
         return undefined
     }
     return (monthNum + 1)
+  },
+  
+  padNumber (num) {
+    if (num < 100) {
+      if (num < 10) {
+        return '00' + num
+      } else {
+        return '0' + num
+      }
+    } else {
+      return num
+    }
   }
 }

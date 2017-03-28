@@ -94,6 +94,9 @@ button[disabled] {
 .col {
   margin-bottom: 15px;
 }
+.checkbox {
+  margin: '10px auto';
+}
 /* ------------------------------------------------------- */
 /* Subpages ---------------------------------------------- */
 #content-page {
