@@ -9,6 +9,8 @@ import AppActions      from '../actions/AppActions'
 import CommonSelector  from '../views/CommonSelector'
 import PreviousMonthDrivers from '../views/PreviousMonthDrivers'
 
+const ipcRenderer = window.require('electron').ipcRenderer
+
 export default class ScheduleContainer extends React.Component {
   constructor (props) {
     super(props)
@@ -90,9 +92,7 @@ export default class ScheduleContainer extends React.Component {
         }
         if (_.find(schedules, {date: date})) {
           // ask user if he want to override existing schedule
-          this.validationPopup.description =
-          'Czy chcesz nadpisać istniejący grafik na wybrany miesiąc?'
-          AppActions.showPopup(this.validationPopup)
+          AppActions.showPopup(this.overrideSchedulePopup)
         } else {
           // this.createSchedule()
         }
@@ -168,8 +168,21 @@ export default class ScheduleContainer extends React.Component {
     }
   }
 
+  // browseSchedules () {
+  //   console.log('browseSchedules')
+  //   const options = {
+  //     defaultPath: 'app/resources/grafiki',
+  //     properties:  ['openFile', 'multiSelections']
+  //   }
+
+  //   dialog.showOpenDialog(options, (schedules) => {
+  //     if (!schedules) return
+  //     schedules.forEach(
+  //       (schedule) => ipcRenderer.send('open-schedule', schedule))
+  //   })
+  // }
+
   render () {
-    console.log(this.state.selectableDriversIds)
     return (
       <div id='schedule-page'>
         {
@@ -262,6 +275,12 @@ export default class ScheduleContainer extends React.Component {
           className='round-btn'
           onClick={this.prepareSchedule}>
           <img src='app/assets/icon_drukuj.svg' />
+        </button>
+        <button
+          className='round-btn'
+          style={{width: 42, height: 42, margin: '70px 27px 0'}}
+          onClick={() => ipcRenderer.send('browse-schedules')}>
+          <img src='app/assets/icon_folder.svg' />
         </button>
       </div>
     )

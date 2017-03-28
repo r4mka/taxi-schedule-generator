@@ -2,10 +2,12 @@ const electron  = require('electron')
 const path      = require('path')
 const PdfMake   = require('pdfmake')
 const fs        = require('fs')
+const PDFWindow = require('electron-pdf-window')
 
 const ipcMain       = electron.ipcMain
 const app           = electron.app
 const BrowserWindow = electron.BrowserWindow
+const dialog        = electron.dialog
 const reactDevTools = '/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0'
 const schedulesPath = path.join(__dirname, '/app/resources/grafiki')
 
@@ -60,5 +62,25 @@ ipcMain.on('check-schedules', (event) => {
       return event.sender.send('check-schedules-reply-err', err)
     }
     return event.sender.send('check-schedules-reply', files)
+  })
+})
+
+ipcMain.on('browse-schedules', (event) => {
+  const options = {
+    defaultPath: 'app/resources/grafiki',
+    properties:  ['openFile', 'multiSelections']
+  }
+
+  dialog.showOpenDialog(options, (schedules) => {
+    if (!schedules) return
+
+    schedules.forEach((schedule) => {
+      const win = new PDFWindow({
+        width:  800,
+        height: 600
+      })
+
+      win.loadURL(schedule)
+    })
   })
 })

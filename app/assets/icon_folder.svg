@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="16px" viewBox="0 0 20 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_folder</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="grafik_uzupelniony" transform="translate(-1042.000000, -233.000000)" fill="#D0011B">
+            <path d="M1050,233 L1044,233 C1042.9,233 1042,233.9 1042,235 L1042,247 C1042,248.1 1042.9,249 1044,249 L1060,249 C1061.1,249 1062,248.1 1062,247 L1062,237 C1062,235.9 1061.1,235 1060,235 L1052,235 L1050,233 L1050,233 Z" id="icon_folder"></path>
+        </g>
+    </g>
+</svg>
