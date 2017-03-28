@@ -10,6 +10,7 @@
   "author": "Adam Ramski",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.2.0",
     "flux": "^2.1.1",
     "keymirror": "^0.1.1",
     "lodash": "^4.17.4",

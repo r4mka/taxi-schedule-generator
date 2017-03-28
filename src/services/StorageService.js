@@ -60,6 +60,18 @@ class StorageService {
     })
   }
 
+  deleteSchedule (filename, done) {
+    const query = {
+      docType:  'schedule',
+      filename: filename
+    }
+    
+    this.database.remove(query, {}, (err) => {
+      if (err) return done(err)
+      done()
+    })
+  }
+
   getSchedules (cb) {
     this.database.find({docType: 'schedule'}, (err, doc) => {
       if (err) return cb(err)

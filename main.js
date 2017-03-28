@@ -7,6 +7,7 @@ const ipcMain       = electron.ipcMain
 const app           = electron.app
 const BrowserWindow = electron.BrowserWindow
 const reactDevTools = '/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0'
+const schedulesPath = path.join(__dirname, '/app/resources/grafiki')
 
 // reference to window object to prevent garbage collection
 let mainWindow
@@ -36,8 +37,6 @@ app.on('activate', () => {
 })
 
 ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
-  console.log('receive msg in main process')
-
   const Roboto = {
     Roboto: {
       normal:      './app/fonts/Roboto-Regular.ttf',
@@ -49,9 +48,17 @@ ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
   
   const printer  = new PdfMake(Roboto)
   const schedule = printer.createPdfKitDocument(pdfDefinition)
-  schedule.pipe(fs.createWriteStream('./app/resources/' + pdfName))
+  schedule.pipe(fs.createWriteStream('./app/resources/grafiki/' + pdfName))
   schedule.end()
 
-  console.log('Schedule generated successfully')
   event.sender.send('generate-schedule-reply', 'done')
+})
+
+ipcMain.on('check-schedules', (event) => {
+  fs.readdir(schedulesPath, (err, files) => {
+    if (err) {
+      return event.sender.send('check-schedules-reply-err', err)
+    }
+    return event.sender.send('check-schedules-reply', files)
+  })
 })

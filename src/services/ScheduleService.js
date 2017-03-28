@@ -1,10 +1,41 @@
 import StorageService from './StorageService'
 import utils          from '../utils'
+import async          from 'async'
 import _              from 'lodash'
 const ipcRenderer = window.require('electron').ipcRenderer
 
 module.exports = {
-  createSchedule: createSchedule
+  createSchedule: createSchedule,
+  checkSchedules: checkSchedules
+}
+
+function checkSchedules (done) {
+  ipcRenderer.on('check-schedules-reply-err', (event, err) => done(err))
+  ipcRenderer.on('check-schedules-reply', (event, files) => {
+    files.forEach((file) => {
+      console.log(file)
+    })
+
+    StorageService.getSchedules((err, schedules) => {
+      if (err) return done(err)
+      if (!schedules.length) return done()
+
+      async.each(schedules, (schedule, next) => {
+        if (_.findIndex(files, (file) => file === schedule.filename) === -1) {
+          console.log('remove: ' + schedule.filename)
+          StorageService.deleteSchedule(schedule.filename, next)
+        } else {
+          next()
+        }
+      }, (err) => {
+        if (err) return done(err)
+
+        return done()
+      })
+    })
+  })
+
+  ipcRenderer.send('check-schedules', null)
 }
 
 function createSchedule (options, done) {
@@ -20,12 +51,13 @@ function createSchedule (options, done) {
     _createScheduleTable(scheduleDocument, (err, scheduleTable, scheduleDocument) => {
       if (err) return done(err)
 
+      const pdfName = 'grafik-' + options.year + '-' + options.month + '.pdf'
+      scheduleDocument.filename = pdfName
+
       console.log('schedule table created successfully')
       StorageService.addSchedule(scheduleDocument, (err, scheduleDocument) => {
         if (err) return done(err)
-
-        const pdfName  = 'grafik-' + options.year + '-' + options.month + '.pdf'
-
+      
         const colsWidth     = []
 
         // set columns width to 'auto'
