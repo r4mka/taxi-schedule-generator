@@ -1,5 +1,6 @@
 import React           from 'react'
 import _               from 'lodash'
+import utils           from '../utils'
 import ScheduleStore   from '../stores/ScheduleStore'
 import ScheduleService from '../services/ScheduleService'
 import StorageService  from '../services/StorageService'
@@ -21,10 +22,10 @@ export default class ScheduleContainer extends React.Component {
       submitBtnLabel:  'tak'
     }
 
-    this.fillScheduleInputsPopup = {
-      header:          'Uwaga!',
-      description:     'Uzupełnij wszystkie pola!',
-      submitBtnLabel:  'zamknij'
+    this.validationPopup = {
+      header:         'Uwaga!',
+      description:    '',
+      submitBtnLabel: 'zamknij'
     }
 
     this.state = this.getScheduleState()
@@ -35,10 +36,12 @@ export default class ScheduleContainer extends React.Component {
 
   componentDidMount () {
     ScheduleStore.addChangeListener(this._onChange)
+    DriversStore.addChangeListener(this._onChange)
   }
 
   componentWillUnmount () {
     ScheduleStore.removeChangeListener(this._onChange)
+    DriversStore.removeChangeListener(this._onChange)
   }
 
   _onChange () {
@@ -62,9 +65,10 @@ export default class ScheduleContainer extends React.Component {
   }
 
   prepareSchedule (e) {
-    const isValid = this._validateScheduleInputs()
-    if (!isValid) {
-      return AppActions.showPopup(this.fillScheduleInputsPopup)
+    const validationResult = this._validateScheduleInputs()
+    if (!validationResult.success) {
+      this.validationPopup.description = validationResult.message
+      return AppActions.showPopup(this.validationPopup)
     }
 
     StorageService.getSchedules((err, schedules) => {
@@ -86,7 +90,9 @@ export default class ScheduleContainer extends React.Component {
         }
         if (_.find(schedules, {date: date})) {
           // ask user if he want to override existing schedule
-          AppActions.showPopup(this.overrideSchedulePopup)
+          this.validationPopup.description =
+          'Czy chcesz nadpisać istniejący grafik na wybrany miesiąc?'
+          AppActions.showPopup(this.validationPopup)
         } else {
           // this.createSchedule()
         }
@@ -104,40 +110,66 @@ export default class ScheduleContainer extends React.Component {
 
   _validateScheduleInputs () {
     let isValid = true
+    let message = ''
     let state   = this.state
+
+    const empty = 'Uzupełnij wszystkie pola.'
 
     if (state.year.trim().length === 0) {
       isValid = false
+      message = empty
+    } else {
+      const _now = new Date()
+      if (_now.getFullYear() > parseInt(state.year)) {
+        isValid = false
+        message = 'Wybrany rok jest niepoprawny'
+      }
     }
     
     if (state.month.trim().length === 0) {
       isValid = false
+      message = empty
+    } else {
+      const _now = new Date()
+      if (_now.getMonth() > utils.monthToNum(state.month) - 1) {
+        isValid = false
+        message = 'Wybrany miesiąc jest niepoprawny'
+      }
     }
     
     if (!state.previousScheduleDriver) {
       isValid = false
+      message = empty
     }
     
     if (state.numberOfDriversPerAllDays.trim().length === 0) {
       isValid = false
+      message = empty
     }
     
     if (state.numberOfDriversPerFridayNight.trim().length === 0) {
       isValid = false
+      message = empty
     }
     
     if (state.numberOfDriversPerSaturdayNight.trim().length === 0) {
       isValid = false
+      message = empty
     }
 
     if (state.numberOfDriversPerOtherNights.trim().length === 0) {
       isValid = false
+      message = empty
     }
 
-    return isValid
+    return {
+      success: isValid,
+      message: message
+    }
   }
 
   render () {
+    console.log(this.state.selectableDriversIds)
     return (
       <div id='schedule-page'>
         {
@@ -149,7 +181,7 @@ export default class ScheduleContainer extends React.Component {
           <h3>Miesiąc na który ma zostać utworzony grafik</h3>
           <input
             type='number'
-            min='0'
+            min={new Date().getFullYear().toString()}
             style={{width: 125, marginRight: 12}}
             className='text-input'
             value={this.state.year}
@@ -181,7 +213,8 @@ export default class ScheduleContainer extends React.Component {
               style={{width: 140}}
               className='text-input'
               value={this.state.numberOfDriversPerAllDays}
-              onChange={(e) => AppActions.setNumberOfDriversPerAllDays(e.target.value)}
+              onChange={(e) =>
+                AppActions.setNumberOfDriversPerAllDays(e.target.value)}
               placeholder='Cały tydzień' />
           </div>
           <div style={{marginBottom: 11}}>
@@ -194,7 +227,8 @@ export default class ScheduleContainer extends React.Component {
               style={{width: 120, marginRight: 12}}
               className='text-input'
               value={this.state.numberOfDriversPerOtherNights}
-              onChange={(e) => AppActions.setNumberOfDriversPerOtherNights(e.target.value)}
+              onChange={(e) =>
+                AppActions.setNumberOfDriversPerOtherNights(e.target.value)}
               placeholder='W tygodniu' />
             <input
               type='number'
@@ -202,7 +236,8 @@ export default class ScheduleContainer extends React.Component {
               style={{width: 100, marginRight: 12}}
               className='text-input'
               value={this.state.numberOfDriversPerFridayNight}
-              onChange={(e) => AppActions.setNumberOfDriversPerFridayNight(e.target.value)}
+              onChange={(e) =>
+                AppActions.setNumberOfDriversPerFridayNight(e.target.value)}
               placeholder='W piątki' />
             <input
               type='number'
@@ -210,7 +245,8 @@ export default class ScheduleContainer extends React.Component {
               style={{width: 108}}
               className='text-input'
               value={this.state.numberOfDriversPerSaturdayNight}
-              onChange={(e) => AppActions.setNumberOfDriversPerSaturdayNight(e.target.value)}
+              onChange={(e) =>
+                AppActions.setNumberOfDriversPerSaturdayNight(e.target.value)}
               placeholder='W soboty' />
           </div>
           <hr />

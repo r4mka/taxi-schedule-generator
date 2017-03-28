@@ -1,18 +1,17 @@
 import AppActionTypes from '../constants/AppActionTypes'
 import BaseStore      from './BaseStore'
-import DriversStore   from './DriversStore'
-import Storage        from '../services/StorageService'
-import _              from 'lodash'
+import utils          from '../utils'
 
 class ScheduleStore extends BaseStore {
   constructor () {
     super()
+    const _now = new Date()
     this.subscribe(() => this._registerToActions.bind(this))
-    this._year = ''
-    this._month = ''
+    this._year = _now.getFullYear().toString()
+    this._month = utils.monthToString(_now.getMonth()).toLowerCase()
     this._message = ''
     // how to determine ?
-    this._previousScheduleDriver = 0
+    this._previousScheduleDriver = ''
     this._numberOfDriversPerAllDays = ''
     this._numberOfDriversPerFridayNight = ''
     this._numberOfDriversPerSaturdayNight = ''

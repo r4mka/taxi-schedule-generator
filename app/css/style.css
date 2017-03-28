@@ -115,6 +115,9 @@ button[disabled] {
   border-radius: 2px;
   text-align: left;
 }
+#schedule-form hr {
+  margin-bottom: 24.7px;
+}
 /* ------------------------------------------------------- */
 /* Custom Bootstrap navbar ------------------------------- */
 .navbar, .navbar-default {
