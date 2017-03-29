@@ -1,12 +1,11 @@
-import React           from 'react'
-import _               from 'lodash'
-import utils           from '../utils'
-import ScheduleStore   from '../stores/ScheduleStore'
-import ScheduleService from '../services/ScheduleService'
-import StorageService  from '../services/StorageService'
-import DriversStore    from '../stores/DriversStore'
-import AppActions      from '../actions/AppActions'
-import CommonSelector  from '../views/CommonSelector'
+import React                from 'react'
+import utils                from '../utils'
+import ScheduleStore        from '../stores/ScheduleStore'
+import StorageService       from '../services/StorageService'
+import ScheduleService      from '../services/ScheduleService'
+import DriversStore         from '../stores/DriversStore'
+import AppActions           from '../actions/AppActions'
+import CommonSelector       from '../views/CommonSelector'
 import PreviousMonthDrivers from '../views/PreviousMonthDrivers'
 
 const ipcRenderer = window.require('electron').ipcRenderer
@@ -20,7 +19,7 @@ export default class ScheduleContainer extends React.Component {
       description:     'Grafik na podany miesiąc już istnieje. Czy chcesz go nadpisać?',
       handleCancelBtn: AppActions.hidePopup,
       cancelBtnLabel:  'nie',
-      handleSubmitBtn: this.createSchedule,
+      handleSubmitBtn: () => this.createSchedule(this.state),
       submitBtnLabel:  'tak'
     }
 
@@ -29,6 +28,14 @@ export default class ScheduleContainer extends React.Component {
       description:    '',
       submitBtnLabel: 'zamknij'
     }
+
+    ScheduleService.checkSchedules((err) => {
+      if (err) {
+        console.log(err)
+        // show popup
+        return
+      }
+    })
 
     this.state = this.getScheduleState()
     this._onChange = this._onChange.bind(this)
@@ -73,36 +80,53 @@ export default class ScheduleContainer extends React.Component {
       return AppActions.showPopup(this.validationPopup)
     }
 
-    StorageService.getSchedules((err, schedules) => {
+    console.log('check if schedule for selected date exists')
+    const year  = this.state.year
+    const month = this.state.month
+    
+    StorageService.getScheduleByDate(year, month, (err, schedule) => {
       if (err) {
         console.log(err)
-        // show proper popup
+        // show error popup
         return
       }
-      console.log('schedules: ' + schedules)
-      // If there is no schedules in db
-      if (!schedules.length) {
-        // get list of users who performed night duty in last day of previous month
-        AppActions.clearPreviousMonthDrivers()
-        AppActions.showPreviousMonthDrivers()
+      // console.log('___schedule: ')
+      // console.log(schedule)
+      if (schedule) {
+        // ask user if he want to override existing schedule
+        AppActions.showPopup(this.overrideSchedulePopup)
       } else {
-        console.log('check if schedule for selected date exists')
-        const date = {
-          year:  this.state.year,
-          month: this.state.month
-        }
-        if (_.find(schedules, {date: date})) {
-          // ask user if he want to override existing schedule
-          AppActions.showPopup(this.overrideSchedulePopup)
-        } else {
-          // this.createSchedule()
-        }
+        // check if previous schedule exists
+        StorageService.getPreviousScheduleByDate(year, month, (err, schedule) => {
+          if (err) {
+            console.log(err)
+            // show error popup
+            return
+          }
+
+          // console.log('___previous_schedule: ')
+          // console.log(schedule)
+          if (!schedule) {
+            // get list of users who performed night duty in last day of previous month
+            AppActions.clearPreviousMonthDrivers()
+            AppActions.showPreviousMonthDrivers()
+          } else {
+            this.createSchedule(this.state)
+          }
+        })
       }
     })
   }
 
-  createSchedule () {
-    ScheduleService.createSchedule(this.state, (err) => {
+  createSchedule (options) {
+    const previousMonthDrivers = ScheduleStore.previousMonthDrivers
+    
+    if (previousMonthDrivers) {
+      console.log(previousMonthDrivers)
+      options.previousMonthDrivers = previousMonthDrivers
+    }
+
+    ScheduleService.createSchedule(options, (err) => {
       if (err) {
         console.log(err)
       }
@@ -132,7 +156,7 @@ export default class ScheduleContainer extends React.Component {
       message = empty
     } else {
       const _now = new Date()
-      if (_now.getMonth() > utils.monthToNum(state.month) - 1) {
+      if (_now.getMonth() > utils.monthToNum(state.month)) {
         isValid = false
         message = 'Wybrany miesiąc jest niepoprawny'
       }
@@ -176,7 +200,7 @@ export default class ScheduleContainer extends React.Component {
           this.state.showPreviousMonthDrivers
           ? <PreviousMonthDrivers
             drivers={DriversStore.drivers}
-            onSubmit={this.prepareSchedule} />
+            onSubmit={() => this.createSchedule(this.state)} />
           : null
         }
         <form id='schedule-form'>
@@ -268,7 +292,16 @@ export default class ScheduleContainer extends React.Component {
         <button
           className='round-btn'
           style={{width: 42, height: 42, margin: '70px 27px 0'}}
-          onClick={() => ipcRenderer.send('browse-schedules')}>
+          onClick={() => {
+            ipcRenderer.send('browse-schedules')
+            // ScheduleService.checkSchedules((err) => {
+            //   if (err) {
+            //     console.log(err)
+            //     // show popup
+            //     return
+            //   }
+            // })
+          }}>
           <img src='app/assets/icon_folder.svg' />
         </button>
       </div>

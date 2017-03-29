@@ -1,5 +1,7 @@
 import config from 'config'
 import _      from 'lodash'
+import utils  from '../utils'
+
 const Datastore = require('nedb')
 
 class StorageService {
@@ -72,20 +74,39 @@ class StorageService {
     })
   }
 
-  getSchedules (cb) {
+  getSchedules (done) {
     this.database.find({docType: 'schedule'}, (err, doc) => {
-      if (err) return cb(err)
-      // if (!doc) return cb(null, [])
-      cb(null, doc)
+      if (err) return done(err)
+      done(null, doc)
     })
   }
 
-  getScheduleByDate (year, month, cb) {
-    this.database.find({'docType': 'schedule', 'date.year': year, 'date.month': month},
-      (err, doc) => {
-        if (err) return cb(err)
-        cb(null, doc)
-      })
+  getScheduleByDate (year, month, done) {
+    const query = {
+      'docType':    'schedule',
+      'date.year':  year,
+      'date.month': month
+    }
+    
+    this.database.find(query, (err, doc) => {
+      if (err) return done(err)
+      if (!doc.length) return done(null, null)
+      done(null, doc[0])
+    })
+  }
+
+  getPreviousScheduleByDate (year, month, done) {
+    month = utils.monthToNum(month)
+
+    if (month === 0) {
+      // If january 2017 back to december 2016
+      month = utils.monthToString(11)
+      year = (year - 1).toString()
+    } else {
+      month = utils.monthToString(month - 1)
+    }
+    
+    this.getScheduleByDate(year, month, done)
   }
 
   updateSchedule (schedule, cb) {
@@ -107,6 +128,7 @@ class StorageService {
   prepareScheduleDocument (options, done) {
     const scheduleDoc = {}
     scheduleDoc.docType = 'schedule'
+    scheduleDoc.filename = options.filename
     scheduleDoc.date = {
       year:        options.year,
       month:       options.month,
@@ -120,7 +142,7 @@ class StorageService {
       otherNightsNum:   options.numberOfDriversPerOtherNights
     }
     scheduleDoc.schedule = []
-    // console.log(scheduleDoc.schedule)
+    
     // get active drivers
     this.database.find({
       docType:         'driver',
@@ -137,8 +159,8 @@ class StorageService {
       for (let i = 0; i < options.daysInMonth; i++) {
         driverSchedule.push('')
       }
-      // console.log('_____')
-      // console.log(scheduleDoc.schedule)
+
+      drivers = _.sortBy(drivers, ['id'])
       drivers.forEach((driver) => {
         const schedule = {
           driverId:          driver.id,
@@ -148,10 +170,38 @@ class StorageService {
         }
 
         scheduleDoc.schedule.push(schedule)
-        // console.log(scheduleDoc.schedule)
       })
-      // console.log(scheduleDoc)
-      return done(null, scheduleDoc)
+      
+      if (options.previousMonthDrivers &&
+          _.isArray(options.previousMonthDrivers) &&
+          options.previousMonthDrivers.length !== 0) {
+        scheduleDoc.options.previousMonthDrivers = options.previousMonthDrivers
+        console.log('from checkboxes')
+        console.log(scheduleDoc)
+        return done(null, scheduleDoc)
+      } else {
+        const previousMonthDrivers = []
+        const year  = scheduleDoc.date.year
+        const month = scheduleDoc.date.month
+        this.getPreviousScheduleByDate(year, month, (err, prevSchedule) => {
+          if (err) return done(err)
+          if (!prevSchedule) return done(new Error('Previous schedule doesn\'t exist in database'))
+
+          console.log(prevSchedule)
+
+          const lastDay = prevSchedule.date.daysInMonth - 1
+          prevSchedule.schedule.forEach((schedule) => {
+            if (schedule.driverSchedule[lastDay] === 'N') {
+              previousMonthDrivers.push(schedule.driverId)
+            }
+          })
+
+          scheduleDoc.options.previousMonthDrivers = previousMonthDrivers
+          console.log('from database')
+          console.log(scheduleDoc)
+          return done(null, scheduleDoc)
+        })
+      }
     })
   }
 

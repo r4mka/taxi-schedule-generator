@@ -57,6 +57,7 @@ ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
 })
 
 ipcMain.on('check-schedules', (event) => {
+  console.log('check-schedules')
   fs.readdir(schedulesPath, (err, files) => {
     if (err) {
       return event.sender.send('check-schedules-reply-err', err)

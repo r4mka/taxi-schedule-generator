@@ -35,40 +35,40 @@ module.exports = {
     let month = ''
     switch (num) {
       case 0:
-        month = 'STYCZEŃ'
+        month = 'styczeń'
         break
       case 1:
-        month = 'LUTY'
+        month = 'luty'
         break
       case 2:
-        month = 'MARZEC'
+        month = 'marzec'
         break
       case 3:
-        month = 'KWIECIEŃ'
+        month = 'kwiecień'
         break
       case 4:
-        month = 'MAJ'
+        month = 'maj'
         break
       case 5:
-        month = 'CZERWIEC'
+        month = 'czerwiec'
         break
       case 6:
-        month = 'LIPIEC'
+        month = 'lipiec'
         break
       case 7:
-        month = 'SIERPIEŃ'
+        month = 'sierpień'
         break
       case 8:
-        month = 'WRZESIEŃ'
+        month = 'wrzesień'
         break
       case 9:
-        month = 'PAŻDZIERNIK'
+        month = 'pażdziernik'
         break
       case 10:
-        month = 'LISTOPAD'
+        month = 'listopad'
         break
       case 11:
-        month = 'GRUDZIEŃ'
+        month = 'grudzień'
         break
       default:
         return undefined
@@ -118,7 +118,7 @@ module.exports = {
       default:
         return undefined
     }
-    return (monthNum + 1)
+    return (monthNum)
   },
   
   padNumber (num) {

@@ -1,6 +1,7 @@
 import AppActionTypes from '../constants/AppActionTypes'
 import BaseStore      from './BaseStore'
 import utils          from '../utils'
+import _              from 'lodash'
 
 class ScheduleStore extends BaseStore {
   constructor () {
@@ -17,7 +18,7 @@ class ScheduleStore extends BaseStore {
     this._numberOfDriversPerSaturdayNight = ''
     this._numberOfDriversPerOtherNights = ''
     this._showPreviousMonthDrivers
-    this._previousMonthDrivers = new Set()
+    this._previousMonthDrivers = []
 
     this._selectableMonths = [
       'styczeń', 'luty', 'marzec',
@@ -69,20 +70,17 @@ class ScheduleStore extends BaseStore {
         this._showPreviousMonthDrivers = false
         break
 
-      case AppActionTypes.ADD_PREVIOUS_MONTH_DRIVER:
-        this._previousMonthDrivers.add(action.driverId)
-        break
-      
       case AppActionTypes.TOGGLE_PREVIOUS_MONTH_DRIVER:
-        if (this._previousMonthDrivers.has(action.driverId)) {
-          this._previousMonthDrivers.delete(action.driverId)
+        const index = _.findIndex(this._previousMonthDrivers, (driver) => driver === action.driverId)
+        if (index !== -1) {
+          this._previousMonthDrivers.splice(index, 1)
         } else {
-          this._previousMonthDrivers.add(action.driverId)
+          this._previousMonthDrivers.push(action.driverId)
         }
         break
 
       case AppActionTypes.CLEAR_PREVIOUS_MONTH_DRIVERS:
-        this._previousMonthDrivers.clear()
+        this._previousMonthDrivers.splice(0, this._previousMonthDrivers.length)
         break
 
       default:

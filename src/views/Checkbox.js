@@ -17,7 +17,7 @@ export default class Checkbox extends React.Component {
       isChecked: !prevState.isChecked
     }))
 
-    handleCheckboxChange(label)
+    handleCheckboxChange(parseInt(label))
   }
 
   render () {

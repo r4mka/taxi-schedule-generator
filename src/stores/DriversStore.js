@@ -172,9 +172,11 @@ class DriversStore extends BaseStore {
 
   get selectableDriversIds () {
     const driverIds = []
+    this._drivers = _.sortBy(this._drivers, ['id'])
     this._drivers.forEach((driver) => {
       driverIds.push(driver.id)
     })
+
     return driverIds
   }
 }
