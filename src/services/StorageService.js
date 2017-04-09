@@ -1,6 +1,7 @@
-import config from 'config'
-import _      from 'lodash'
-import utils  from '../utils'
+import config       from 'config'
+import _            from 'lodash'
+import utils        from '../utils'
+import DriversStore from '../stores/DriversStore'
 
 const Datastore = require('nedb')
 
@@ -134,8 +135,12 @@ class StorageService {
       month:       options.month,
       daysInMonth: options.daysInMonth
     }
+
+    const lastDriver  = parseInt(options.previousScheduleDriver)
+    const firstDriver = DriversStore.getNextDriver(lastDriver)
+
     scheduleDoc.options = {
-      previousDriver:   options.previousScheduleDriver,
+      firstDriver:      firstDriver,
       allDaysNum:       options.numberOfDriversPerAllDays,
       fridayNightNum:   options.numberOfDriversPerFridayNight,
       saturdayNightNum: options.numberOfDriversPerSaturdayNight,
@@ -180,28 +185,55 @@ class StorageService {
         console.log(scheduleDoc)
         return done(null, scheduleDoc)
       } else {
-        const previousMonthDrivers = []
         const year  = scheduleDoc.date.year
         const month = scheduleDoc.date.month
-        this.getPreviousScheduleByDate(year, month, (err, prevSchedule) => {
+        this.getNightDriversFromPreviousMonth(year, month, (err, previousMonthDrivers) => {
           if (err) return done(err)
-          if (!prevSchedule) return done(new Error('Previous schedule doesn\'t exist in database'))
-
-          console.log(prevSchedule)
-
-          const lastDay = prevSchedule.date.daysInMonth - 1
-          prevSchedule.schedule.forEach((schedule) => {
-            if (schedule.driverSchedule[lastDay] === 'N') {
-              previousMonthDrivers.push(schedule.driverId)
-            }
-          })
-
+          
           scheduleDoc.options.previousMonthDrivers = previousMonthDrivers
-          console.log('from database')
-          console.log(scheduleDoc)
           return done(null, scheduleDoc)
         })
+
+        // const previousMonthDrivers = []
+        // const year  = scheduleDoc.date.year
+        // const month = scheduleDoc.date.month
+        // this.getPreviousScheduleByDate(year, month, (err, prevSchedule) => {
+        //   if (err) return done(err)
+        //   if (!prevSchedule) return done(new Error('Previous schedule doesn\'t exist in database'))
+
+        //   console.log(prevSchedule)
+
+        //   const lastDay = prevSchedule.date.daysInMonth - 1
+        //   prevSchedule.schedule.forEach((schedule) => {
+        //     if (schedule.driverSchedule[lastDay] === 'N') {
+        //       previousMonthDrivers.push(schedule.driverId)
+        //     }
+        //   })
+
+        //   scheduleDoc.options.previousMonthDrivers = previousMonthDrivers
+        //   console.log('from database')
+        //   console.log(scheduleDoc)
+        //   return done(null, scheduleDoc)
+        // })
       }
+    })
+  }
+
+  getNightDriversFromPreviousMonth (year, month, done) {
+    const previousMonthDrivers = []
+    
+    this.getPreviousScheduleByDate(year, month, (err, prevSchedule) => {
+      if (err) return done(err)
+      if (!prevSchedule) return done()
+
+      const lastDay = prevSchedule.date.daysInMonth - 1
+      prevSchedule.schedule.forEach((schedule) => {
+        if (schedule.driverSchedule[lastDay] === 'N') {
+          previousMonthDrivers.push(schedule.driverId)
+        }
+      })
+
+      return done(null, previousMonthDrivers)
     })
   }
 

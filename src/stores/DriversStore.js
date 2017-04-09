@@ -158,6 +158,15 @@ class DriversStore extends BaseStore {
     }
   }
 
+  getNextDriver (id) {
+    this._drivers = _.sortBy(this._drivers, ['id'])
+    while (id++) {
+      console.log('find for driver id: ' + id)
+      let driver = _.find(this._drivers, {id: id})
+      if (driver) return driver.id
+    }
+  }
+
   get drivers () {
     return (this._drivers = _.sortBy(this._drivers, ['id']))
   }

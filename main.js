@@ -48,11 +48,18 @@ ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
     }
   }
   
-  const printer  = new PdfMake(Roboto)
-  const schedule = printer.createPdfKitDocument(pdfDefinition)
-  schedule.pipe(fs.createWriteStream('./app/resources/grafiki/' + pdfName))
-  schedule.end()
+  const schedulePath = path.resolve('./app/resources/grafiki/' + pdfName)
+  const printer      = new PdfMake(Roboto)
+  const schedule     = printer.createPdfKitDocument(pdfDefinition)
+  const win          = new PDFWindow({
+    width:  800,
+    height: 600
+  })
 
+  schedule.pipe(fs.createWriteStream(schedulePath))
+  schedule.end()
+  console.log(schedulePath)
+  win.loadURL(schedulePath)
   event.sender.send('generate-schedule-reply', 'done')
 })
 
@@ -76,6 +83,7 @@ ipcMain.on('browse-schedules', (event) => {
     if (!schedules) return
 
     schedules.forEach((schedule) => {
+      console.log('shcedule: ' + schedule)
       const win = new PDFWindow({
         width:  800,
         height: 600

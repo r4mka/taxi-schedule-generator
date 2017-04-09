@@ -11,10 +11,10 @@ module.exports = {
 }
 
 function checkSchedules (done) {
-  console.log('CHECK SCHEDULES')
+  // console.log('CHECK SCHEDULES')
   ipcRenderer.on('check-schedules-reply-err', (event, err) => done(err))
   ipcRenderer.on('check-schedules-reply', (event, files) => {
-    console.log('check-schedules-reply')
+    // console.log('check-schedules-reply')
     StorageService.getSchedules((err, schedules) => {
       if (err) return done(err)
       if (!schedules.length) return done()
@@ -23,18 +23,18 @@ function checkSchedules (done) {
       // console.log(schedules)
       async.each(schedules, (schedule, next) => {
         // console.log(schedule.filename)
-        console.log('_____')
+        // console.log('_____')
         if (_.findIndex(files, (file) => {
-            console.log(file)
-            console.log(schedule.filename)
-            console.log(file === schedule.filename)
+            // console.log(file)
+            // console.log(schedule.filename)
+            // console.log(file === schedule.filename)
             return file === schedule.filename
           }) === -1) {
-          console.log('-1')
+          // console.log('-1')
           console.log('remove: ' + schedule.filename)
           StorageService.deleteSchedule(schedule.filename, next)
         } else {
-          console.log('1')
+          // console.log('1')
           next()
         }
       }, (err) => {
@@ -117,7 +117,10 @@ function _createScheduleTable (scheduleDocument, done) {
   console.log('month: ' + (parseInt(month) + 1))
   console.log('daysInMonth: ' + daysInMonth)
   
+  // create schedule header
   const body = _createScheduleHeader(year, month, daysInMonth)
+  
+  // add row for each driver
   scheduleDocument.schedule.forEach((_schedule) => {
     const schedule = _.cloneDeep(_schedule)
     schedule.driverSchedule.unshift(schedule.driverId)
@@ -129,14 +132,15 @@ function _createScheduleTable (scheduleDocument, done) {
   let assignedNs    = 0
   let nightsNum     = 0
   let dayOfTheMonth = -1
+  let nextDay       = true
 
   // start from spiecified driver
   let startFromIndex
-  const previousDriverId = scheduleDocument.options.previousDriver
+  const firstDriverId = scheduleDocument.options.firstDriver
 
   for (let i = 4; i < body.length; i++) {
     console.log(body[i][0])
-    if (body[i][0] == previousDriverId) {
+    if (body[i][0] === firstDriverId) {
       startFromIndex = i
       break
     }
@@ -170,11 +174,12 @@ function _createScheduleTable (scheduleDocument, done) {
     
     while (true) {
       // console.log('dayOfTheMonth: ' + dayOfTheMonth)
-      if (assignedNs === 0) {
+      if (nextDay) {
         // find index of selected day in days row (body[3])
         dayOfTheMonth = _.indexOf(body[3], day, fromIndex)
         if (dayOfTheMonth === -1) break
 
+        nextDay = false
         fromIndex = dayOfTheMonth + 1
       } else {
         // start from first driver in table
@@ -183,12 +188,17 @@ function _createScheduleTable (scheduleDocument, done) {
       // iterate over all drivers in specified column (day)
       // and add N to pdf document
       for (let i = startFromIndex; i < body.length; i++) {
+        const currentDriverId = parseInt(body[i][0])
+  
         // find schedule table for given driver in db
-        let driverSchedule = _.find(scheduleDocument.schedule, {driverId: body[i][0]})
+        let driverSchedule = _.find(scheduleDocument.schedule, {driverId: currentDriverId})
+        console.log('*************')
+        console.log(driverSchedule)
         if (driverSchedule && driverSchedule.nocturnalActivity) {
           // add N to specified driver schedule
           driverSchedule.driverSchedule[dayOfTheMonth - 1] = 'N'
         } else {
+          console.log('skip!!!')
           continue
         }
         
@@ -197,6 +207,7 @@ function _createScheduleTable (scheduleDocument, done) {
         assignedNs++
         if (assignedNs === nightsNum) {
           assignedNs = 0
+          nextDay = true
           startFromIndex = i
           startFromIndex++
           if (startFromIndex === body.length) {
@@ -213,12 +224,16 @@ function _createScheduleTable (scheduleDocument, done) {
   console.log(previousMonthDrivers)
   const daysNum  = parseInt(scheduleDocument.options.allDaysNum)
   let assignedDs = 0
+  
+  nextDay = true
   startFromIndex = 4
   dayOfTheMonth = 0
   
   while (true) {
-    if (assignedDs === 0) {
+    if (nextDay) {
+      nextDay = false
       dayOfTheMonth++
+      console.log('day: ' + dayOfTheMonth)
       if (dayOfTheMonth > daysInMonth) break
     } else {
       startFromIndex = 4
@@ -228,15 +243,11 @@ function _createScheduleTable (scheduleDocument, done) {
       const currentDriverId = parseInt(body[i][0])
       const driverSchedule  = _.find(scheduleDocument.schedule, {driverId: currentDriverId})
       
-      if (dayOfTheMonth === 30) {
-        console.log(currentDriverId)
-      }
-    
       if (driverSchedule && driverSchedule.dailyActivity) {
         if (dayOfTheMonth === 1) {
           // check last day from previous month
           if (_.findIndex(previousMonthDrivers, (id) => id === currentDriverId) !== -1) {
-            console.log('skip: ' + currentDriverId)
+            console.log('got night in previous day - skip: ' + currentDriverId)
             continue
           } else {
             driverSchedule.driverSchedule[dayOfTheMonth - 1] = 'D'
@@ -246,9 +257,7 @@ function _createScheduleTable (scheduleDocument, done) {
           // check if the current or previous day is not 'N'
           // and if is, skip to next driver
           if (body[i][dayOfTheMonth] === 'N' || body[i][dayOfTheMonth - 1] === 'N') {
-            if (dayOfTheMonth === 30) {
-              console.log('continue')
-            }
+            console.log('continue')
             continue
           } else {
             if (dayOfTheMonth === 30) {
@@ -259,15 +268,14 @@ function _createScheduleTable (scheduleDocument, done) {
           }
         }
       } else {
-        if (dayOfTheMonth === 30) {
-          console.log('skip')
-        }
+        console.log('driver do not drive in day - skip')
         continue
       }
 
       assignedDs++
       if (assignedDs === daysNum) {
         assignedDs = 0
+        nextDay = true
         startFromIndex = i
         startFromIndex++
         if (startFromIndex === body.length) {

@@ -19,8 +19,11 @@ export default class ScheduleContainer extends React.Component {
       description:     'Grafik na podany miesiąc już istnieje. Czy chcesz go nadpisać?',
       handleCancelBtn: AppActions.hidePopup,
       cancelBtnLabel:  'nie',
-      handleSubmitBtn: () => this.createSchedule(this.state),
-      submitBtnLabel:  'tak'
+      handleSubmitBtn: () => {
+        this.createSchedule(this.state)
+        AppActions.hidePopup()
+      },
+      submitBtnLabel: 'tak'
     }
 
     this.validationPopup = {
@@ -29,6 +32,13 @@ export default class ScheduleContainer extends React.Component {
       submitBtnLabel: 'zamknij'
     }
 
+    this.state = this.getScheduleState()
+    this._onChange = this._onChange.bind(this)
+    this.prepareSchedule = this.prepareSchedule.bind(this)
+    this.createSchedule = this.createSchedule.bind(this)
+  }
+
+  componentWillMount () {
     ScheduleService.checkSchedules((err) => {
       if (err) {
         console.log(err)
@@ -37,10 +47,21 @@ export default class ScheduleContainer extends React.Component {
       }
     })
 
-    this.state = this.getScheduleState()
-    this._onChange = this._onChange.bind(this)
-    this.prepareSchedule = this.prepareSchedule.bind(this)
-    this.createSchedule = this.createSchedule.bind(this)
+    console.log('get driver who will start schedule')
+    const year  = this.state.year
+    const month = this.state.month
+    StorageService.getNightDriversFromPreviousMonth(year, month, (err, drivers) => {
+      if (err) {
+        console.log(err)
+        // show popup
+        return
+      }
+      
+      if (!drivers || drivers.length === 0) return
+
+      const lastDriver = drivers[drivers.length - 1]
+      AppActions.setPreviousScheduleDriver(lastDriver.toString())
+    })
   }
 
   componentDidMount () {
@@ -200,7 +221,10 @@ export default class ScheduleContainer extends React.Component {
           this.state.showPreviousMonthDrivers
           ? <PreviousMonthDrivers
             drivers={DriversStore.drivers}
-            onSubmit={() => this.createSchedule(this.state)} />
+            onSubmit={() => {
+              this.createSchedule(this.state)
+              AppActions.hidePreviousMonthDrivers()
+            }} />
           : null
         }
         <form id='schedule-form'>
