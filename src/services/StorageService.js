@@ -238,25 +238,25 @@ class StorageService {
   }
 
   addSchedule (schedule, done) {
-    // check if schedule for given month exists
-    this.database.find({
+    const query = {
       'docType':    'schedule',
-      'date.year':  schedule.year,
-      'date.month': schedule.month
-    }, (err, docs) => {
+      'date.year':  schedule.date.year,
+      'date.month': schedule.date.month
+    }
+    // check if schedule for given month exists
+    this.database.find(query, (err, docs) => {
       if (err) return done(err)
       // if there is no schedule - add new one
       if (_.isEmpty(docs)) {
+        console.log('Insert new schedule')
         this.database.insert(schedule, (err, doc) => {
           if (err) return done(err)
           return done(null, doc)
         })
       } else { // if there is already schedule - update it
-        this.database.update({
-          'docType':    'schedule',
-          'date.year':  schedule.year,
-          'date.month': schedule.month
-        },
+        console.log('Update existing schedule')
+        this.database.update(
+        query,
         {$set: schedule},
         {returnUpdatedDocs: true},
         (err, numReplaced, doc) => {

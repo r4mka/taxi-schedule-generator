@@ -47,9 +47,10 @@ export default class ScheduleContainer extends React.Component {
       }
     })
 
-    console.log('get driver who will start schedule')
     const year  = this.state.year
     const month = this.state.month
+    console.log('get driver who will start schedule for: ' + month + ' in ' + year)
+
     StorageService.getNightDriversFromPreviousMonth(year, month, (err, drivers) => {
       if (err) {
         console.log(err)
@@ -57,10 +58,13 @@ export default class ScheduleContainer extends React.Component {
         return
       }
       
-      if (!drivers || drivers.length === 0) return
-
-      const lastDriver = drivers[drivers.length - 1]
-      AppActions.setPreviousScheduleDriver(lastDriver.toString())
+      if (!drivers || drivers.length === 0) {
+        console.log('No previous schedule')
+        AppActions.setPreviousScheduleDriver('')
+      } else {
+        const lastDriver = drivers[drivers.length - 1]
+        AppActions.setPreviousScheduleDriver(lastDriver.toString())
+      }
     })
   }
 
@@ -72,6 +76,31 @@ export default class ScheduleContainer extends React.Component {
   componentWillUnmount () {
     ScheduleStore.removeChangeListener(this._onChange)
     DriversStore.removeChangeListener(this._onChange)
+  }
+
+  componentWillUpdate (nextProps, nextState) {
+    if (nextState.year !== this.state.year ||
+        nextState.month !== this.state.month) {
+      const year  = nextState.year
+      const month = nextState.month
+      console.log('get driver who will start schedule for: ' + month + ' in ' + year)
+
+      StorageService.getNightDriversFromPreviousMonth(year, month, (err, drivers) => {
+        if (err) {
+          console.log(err)
+          // show popup
+          return
+        }
+        
+        if (!drivers || drivers.length === 0) {
+          console.log('No previous schedule')
+          AppActions.setPreviousScheduleDriver('')
+        } else {
+          const lastDriver = drivers[drivers.length - 1]
+          AppActions.setPreviousScheduleDriver(lastDriver.toString())
+        }
+      })
+    }
   }
 
   _onChange () {
@@ -111,8 +140,8 @@ export default class ScheduleContainer extends React.Component {
         // show error popup
         return
       }
-      // console.log('___schedule: ')
-      // console.log(schedule)
+      console.log('___schedule: ')
+      console.log(schedule)
       if (schedule) {
         // ask user if he want to override existing schedule
         AppActions.showPopup(this.overrideSchedulePopup)
@@ -125,8 +154,8 @@ export default class ScheduleContainer extends React.Component {
             return
           }
 
-          // console.log('___previous_schedule: ')
-          // console.log(schedule)
+          console.log('___previous_schedule: ')
+          console.log(schedule)
           if (!schedule) {
             // get list of users who performed night duty in last day of previous month
             AppActions.clearPreviousMonthDrivers()
@@ -318,13 +347,14 @@ export default class ScheduleContainer extends React.Component {
           style={{width: 42, height: 42, margin: '70px 27px 0'}}
           onClick={() => {
             ipcRenderer.send('browse-schedules')
-            // ScheduleService.checkSchedules((err) => {
-            //   if (err) {
-            //     console.log(err)
-            //     // show popup
-            //     return
-            //   }
-            // })
+            // todo: wait for response event and then do check
+            ScheduleService.checkSchedules((err) => {
+              if (err) {
+                console.log(err)
+                // show popup
+                return
+              }
+            })
           }}>
           <img src='app/assets/icon_folder.svg' />
         </button>

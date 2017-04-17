@@ -11,30 +11,19 @@ module.exports = {
 }
 
 function checkSchedules (done) {
-  // console.log('CHECK SCHEDULES')
+  console.log('CHECK SCHEDULES')
   ipcRenderer.on('check-schedules-reply-err', (event, err) => done(err))
   ipcRenderer.on('check-schedules-reply', (event, files) => {
-    // console.log('check-schedules-reply')
     StorageService.getSchedules((err, schedules) => {
       if (err) return done(err)
       if (!schedules.length) return done()
       
-      // console.log(files)
-      // console.log(schedules)
-      async.each(schedules, (schedule, next) => {
-        // console.log(schedule.filename)
-        // console.log('_____')
-        if (_.findIndex(files, (file) => {
-            // console.log(file)
-            // console.log(schedule.filename)
-            // console.log(file === schedule.filename)
-            return file === schedule.filename
-          }) === -1) {
-          // console.log('-1')
-          console.log('remove: ' + schedule.filename)
-          StorageService.deleteSchedule(schedule.filename, next)
+      const scheduleNames = schedules.map((schedule) => schedule.filename)
+      async.each(scheduleNames, (scheduleName, next) => {
+        if (_.findIndex(files, (file) => file === scheduleName) === -1) {
+          console.log('remove: ' + scheduleName)
+          StorageService.deleteSchedule(scheduleName, next)
         } else {
-          // console.log('1')
           next()
         }
       }, (err) => {
@@ -99,7 +88,10 @@ function createSchedule (options, done) {
           }
         }
 
-        ipcRenderer.on('generate-schedule-reply', (event, arg) => done())
+        ipcRenderer.on('generate-schedule-reply', (event, arg) => {
+          console.log('generated')
+          done()
+        })
         console.log('generate-schedule')
         ipcRenderer.send('generate-schedule', pdfDefinition, pdfName)
       })

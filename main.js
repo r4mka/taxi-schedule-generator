@@ -58,17 +58,19 @@ ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
 
   schedule.pipe(fs.createWriteStream(schedulePath))
   schedule.end()
-  console.log(schedulePath)
+  
   win.loadURL(schedulePath)
   event.sender.send('generate-schedule-reply', 'done')
 })
 
 ipcMain.on('check-schedules', (event) => {
-  console.log('check-schedules')
-  fs.readdir(schedulesPath, (err, files) => {
+  fs.readdir(schedulesPath, 'utf8', (err, files) => {
     if (err) {
       return event.sender.send('check-schedules-reply-err', err)
     }
+
+    files = files.map((file) => file.normalize())
+
     return event.sender.send('check-schedules-reply', files)
   })
 })
@@ -79,11 +81,11 @@ ipcMain.on('browse-schedules', (event) => {
     properties:  ['openFile', 'multiSelections']
   }
 
+  // todo: send event on dialog close
   dialog.showOpenDialog(options, (schedules) => {
     if (!schedules) return
 
     schedules.forEach((schedule) => {
-      console.log('shcedule: ' + schedule)
       const win = new PDFWindow({
         width:  800,
         height: 600
