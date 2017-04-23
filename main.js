@@ -76,22 +76,25 @@ ipcMain.on('check-schedules', (event) => {
 })
 
 ipcMain.on('browse-schedules', (event) => {
+  console.log('[ipcMain] - on-browse-schedules')
   const options = {
     defaultPath: 'app/resources/grafiki',
     properties:  ['openFile', 'multiSelections']
   }
 
-  // todo: send event on dialog close
   dialog.showOpenDialog(options, (schedules) => {
-    if (!schedules) return
+    if (schedules) {
+      schedules.forEach((schedule) => {
+        const win = new PDFWindow({
+          width:  800,
+          height: 600
+        })
 
-    schedules.forEach((schedule) => {
-      const win = new PDFWindow({
-        width:  800,
-        height: 600
+        win.loadURL(schedule)
       })
+    }
 
-      win.loadURL(schedule)
-    })
+    console.log('[ipcMain] - browse-schedules-reply')
+    return event.sender.send('browse-schedules-reply')
   })
 })

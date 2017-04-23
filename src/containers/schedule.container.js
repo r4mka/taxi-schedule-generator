@@ -130,7 +130,7 @@ export default class ScheduleContainer extends React.Component {
       return AppActions.showPopup(this.validationPopup)
     }
 
-    console.log('check if schedule for selected date exists')
+    // console.log('check if schedule for selected date exists')
     const year  = this.state.year
     const month = this.state.month
     
@@ -140,8 +140,8 @@ export default class ScheduleContainer extends React.Component {
         // show error popup
         return
       }
-      console.log('___schedule: ')
-      console.log(schedule)
+      // console.log('___schedule: ')
+      // console.log(schedule)
       if (schedule) {
         // ask user if he want to override existing schedule
         AppActions.showPopup(this.overrideSchedulePopup)
@@ -154,8 +154,8 @@ export default class ScheduleContainer extends React.Component {
             return
           }
 
-          console.log('___previous_schedule: ')
-          console.log(schedule)
+          // console.log('___previous_schedule: ')
+          // console.log(schedule)
           if (!schedule) {
             // get list of users who performed night duty in last day of previous month
             AppActions.clearPreviousMonthDrivers()
@@ -172,7 +172,7 @@ export default class ScheduleContainer extends React.Component {
     const previousMonthDrivers = ScheduleStore.previousMonthDrivers
     
     if (previousMonthDrivers) {
-      console.log(previousMonthDrivers)
+      // console.log(previousMonthDrivers)
       options.previousMonthDrivers = previousMonthDrivers
     }
 
@@ -241,6 +241,22 @@ export default class ScheduleContainer extends React.Component {
       success: isValid,
       message: message
     }
+  }
+
+  browseSchedules () {
+    ipcRenderer.once('browse-schedules-reply', (event) => {
+      console.log('browse-schedules-reply')
+      ScheduleService.checkSchedules((err) => {
+        if (err) {
+          console.log(err)
+          // show popup
+          return
+        }
+      })
+    })
+
+    console.log('browse-schedules')
+    ipcRenderer.send('browse-schedules')
   }
 
   render () {
@@ -345,17 +361,7 @@ export default class ScheduleContainer extends React.Component {
         <button
           className='round-btn'
           style={{width: 42, height: 42, margin: '70px 27px 0'}}
-          onClick={() => {
-            ipcRenderer.send('browse-schedules')
-            // todo: wait for response event and then do check
-            ScheduleService.checkSchedules((err) => {
-              if (err) {
-                console.log(err)
-                // show popup
-                return
-              }
-            })
-          }}>
+          onClick={this.browseSchedules}>
           <img src='app/assets/icon_folder.svg' />
         </button>
       </div>
