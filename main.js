@@ -57,10 +57,11 @@ ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
   })
 
   schedule.pipe(fs.createWriteStream(schedulePath))
+  schedule.on('end', () => {
+    win.loadURL(schedulePath)
+    event.sender.send('generate-schedule-reply', 'done')
+  })
   schedule.end()
-  
-  win.loadURL(schedulePath)
-  event.sender.send('generate-schedule-reply', 'done')
 })
 
 ipcMain.on('check-schedules', (event) => {

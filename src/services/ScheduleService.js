@@ -49,35 +49,48 @@ function createSchedule (options, done) {
     if (err) return done(err)
 
     console.log('schedule document prepared successfully')
-    _createScheduleTable(scheduleDocument, (err, scheduleTable, scheduleDocument) => {
+    _createScheduleTable(scheduleDocument, (err, scheduleHeader, scheduleTable, scheduleDocument) => {
       if (err) return done(err)
 
       console.log('schedule table created successfully')
       StorageService.addSchedule(scheduleDocument, (err, scheduleDocument) => {
         if (err) return done(err)
       
-        const colsWidth     = []
+        const colsWidth = []
+        colsWidth[0] = 15
 
         // set columns width to 'auto'
-        for (let i = 0; i < daysInMonth + 1; i++) {
-          colsWidth.push('auto')
+        for (let i = 1; i < daysInMonth + 1; i++) {
+          colsWidth.push(9)
         }
 
         const pdfDefinition = {
-          pageMargins: [ 20, 5, 20, 5 ],
-          content:     [
+          pageMargins: [ 15, 70, 15, 65 ],
+          header:      [
+            {
+              style: 'custom',
+              table: {
+                widths: colsWidth,
+                body:   scheduleHeader
+              },
+              margin: [ 15, 10, 15, 0 ]
+            }
+          ],
+          footer: [
+            {
+              text:     options.message,
+              fontSize: 12,
+              bold:     true,
+              margin:   [15, 5, 15, 10]
+            }
+          ],
+          content: [
             {
               style: 'custom',
               table: {
                 widths: colsWidth,
                 body:   scheduleTable
               }
-            },
-            {
-              text:     options.message,
-              fontSize: 8,
-              bold:     true,
-              margin:   [0, 10, 0, 0]
             }
           ],
           styles: {
@@ -110,7 +123,8 @@ function _createScheduleTable (scheduleDocument, done) {
   // console.log('daysInMonth: ' + daysInMonth)
   
   // create schedule header
-  const body = _createScheduleHeader(year, month, daysInMonth)
+  const _header = _createScheduleHeader(year, month, daysInMonth)
+  let body = _createScheduleHeader(year, month, daysInMonth)
   
   // add row for each driver
   scheduleDocument.schedule.forEach((_schedule) => {
@@ -277,7 +291,8 @@ function _createScheduleTable (scheduleDocument, done) {
     }
   }
 
-  done(null, body, scheduleDocument)
+  body = body.slice(4)
+  done(null, _header, body, scheduleDocument)
 }
 
 function _createScheduleHeader (year, month, daysInMonth) {
