@@ -143,6 +143,14 @@ const Actions = {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.CLEAR_PREVIOUS_MONTH_DRIVERS
     })
+  },
+  setDriverFilters (filters) {
+    console.log('setDriverFilters')
+    console.log(filters)
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SET_DRIVER_FILTERS,
+      filters:    filters
+    })
   }
 }
 

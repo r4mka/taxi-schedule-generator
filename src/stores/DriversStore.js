@@ -10,6 +10,14 @@ class DriversStore extends BaseStore {
     this._drivers = []
     this._driverDetails = null
     this._isDriverNew = false
+    this._driverFilters = {
+      dailyActivity:     false,
+      nocturnalActivity: false,
+      vacation:          false,
+      accident:          false,
+      generalActivity:   false,
+      generalInactivity: false
+    }
   }
 
   _addDriver (driver) {
@@ -106,6 +114,16 @@ class DriversStore extends BaseStore {
     this.emitChange()
   }
 
+  _updateDriverFilters (filters) {
+    for (let property in filters) {
+      if (filters.hasOwnProperty(property) &&
+          this._driverFilters.hasOwnProperty(property)) {
+        this._driverFilters[property] = filters[property]
+      }
+    }
+    this.emitChange()
+  }
+
   _registerToActions (action) {
     switch (action.actionType) {
       case AppActionTypes.LOAD_DRIVERS:
@@ -135,6 +153,10 @@ class DriversStore extends BaseStore {
 
       case AppActionTypes.HIDE_DRIVER_DETAILS:
         this._rejectDriverDetails()
+        break
+
+      case AppActionTypes.SET_DRIVER_FILTERS:
+        this._updateDriverFilters(action.filters)
         break
     }
   }
@@ -167,8 +189,48 @@ class DriversStore extends BaseStore {
     }
   }
 
+  get driverFilters () {
+    return this._driverFilters
+  }
+
   get drivers () {
-    return (this._drivers = _.sortBy(this._drivers, ['id']))
+    // let status
+    // if (this._driverFilters.vacation) {
+    //   status = 'urlop'
+    // } else if (this._driverFilters.accident) {
+    //   status = 'awaria'
+    // } else {
+    //   status = 'pracuje'
+    // }
+
+    // console.log(filter)
+
+    const filters = this._driverFilters
+    const _filter = {}
+    for (let key in filters) {
+      // console.log('key: ' + key)
+      // console.log('filter[key]: ' + filters[key])
+
+      if (filters.hasOwnProperty(key) &&
+          filters[key] &&
+          key === 'generalInactivity') {
+        _filter['generalActivity'] = false
+        break
+      }
+
+      if (filters.hasOwnProperty(key) && filters[key]) {
+        _filter[key] = filters[key]
+      }
+    }
+
+    console.log(_filter)
+    this._drivers = _.sortBy(this._drivers, ['id'])
+
+    if (_.isEmpty(_filter)) {
+      return this._drivers
+    } else {
+      return _.filter(this._drivers, _filter)
+    }
   }
 
   get driverDetails () {

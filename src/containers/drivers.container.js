@@ -29,7 +29,8 @@ export default class DriversContainer extends React.Component {
     return {
       drivers:       DriversStore.drivers,
       driverDetails: DriversStore.driverDetails,
-      isDriverNew:   DriversStore.isDriverNew
+      isDriverNew:   DriversStore.isDriverNew,
+      driverFilters: DriversStore.driverFilters
     }
   }
 
@@ -60,7 +61,7 @@ export default class DriversContainer extends React.Component {
             driver={this.state.driverDetails} />
           : null
         }
-        <DriverFooter />
+        <DriverFooter filters={this.state.driverFilters} />
       </div>
     )
   }
