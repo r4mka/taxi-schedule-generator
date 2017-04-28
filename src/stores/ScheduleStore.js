@@ -9,7 +9,7 @@ class ScheduleStore extends BaseStore {
     const _now = new Date()
     this.subscribe(() => this._registerToActions.bind(this))
     this._year = _now.getFullYear().toString()
-    this._month = utils.monthToString(_now.getMonth()).toLowerCase()
+    this._month = utils.monthToString(_now.getMonth() + 1).toLowerCase()
     this._message = ''
     // how to determine ?
     this._previousScheduleDriver = ''
@@ -114,7 +114,7 @@ class ScheduleStore extends BaseStore {
   get numberOfDriversPerAllDays () {
     return this._numberOfDriversPerAllDays
   }
-  
+
   get numberOfDriversPerFridayNight () {
     return this._numberOfDriversPerFridayNight
   }

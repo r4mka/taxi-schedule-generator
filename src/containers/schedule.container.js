@@ -49,17 +49,17 @@ export default class ScheduleContainer extends React.Component {
 
     const year  = this.state.year
     const month = this.state.month
-    console.log('get driver who will start schedule for: ' + month + ' in ' + year)
 
+    // get driver who will start new schedule
     StorageService.getNightDriversFromPreviousMonth(year, month, (err, drivers) => {
       if (err) {
         console.log(err)
         // show popup
         return
       }
-      
+
       if (!drivers || drivers.length === 0) {
-        console.log('No previous schedule')
+        // No previous schedule
         AppActions.setPreviousScheduleDriver('')
       } else {
         const lastDriver = drivers[drivers.length - 1]
@@ -91,7 +91,7 @@ export default class ScheduleContainer extends React.Component {
           // show popup
           return
         }
-        
+
         if (!drivers || drivers.length === 0) {
           console.log('No previous schedule')
           AppActions.setPreviousScheduleDriver('')
@@ -133,15 +133,13 @@ export default class ScheduleContainer extends React.Component {
     // console.log('check if schedule for selected date exists')
     const year  = this.state.year
     const month = this.state.month
-    
+
     StorageService.getScheduleByDate(year, month, (err, schedule) => {
       if (err) {
         console.log(err)
         // show error popup
         return
       }
-      // console.log('___schedule: ')
-      // console.log(schedule)
       if (schedule) {
         // ask user if he want to override existing schedule
         AppActions.showPopup(this.overrideSchedulePopup)
@@ -154,8 +152,6 @@ export default class ScheduleContainer extends React.Component {
             return
           }
 
-          // console.log('___previous_schedule: ')
-          // console.log(schedule)
           if (!schedule) {
             // get list of users who performed night duty in last day of previous month
             AppActions.clearPreviousMonthDrivers()
@@ -170,7 +166,7 @@ export default class ScheduleContainer extends React.Component {
 
   createSchedule (options) {
     const previousMonthDrivers = ScheduleStore.previousMonthDrivers
-    
+
     if (previousMonthDrivers) {
       // console.log(previousMonthDrivers)
       options.previousMonthDrivers = previousMonthDrivers
@@ -200,7 +196,7 @@ export default class ScheduleContainer extends React.Component {
         message = 'Wybrany rok jest niepoprawny'
       }
     }
-    
+
     if (state.month.trim().length === 0) {
       isValid = false
       message = empty
@@ -211,22 +207,22 @@ export default class ScheduleContainer extends React.Component {
         message = 'Wybrany miesiąc jest niepoprawny'
       }
     }
-    
+
     if (!state.previousScheduleDriver) {
       isValid = false
       message = empty
     }
-    
+
     if (state.numberOfDriversPerAllDays.trim().length === 0) {
       isValid = false
       message = empty
     }
-    
+
     if (state.numberOfDriversPerFridayNight.trim().length === 0) {
       isValid = false
       message = empty
     }
-    
+
     if (state.numberOfDriversPerSaturdayNight.trim().length === 0) {
       isValid = false
       message = empty
@@ -288,15 +284,15 @@ export default class ScheduleContainer extends React.Component {
             onChange={AppActions.setScheduleMonth}
             options={this.state.selectableMonths} />
           <hr />
-          
-          <h3>Kierowca który zamykał grafik w ubiegłym miesiącu</h3>
+
+          <h3>Kierowca który zamykał grafik na nocnej zmianie w ubiegłym miesiącu</h3>
           <CommonSelector
             placeholder='Wybierz kierowcę'
             value={this.state.previousScheduleDriver}
             onChange={AppActions.setPreviousScheduleDriver}
             options={this.state.selectableDriversIds} />
           <hr />
-          
+
           <h3>Liczba kierowców na poszczególnych dyżurach</h3>
           <div style={{marginTop: 12}}>
             <label style={{marginRight: 12}}>
