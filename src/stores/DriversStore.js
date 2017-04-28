@@ -15,8 +15,7 @@ class DriversStore extends BaseStore {
       nocturnalActivity: false,
       vacation:          false,
       accident:          false,
-      generalActivity:   false,
-      generalInactivity: false
+      generalActivity:   false
     }
   }
 
@@ -63,7 +62,7 @@ class DriversStore extends BaseStore {
       }
     })
   }
-  
+
   _deleteDriver (_id) {
     Storage.deleteDriver(_id, (err) => {
       if (err) {
@@ -130,15 +129,15 @@ class DriversStore extends BaseStore {
         this._drivers = action.drivers
         this.emitChange()
         break
-      
+
       case AppActionTypes.ADD_DRIVER:
         this._addDriver(action.driver)
         break
-      
+
       case AppActionTypes.UPDATE_DRIVER:
         this._updateDriver(action.driver)
         break
-      
+
       case AppActionTypes.DELETE_DRIVER:
         this._deleteDriver(action._id)
         break
@@ -194,42 +193,31 @@ class DriversStore extends BaseStore {
   }
 
   get drivers () {
-    // let status
-    // if (this._driverFilters.vacation) {
-    //   status = 'urlop'
-    // } else if (this._driverFilters.accident) {
-    //   status = 'awaria'
-    // } else {
-    //   status = 'pracuje'
-    // }
-
-    // console.log(filter)
-
     const filters = this._driverFilters
-    const _filter = {}
+    const filter = {}
+
     for (let key in filters) {
-      // console.log('key: ' + key)
-      // console.log('filter[key]: ' + filters[key])
-
-      if (filters.hasOwnProperty(key) &&
-          filters[key] &&
-          key === 'generalInactivity') {
-        _filter['generalActivity'] = false
-        break
-      }
-
       if (filters.hasOwnProperty(key) && filters[key]) {
-        _filter[key] = filters[key]
+        if (key === 'vacation') {
+          filter['status'] = 'urlop'
+        } else if (key === 'accident') {
+          filter['status'] = 'awaria'
+        } else {
+          filter[key] = filters[key]
+        }
       }
     }
 
-    console.log(_filter)
+    if (filter.hasOwnProperty('generalActivity')) {
+      filter['generalActivity'] = !filter['generalActivity']
+    }
+
     this._drivers = _.sortBy(this._drivers, ['id'])
 
-    if (_.isEmpty(_filter)) {
+    if (_.isEmpty(filter)) {
       return this._drivers
     } else {
-      return _.filter(this._drivers, _filter)
+      return _.filter(this._drivers, filter)
     }
   }
 

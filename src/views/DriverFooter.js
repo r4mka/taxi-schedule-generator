@@ -20,8 +20,7 @@ export default class DriverFooter extends React.Component {
       nocturnalActivity: false,
       vacation:          false,
       accident:          false,
-      generalActivity:   false,
-      generalInactivity: false
+      generalActivity:   false
     })
   }
 
@@ -41,7 +40,6 @@ export default class DriverFooter extends React.Component {
         <label className='control control--radio'>
           <input
             type='checkbox'
-            // name=''
             checked={this.areFiltersEnabled(this.props.filters)}
             onChange={this.disableFilters} />
           <div className='control__indicator'>wszyscy</div>
@@ -83,14 +81,6 @@ export default class DriverFooter extends React.Component {
             type='checkbox'
             name='generalActivity'
             checked={this.props.filters.generalActivity}
-            onChange={this.handleFiltersChange} />
-          <div className='control__indicator'>aktywni</div>
-        </label>
-        <label className='control control--radio'>
-          <input
-            type='checkbox'
-            name='generalInactivity'
-            checked={this.props.filters.generalInactivity}
             onChange={this.handleFiltersChange} />
           <div className='control__indicator'>nieaktywni</div>
         </label>
