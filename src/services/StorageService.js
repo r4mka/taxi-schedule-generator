@@ -1,15 +1,24 @@
 import config       from 'config'
 import _            from 'lodash'
+// import { remote }   from 'electron'
+import path         from 'path'
 import utils        from '../utils'
 import DriversStore from '../stores/DriversStore'
+
+const remote = window.require('electron').remote
 
 const Datastore = require('nedb')
 
 class StorageService {
   constructor () {
     console.log('open database connection')
+
+    const userDataPath = remote.app.getPath('userData')
+    const dbPath = path.join(userDataPath, 'datastore.bin')
+
     this.database = new Datastore({
-      filename: config.db.filename,
+      filename: dbPath,
+      // filename: config.db.filename,
       autoload: config.db.autoload
     })
     console.log(this.database)

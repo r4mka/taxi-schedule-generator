@@ -1,15 +1,19 @@
 const electron  = require('electron')
 const path      = require('path')
-const PdfMake   = require('pdfmake')
 const fs        = require('fs')
+const PdfMake   = require('pdfmake')
 const PDFWindow = require('electron-pdf-window')
 
 const ipcMain       = electron.ipcMain
 const app           = electron.app
 const BrowserWindow = electron.BrowserWindow
 const dialog        = electron.dialog
-const reactDevTools = '/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0'
-const schedulesPath = path.join(__dirname, '/app/resources/grafiki')
+
+// const reactDevTools = '/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0'
+// const schedulesPath = path.join(__dirname, '/app/resources/grafiki')
+
+const userDataPath  = (electron.app || electron.remote.app).getPath('userData')
+const schedulesPath = path.join(userDataPath)
 
 // reference to window object to prevent garbage collection
 let mainWindow
@@ -23,7 +27,7 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-  BrowserWindow.addDevToolsExtension(reactDevTools)
+  // BrowserWindow.addDevToolsExtension(reactDevTools)
 }
 
 app.on('ready', createWindow)
@@ -47,8 +51,7 @@ ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
       bolditalics: './app/fonts/Roboto-Italic.ttf'
     }
   }
-  
-  const schedulePath = path.resolve('./app/resources/grafiki/' + pdfName)
+  const schedulePath = path.join(schedulesPath, pdfName)
   const printer      = new PdfMake(Roboto)
   const schedule     = printer.createPdfKitDocument(pdfDefinition)
   const win          = new PDFWindow({
@@ -79,7 +82,7 @@ ipcMain.on('check-schedules', (event) => {
 ipcMain.on('browse-schedules', (event) => {
   console.log('[ipcMain] - on-browse-schedules')
   const options = {
-    defaultPath: 'app/resources/grafiki',
+    defaultPath: schedulesPath,
     properties:  ['openFile', 'multiSelections']
   }
 
