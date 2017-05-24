@@ -5,10 +5,59 @@
   "main": "main.js",
   "scripts": {
     "build": "webpack --progress --colors --watch",
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "postinstall": "install-app-deps",
+    "pack": "build --dir",
+    "dist": "build"
   },
   "author": "Adam Ramski",
   "license": "ISC",
+  "build": {
+    "extraFiles": [{
+      "from": "./app/fonts",
+      "to": "fonts"
+    }],
+    "appId": "aply.adam.ramski",
+    "asar": true,
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "category": "",
+      "packageCategory": "GNOME;GTK;Network;InstantMessaging",
+      "description": "Scheduler generator for taxi drivers.",
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "maintainer": "Adam Ramski <adamramski@gmail.com>"
+    },
+    "deb": {
+      "synopsis": "Taxi"
+    },
+    "dmg": {
+      "background": "build/background.png",
+      "icon": "build/icon.icns",
+      "iconSize": 128,
+      "contents": [
+        {
+          "x": 380,
+          "y": 240,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 122,
+          "y": 240,
+          "type": "file"
+        }
+      ]
+    },
+    "win": {
+      "target": "squirrel",
+      "icon": "build/icon.ico"
+    }
+  },
   "dependencies": {
     "async": "^2.2.0",
     "electron-pdf-window": "^1.0.10",
@@ -29,6 +78,8 @@
     "babel-loader": "^6.2.2",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
+    "electron": "^1.6.8",
+    "electron-builder": "^18.0.1",
     "expose-loader": "^0.7.1",
     "json-loader": "^0.5.4",
     "react-addons-perf": "^15.3.2",

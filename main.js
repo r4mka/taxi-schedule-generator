@@ -10,9 +10,11 @@ const BrowserWindow = electron.BrowserWindow
 const dialog        = electron.dialog
 
 // const reactDevTools = '/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0'
-// const schedulesPath = path.join(__dirname, '/app/resources/grafiki')
 
+const appDataPath   = (electron.app || electron.remote.app).getAppPath()
 const userDataPath  = (electron.app || electron.remote.app).getPath('userData')
+
+const fontsPath = path.join(__dirname, '..', '..', 'fonts')
 const schedulesPath = path.join(userDataPath)
 
 // reference to window object to prevent garbage collection
@@ -45,10 +47,10 @@ app.on('activate', () => {
 ipcMain.on('generate-schedule', (event, pdfDefinition, pdfName) => {
   const Roboto = {
     Roboto: {
-      normal:      './app/fonts/Roboto-Regular.ttf',
-      bold:        './app/fonts/Roboto-Medium.ttf',
-      italics:     './app/fonts/Roboto-Italic.ttf',
-      bolditalics: './app/fonts/Roboto-Italic.ttf'
+      normal:      path.join(fontsPath, 'Roboto-Regular.ttf'),
+      bold:        path.join(fontsPath, 'Roboto-Medium.ttf'),
+      italics:     path.join(fontsPath, 'Roboto-Italic.ttf'),
+      bolditalics: path.join(fontsPath, 'Roboto-Italic.ttf')
     }
   }
   const schedulePath = path.join(schedulesPath, pdfName)
@@ -80,7 +82,6 @@ ipcMain.on('check-schedules', (event) => {
 })
 
 ipcMain.on('browse-schedules', (event) => {
-  console.log('[ipcMain] - on-browse-schedules')
   const options = {
     defaultPath: schedulesPath,
     properties:  ['openFile', 'multiSelections']
@@ -98,7 +99,6 @@ ipcMain.on('browse-schedules', (event) => {
       })
     }
 
-    console.log('[ipcMain] - browse-schedules-reply')
     return event.sender.send('browse-schedules-reply')
   })
 })
