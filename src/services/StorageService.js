@@ -1,6 +1,5 @@
 import config       from 'config'
 import _            from 'lodash'
-// import { remote }   from 'electron'
 import path         from 'path'
 import utils        from '../utils'
 import DriversStore from '../stores/DriversStore'
@@ -77,7 +76,7 @@ class StorageService {
       docType:  'schedule',
       filename: filename
     }
-    
+
     this.database.remove(query, {}, (err) => {
       if (err) return done(err)
       done()
@@ -97,7 +96,7 @@ class StorageService {
       'date.year':  year,
       'date.month': month
     }
-    
+
     this.database.find(query, (err, doc) => {
       if (err) return done(err)
       if (!doc.length) return done(null, null)
@@ -115,7 +114,7 @@ class StorageService {
     } else {
       month = utils.monthToString(month - 1)
     }
-    
+
     this.getScheduleByDate(year, month, done)
   }
 
@@ -156,7 +155,7 @@ class StorageService {
       otherNightsNum:   options.numberOfDriversPerOtherNights
     }
     scheduleDoc.schedule = []
-    
+
     // get active drivers
     this.database.find({
       docType:         'driver',
@@ -167,7 +166,7 @@ class StorageService {
       if (!drivers) {
         return done(new Error('Cannot retrieve drivers from database'))
       }
-      
+
       // add schedule table for each driver
       const driverSchedule = []
       for (let i = 0; i < options.daysInMonth; i++) {
@@ -185,7 +184,7 @@ class StorageService {
 
         scheduleDoc.schedule.push(schedule)
       })
-      
+
       if (options.previousMonthDrivers &&
           _.isArray(options.previousMonthDrivers) &&
           options.previousMonthDrivers.length !== 0) {
@@ -198,7 +197,7 @@ class StorageService {
         const month = scheduleDoc.date.month
         this.getNightDriversFromPreviousMonth(year, month, (err, previousMonthDrivers) => {
           if (err) return done(err)
-          
+
           scheduleDoc.options.previousMonthDrivers = previousMonthDrivers
           return done(null, scheduleDoc)
         })
@@ -230,7 +229,7 @@ class StorageService {
 
   getNightDriversFromPreviousMonth (year, month, done) {
     const previousMonthDrivers = []
-    
+
     this.getPreviousScheduleByDate(year, month, (err, prevSchedule) => {
       if (err) return done(err)
       if (!prevSchedule) return done()

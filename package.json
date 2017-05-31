@@ -1,10 +1,11 @@
 {
-  "name": "taxi_prawobrzeze_scheduler",
-  "version": "1.0.0",
+  "name": "Taxi-Grafiki",
+  "version": "1.0.1",
   "description": "Scheduler generator for taxi drivers.",
   "main": "main.js",
   "scripts": {
-    "build": "webpack --progress --colors --watch",
+    "watch": "webpack --progress --colors --watch",
+    "build": "webpack --progress --colors",
     "start": "electron main.js",
     "postinstall": "install-app-deps",
     "pack": "build --dir",
@@ -54,7 +55,7 @@
       ]
     },
     "win": {
-      "target": "squirrel",
+      "target": "NSIS",
       "icon": "build/icon.ico"
     }
   },

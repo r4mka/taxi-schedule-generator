@@ -180,11 +180,15 @@ class DriversStore extends BaseStore {
   }
 
   getNextDriver (id) {
+    const lastDriverId = this._drivers[this._drivers.length - 1].id
+    console.log('last driver id: ' + lastDriverId)
+
     this._drivers = _.sortBy(this._drivers, ['id'])
     while (id++) {
       console.log('find for driver id: ' + id)
       let driver = _.find(this._drivers, {id: id})
       if (driver) return driver.id
+      if (id >= lastDriverId) id = -1
     }
   }
 

@@ -17,7 +17,7 @@ function checkSchedules (done) {
     StorageService.getSchedules((err, schedules) => {
       if (err) return done(err)
       if (!schedules.length) return done()
-      
+
       const scheduleNames = schedules.map((schedule) => schedule.filename)
       async.each(scheduleNames, (scheduleName, next) => {
         if (_.findIndex(files, (file) => file === scheduleName) === -1) {
@@ -41,10 +41,10 @@ function createSchedule (options, done) {
   const nextMonth     = utils.monthToNum(options.month) + 1
   const daysInMonth   = new Date(options.year, nextMonth, 0).getDate()
   const pdfName       = 'grafik-' + options.year + '-' + options.month + '.pdf'
-  
+
   options.filename = pdfName
   options.daysInMonth = daysInMonth
-  
+
   StorageService.prepareScheduleDocument(options, (err, scheduleDocument) => {
     if (err) return done(err)
 
@@ -55,7 +55,7 @@ function createSchedule (options, done) {
       console.log('schedule table created successfully')
       StorageService.addSchedule(scheduleDocument, (err, scheduleDocument) => {
         if (err) return done(err)
-      
+
         const colsWidth = []
         colsWidth[0] = 15
 
@@ -121,11 +121,11 @@ function _createScheduleTable (scheduleDocument, done) {
   // console.log('year: ' + year)
   // console.log('month: ' + (parseInt(month) + 1))
   // console.log('daysInMonth: ' + daysInMonth)
-  
+
   // create schedule header
   const _header = _createScheduleHeader(year, month, daysInMonth)
   let body = _createScheduleHeader(year, month, daysInMonth)
-  
+
   // add row for each driver
   scheduleDocument.schedule.forEach((_schedule) => {
     const schedule = _.cloneDeep(_schedule)
@@ -151,7 +151,7 @@ function _createScheduleTable (scheduleDocument, done) {
       break
     }
   }
-  
+
   // console.log('startFromIndex: ' + startFromIndex)
   // console.log(body)
 
@@ -162,7 +162,7 @@ function _createScheduleTable (scheduleDocument, done) {
     dayOfTheMonth = 0
     assignedNs = 0
     nightsNum = 0
-    
+
     // the number of drivers per nights
     switch (day) {
       case 'PT':
@@ -177,7 +177,7 @@ function _createScheduleTable (scheduleDocument, done) {
 
     nightsNum = parseInt(nightsNum)
     // console.log('nightsNum: ' + nightsNum)
-    
+
     while (true) {
       // console.log('dayOfTheMonth: ' + dayOfTheMonth)
       if (nextDay) {
@@ -195,7 +195,7 @@ function _createScheduleTable (scheduleDocument, done) {
       // and add N to pdf document
       for (let i = startFromIndex; i < body.length; i++) {
         const currentDriverId = parseInt(body[i][0])
-  
+
         // find schedule table for given driver in db
         let driverSchedule = _.find(scheduleDocument.schedule, {driverId: currentDriverId})
         // console.log(driverSchedule)
@@ -206,7 +206,7 @@ function _createScheduleTable (scheduleDocument, done) {
           // console.log('skip!!!')
           continue
         }
-        
+
         body[i][dayOfTheMonth] = 'N'
 
         assignedNs++
@@ -229,11 +229,11 @@ function _createScheduleTable (scheduleDocument, done) {
   // console.log(previousMonthDrivers)
   const daysNum  = parseInt(scheduleDocument.options.allDaysNum)
   let assignedDs = 0
-  
+
   nextDay = true
   startFromIndex = 4
   dayOfTheMonth = 0
-  
+
   while (true) {
     if (nextDay) {
       nextDay = false
@@ -247,12 +247,14 @@ function _createScheduleTable (scheduleDocument, done) {
     for (let i = startFromIndex; i < body.length; i++) {
       const currentDriverId = parseInt(body[i][0])
       const driverSchedule  = _.find(scheduleDocument.schedule, {driverId: currentDriverId})
-      
+
       if (driverSchedule && driverSchedule.dailyActivity) {
         if (dayOfTheMonth === 1) {
           // check last day from previous month
           if (_.findIndex(previousMonthDrivers, (id) => id === currentDriverId) !== -1) {
             // console.log('got night in previous day - skip: ' + currentDriverId)
+            continue
+          } else if (body[i][dayOfTheMonth] === 'N') {
             continue
           } else {
             driverSchedule.driverSchedule[dayOfTheMonth - 1] = 'D'
@@ -265,9 +267,6 @@ function _createScheduleTable (scheduleDocument, done) {
             // console.log('continue')
             continue
           } else {
-            if (dayOfTheMonth === 30) {
-              // console.log('add D')
-            }
             driverSchedule.driverSchedule[dayOfTheMonth - 1] = 'D'
             body[i][dayOfTheMonth] = 'D'
           }
@@ -310,11 +309,11 @@ function _createScheduleHeader (year, month, daysInMonth) {
       alignment: 'center',
       fontSize:  6
     }]
-    
+
   for (let i = 0; i < (daysInMonth - 17); i++) {
     infoBar.push('')
   }
-  
+
   infoBar = infoBar.concat([{
     colSpan:   8,
     text:      'Kontakt z dyspozytornią:\n508 550 111',
@@ -345,7 +344,7 @@ function _createScheduleHeader (year, month, daysInMonth) {
     daysNames.push(utils.numToDay(new Date(year, (month), i).getDay()))
   }
   daysNames.unshift('')
-  
+
   header.push(infoBar, title, daysNums, daysNames)
   return header
 }
