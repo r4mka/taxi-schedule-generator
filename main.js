@@ -9,30 +9,21 @@ const app           = electron.app
 const BrowserWindow = electron.BrowserWindow
 const dialog        = electron.dialog
 
-// const reactDevTools = '/Users/aramski/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0'
-
-// const appDataPath  = (electron.app || electron.remote.app).getAppPath()
-
-const userDataPath  = (electron.app || electron.remote.app).getPath('userData')
-const schedulesPath = path.join(userDataPath)
-const fontsPath     = path.join(__dirname, '..', '..', 'fonts')
-
-// const fontsPath = path.join(__dirname, 'app', 'fonts')
-// console.log(fontsPath)
+const schedulesPath = (electron.app || electron.remote.app).getPath('userData')
+const fontsPath     = path.join(__dirname, 'app', 'fonts')
 
 // reference to window object to prevent garbage collection
 let mainWindow
-
 function createWindow () {
   let modalPath = path.join('file://', __dirname, 'index.html')
 
   mainWindow = new BrowserWindow({width: 1360, height: 882})
-  // mainWindow.webContents.openDevTools()
   mainWindow.loadURL(modalPath)
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-  // BrowserWindow.addDevToolsExtension(reactDevTools)
+
+  // mainWindow.webContents.openDevTools()
 }
 
 app.on('ready', createWindow)

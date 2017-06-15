@@ -14,10 +14,7 @@
   "author": "Adam Ramski",
   "license": "ISC",
   "build": {
-    "extraFiles": [{
-      "from": "./app/fonts",
-      "to": "fonts"
-    }],
+    "compression": "store",
     "appId": "aply.adam.ramski",
     "asar": true,
     "mac": {

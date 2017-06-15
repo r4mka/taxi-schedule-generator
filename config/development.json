@@ -4,9 +4,5 @@
     "payments": 		 "/payments",
     "advertisement": "/advertisement",
     "schedule": 		 "/schedule"
-  },
-  "db": {
-    "filename": "./app/resources/datastore.bin",
-    "autoload": true
   }
 }
