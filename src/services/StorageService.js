@@ -4,13 +4,11 @@ import path         from 'path'
 import utils        from '../utils'
 import DriversStore from '../stores/DriversStore'
 
-const remote = window.require('electron').remote
-
+const remote    = window.require('electron').remote
 const Datastore = require('nedb')
 
 class StorageService {
   constructor () {
-    console.log('open database connection')
 
     let dbPath
     if (process.env.NODE_ENV === 'production') {
@@ -24,7 +22,6 @@ class StorageService {
       filename: dbPath,
       autoload: true
     })
-    console.log(this.database)
   }
 
   addDriver (driver, cb) {
@@ -193,8 +190,6 @@ class StorageService {
           _.isArray(options.previousMonthDrivers) &&
           options.previousMonthDrivers.length !== 0) {
         scheduleDoc.options.previousMonthDrivers = options.previousMonthDrivers
-        console.log('from checkboxes')
-        console.log(scheduleDoc)
         return done(null, scheduleDoc)
       } else {
         const year  = scheduleDoc.date.year
@@ -205,28 +200,6 @@ class StorageService {
           scheduleDoc.options.previousMonthDrivers = previousMonthDrivers
           return done(null, scheduleDoc)
         })
-
-        // const previousMonthDrivers = []
-        // const year  = scheduleDoc.date.year
-        // const month = scheduleDoc.date.month
-        // this.getPreviousScheduleByDate(year, month, (err, prevSchedule) => {
-        //   if (err) return done(err)
-        //   if (!prevSchedule) return done(new Error('Previous schedule doesn\'t exist in database'))
-
-        //   console.log(prevSchedule)
-
-        //   const lastDay = prevSchedule.date.daysInMonth - 1
-        //   prevSchedule.schedule.forEach((schedule) => {
-        //     if (schedule.driverSchedule[lastDay] === 'N') {
-        //       previousMonthDrivers.push(schedule.driverId)
-        //     }
-        //   })
-
-        //   scheduleDoc.options.previousMonthDrivers = previousMonthDrivers
-        //   console.log('from database')
-        //   console.log(scheduleDoc)
-        //   return done(null, scheduleDoc)
-        // })
       }
     })
   }

@@ -13,7 +13,7 @@ module.exports = {
 function checkSchedules (done) {
   ipcRenderer.once('check-schedules-reply-err', (event, err) => done(err))
   ipcRenderer.once('check-schedules-reply', (event, files) => {
-    console.log('CHECK SCHEDULES')
+    // console.log('CHECK SCHEDULES')
     StorageService.getSchedules((err, schedules) => {
       if (err) return done(err)
       if (!schedules.length) return done()
@@ -48,32 +48,34 @@ function createSchedule (options, done) {
   StorageService.prepareScheduleDocument(options, (err, scheduleDocument) => {
     if (err) return done(err)
 
-    console.log('schedule document prepared successfully')
     _createScheduleTable(scheduleDocument, (err, scheduleHeader, scheduleTable, scheduleDocument) => {
       if (err) return done(err)
 
-      console.log('schedule table created successfully')
       StorageService.addSchedule(scheduleDocument, (err, scheduleDocument) => {
         if (err) return done(err)
 
         const colsWidth = []
-        colsWidth[0] = 15
+        colsWidth[0] = 16
 
         // set columns width to 'auto'
         for (let i = 1; i < daysInMonth + 1; i++) {
           colsWidth.push(9)
         }
 
+        const margins = daysInMonth === 31 ? 6 : 15 
         const pdfDefinition = {
-          pageMargins: [ 15, 70, 15, 65 ],
+          pageMargins: [ margins, 68, margins, 65 ],
           header:      [
             {
-              style: 'custom',
+              style: {
+                fontSize: 6,
+                bold:     true
+              },
               table: {
                 widths: colsWidth,
                 body:   scheduleHeader
               },
-              margin: [ 15, 10, 15, 0 ]
+              margin: [ margins, 6, margins, 0 ]
             }
           ],
           footer: [
@@ -81,7 +83,7 @@ function createSchedule (options, done) {
               text:     options.message,
               fontSize: 12,
               bold:     true,
-              margin:   [15, 5, 15, 10]
+              margin:   [margins, 5, margins, 10]
             }
           ],
           content: [
@@ -95,17 +97,16 @@ function createSchedule (options, done) {
           ],
           styles: {
             custom: {
-              fontSize: 6,
-              bold:     true
+              fontSize: 8,
+              bold:     false
             }
           }
         }
 
         ipcRenderer.once('generate-schedule-reply', (event, arg) => {
-          console.log('generated')
+          console.log('Schedule table generated successfully')
           done()
         })
-        console.log('generate-schedule')
         ipcRenderer.send('generate-schedule', pdfDefinition, pdfName)
       })
     })
@@ -207,7 +208,7 @@ function _createScheduleTable (scheduleDocument, done) {
           continue
         }
 
-        body[i][dayOfTheMonth] = 'N'
+        body[i][dayOfTheMonth] = { text: 'N', bold: true }
 
         assignedNs++
         if (assignedNs === nightsNum) {
@@ -254,7 +255,7 @@ function _createScheduleTable (scheduleDocument, done) {
           if (_.findIndex(previousMonthDrivers, (id) => id === currentDriverId) !== -1) {
             // console.log('got night in previous day - skip: ' + currentDriverId)
             continue
-          } else if (body[i][dayOfTheMonth] === 'N') {
+          } else if (body[i][dayOfTheMonth].text === 'N') {
             continue
           } else {
             driverSchedule.driverSchedule[dayOfTheMonth - 1] = 'D'
@@ -263,7 +264,7 @@ function _createScheduleTable (scheduleDocument, done) {
         } else {
           // check if the current or previous day is not 'N'
           // and if is, skip to next driver
-          if (body[i][dayOfTheMonth] === 'N' || body[i][dayOfTheMonth - 1] === 'N') {
+          if (body[i][dayOfTheMonth].text === 'N' || body[i][dayOfTheMonth - 1].text === 'N') {
             // console.log('continue')
             continue
           } else {

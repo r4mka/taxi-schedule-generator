@@ -83,8 +83,9 @@ export default class ScheduleContainer extends React.Component {
         nextState.month !== this.state.month) {
       const year  = nextState.year
       const month = nextState.month
-      console.log('get driver who will start schedule for: ' + month + ' in ' + year)
+      // console.log('get driver who will start schedule for: ' + month + ' in ' + year)
 
+      // get driver who will start new schedule
       StorageService.getNightDriversFromPreviousMonth(year, month, (err, drivers) => {
         if (err) {
           console.log(err)
@@ -93,7 +94,7 @@ export default class ScheduleContainer extends React.Component {
         }
 
         if (!drivers || drivers.length === 0) {
-          console.log('No previous schedule')
+          // No previous schedule
           AppActions.setPreviousScheduleDriver('')
         } else {
           const lastDriver = drivers[drivers.length - 1]
@@ -168,14 +169,11 @@ export default class ScheduleContainer extends React.Component {
     const previousMonthDrivers = ScheduleStore.previousMonthDrivers
 
     if (previousMonthDrivers) {
-      // console.log(previousMonthDrivers)
       options.previousMonthDrivers = previousMonthDrivers
     }
 
     ScheduleService.createSchedule(options, (err) => {
-      if (err) {
-        console.log(err)
-      }
+      if (err) console.log(err)
     })
   }
 
@@ -241,7 +239,6 @@ export default class ScheduleContainer extends React.Component {
 
   browseSchedules () {
     ipcRenderer.once('browse-schedules-reply', (event) => {
-      console.log('browse-schedules-reply')
       ScheduleService.checkSchedules((err) => {
         if (err) {
           console.log(err)
@@ -251,7 +248,6 @@ export default class ScheduleContainer extends React.Component {
       })
     })
 
-    console.log('browse-schedules')
     ipcRenderer.send('browse-schedules')
   }
 

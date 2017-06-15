@@ -39,7 +39,6 @@ class ScheduleStore extends BaseStore {
         break
 
       case AppActionTypes.SET_SCHEDULE_MSG:
-        console.log('msg length: ' + action.msg.length)
         if (action.msg.length > 220) return
         this._message = action.msg
         break

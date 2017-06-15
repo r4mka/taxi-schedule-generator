@@ -27,7 +27,7 @@ class DriversStore extends BaseStore {
         return
       }
       if (!driver) {
-        console.error('driver didn\'t add')
+        console.error('Could not add a driver')
         // todo: error popup
         return
       }
@@ -45,7 +45,7 @@ class DriversStore extends BaseStore {
         return
       }
       if (!updatedDriver) {
-        console.error('driver didn\'t update')
+        console.error('Could not update a driver')
         // todo: error popup
         return
       }
@@ -66,7 +66,7 @@ class DriversStore extends BaseStore {
   _deleteDriver (_id) {
     Storage.deleteDriver(_id, (err) => {
       if (err) {
-        console.error('driver didn\'t delete')
+        console.error('Could not delete a driver')
         // todo: error popup
         return
       }
@@ -179,13 +179,14 @@ class DriversStore extends BaseStore {
     }
   }
 
+  // Find id of next driver on list  
   getNextDriver (id) {
-    const lastDriverId = this._drivers[this._drivers.length - 1].id
-    console.log('last driver id: ' + lastDriverId)
-
     this._drivers = _.sortBy(this._drivers, ['id'])
+    const lastDriverId = this._drivers[this._drivers.length - 1].id
+    // console.log('last driver id: ' + lastDriverId)
+
     while (id++) {
-      console.log('find for driver id: ' + id)
+      // console.log('find for driver id: ' + id)
       let driver = _.find(this._drivers, {id: id})
       if (driver) return driver.id
       if (id >= lastDriverId) id = -1
