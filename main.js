@@ -9,7 +9,8 @@ const app           = electron.app
 const BrowserWindow = electron.BrowserWindow
 const dialog        = electron.dialog
 
-const schedulesPath = (electron.app || electron.remote.app).getPath('userData')
+const userDocsPath  = (electron.app || electron.remote.app).getPath('documents')
+const schedulesPath = path.join(userDocsPath, 'Taxi grafiki')
 const fontsPath     = path.join(__dirname, 'app', 'fonts')
 
 // reference to window object to prevent garbage collection
@@ -24,6 +25,10 @@ function createWindow () {
   })
 
   mainWindow.webContents.openDevTools()
+  _createSchedulesDirectory(schedulesPath, (err) => {
+    if (err) return console.log(err)
+    // todo: if err - render popup with message
+  })
 }
 
 app.on('ready', createWindow)
@@ -96,3 +101,19 @@ ipcMain.on('browse-schedules', (event) => {
     return event.sender.send('browse-schedules-reply')
   })
 })
+
+function _createSchedulesDirectory (_path, done) {
+  fs.stat(_path, (err, stats) => {
+    if (err) {
+      if (err.code !== 'ENOENT') return done(err) 
+
+      fs.mkdir(_path, done)
+    }
+
+    if (!stats.isDirectory()) {
+      return done(new Error(_path + ' is not a directory'))
+    } 
+    
+    done()
+  })
+}
