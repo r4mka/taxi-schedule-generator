@@ -107,6 +107,7 @@ const Actions = {
   },
   setNumberOfDriversPerOtherNights (number) {
     console.log('setNumberOfDriversPerOtherNights')
+    console.log(number)
     AppDispatcher.dispatch({
       actionType:      AppActionTypes.SET_DRIVERS_PER_OTHERS_NIGHTS,
       numberOfDrivers: number
@@ -150,6 +151,18 @@ const Actions = {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.SET_DRIVER_FILTERS,
       filters:    filters
+    })
+  },
+  showCreateScheduleException () {
+    console.log('showCreateScheduleException')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SHOW_CREATE_SCHEDULE_EXCEPTION
+    })
+  },
+  hideCreateScheduleException () {
+    console.log('hideCreateScheduleException')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.HIDE_CREATE_SCHEDULE_EXCEPTION
     })
   }
 }

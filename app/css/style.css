@@ -107,6 +107,7 @@ button[disabled] {
 }
 #schedule-page {
   text-align: center;
+  margin-bottom: 60px;
 }
 #schedule-form {
   display: inline-block;

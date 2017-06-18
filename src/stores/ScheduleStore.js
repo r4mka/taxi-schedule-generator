@@ -17,9 +17,12 @@ class ScheduleStore extends BaseStore {
     this._numberOfDriversPerFridayNight = ''
     this._numberOfDriversPerSaturdayNight = ''
     this._numberOfDriversPerOtherNights = ''
-    this._showPreviousMonthDrivers
+    this._showPreviousMonthDrivers = false
+    this._showCreateScheduleException = false
     this._previousMonthDrivers = []
+    this._scheduleExceptions = []
 
+    this._selectableDays = this._populateSelectableDays(_now.getFullYear(), _now.getMonth() + 1)
     this._selectableMonths = [
       'styczeń', 'luty', 'marzec',
       'kwiecień', 'maj', 'czerwiec',
@@ -32,10 +35,12 @@ class ScheduleStore extends BaseStore {
     switch (action.actionType) {
       case AppActionTypes.SET_SCHEDULE_YEAR:
         this._year = action.year
+        console.log(this._year)
         break
 
       case AppActionTypes.SET_SCHEDULE_MONTH:
         this._month = action.month
+        console.log(this._month)
         break
 
       case AppActionTypes.SET_SCHEDULE_MSG:
@@ -84,10 +89,34 @@ class ScheduleStore extends BaseStore {
         this._previousMonthDrivers.splice(0, this._previousMonthDrivers.length)
         break
 
+      case AppActionTypes.SHOW_CREATE_SCHEDULE_EXCEPTION:
+        this._showCreateScheduleException = true
+        break
+
+      case AppActionTypes.HIDE_CREATE_SCHEDULE_EXCEPTION:
+        this._showCreateScheduleException = false
+        break
+
       default:
         return
     }
     this.emitChange()
+  }
+
+  _populateSelectableDays (year, month) {
+    const daysInMonth    = new Date(year, month + 1, 0).getDate()
+    const selectableDays = []
+
+    console.log('year: ' + year)
+    console.log('month: ' + month)
+    console.log('days: ' + daysInMonth)
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      selectableDays.push(i)
+    }
+
+    console.log(selectableDays)
+    return selectableDays
   }
 
   get year () {
@@ -132,6 +161,14 @@ class ScheduleStore extends BaseStore {
 
   get previousMonthDrivers () {
     return this._previousMonthDrivers
+  }
+
+  get showCreateScheduleException () {
+    return this._showCreateScheduleException
+  }
+
+  get selectableDays () {
+    return this._selectableDays
   }
 }
 

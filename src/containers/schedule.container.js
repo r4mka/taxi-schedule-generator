@@ -1,12 +1,14 @@
-import React                from 'react'
-import utils                from '../utils'
-import ScheduleStore        from '../stores/ScheduleStore'
-import StorageService       from '../services/StorageService'
-import ScheduleService      from '../services/ScheduleService'
-import DriversStore         from '../stores/DriversStore'
-import AppActions           from '../actions/AppActions'
-import CommonSelector       from '../views/CommonSelector'
-import PreviousMonthDrivers from '../views/PreviousMonthDrivers'
+import React                   from 'react'
+import utils                   from '../utils'
+import ScheduleStore           from '../stores/ScheduleStore'
+import StorageService          from '../services/StorageService'
+import ScheduleService         from '../services/ScheduleService'
+import DriversStore            from '../stores/DriversStore'
+import AppActions              from '../actions/AppActions'
+import CommonSelector          from '../views/CommonSelector'
+import PreviousMonthDrivers    from '../views/PreviousMonthDrivers'
+import ScheduleException       from '../views/ScheduleException'
+import CreateScheduleException from '../views/CreateScheduleException'
 
 const ipcRenderer = window.require('electron').ipcRenderer
 
@@ -120,7 +122,9 @@ export default class ScheduleContainer extends React.Component {
       numberOfDriversPerOtherNights:   ScheduleStore.numberOfDriversPerOtherNights,
       selectableMonths:                ScheduleStore.selectableMonths,
       showPreviousMonthDrivers:        ScheduleStore.showPreviousMonthDrivers,
-      selectableDriversIds:            DriversStore.selectableDriversIds
+      selectableDriversIds:            DriversStore.selectableDriversIds,
+      showCreateScheduleException:     ScheduleStore.showCreateScheduleException,
+      selectableDays:                  ScheduleStore.selectableDays
     }
   }
 
@@ -182,8 +186,10 @@ export default class ScheduleContainer extends React.Component {
     let message = ''
     let state   = this.state
 
-    const empty = 'Uzupełnij wszystkie pola.'
+    const empty    = 'Uzupełnij wszystkie pola.'
+    const negative = 'Liczba kierowców nie może być ujemna'
 
+    // Validate year
     if (state.year.trim().length === 0) {
       isValid = false
       message = empty
@@ -195,6 +201,7 @@ export default class ScheduleContainer extends React.Component {
       }
     }
 
+    // Validate month
     if (state.month.trim().length === 0) {
       isValid = false
       message = empty
@@ -216,9 +223,19 @@ export default class ScheduleContainer extends React.Component {
       message = empty
     }
 
+    if (state.numberOfDriversPerAllDays < 0) {
+      isValid = false
+      message = negative
+    } 
+
     if (state.numberOfDriversPerFridayNight.trim().length === 0) {
       isValid = false
       message = empty
+    }
+
+    if (state.numberOfDriversPerFridayNight < 0) {
+      isValid = false
+      message = negative
     }
 
     if (state.numberOfDriversPerSaturdayNight.trim().length === 0) {
@@ -226,11 +243,21 @@ export default class ScheduleContainer extends React.Component {
       message = empty
     }
 
+    if (state.numberOfDriversPerSaturdayNight < 0) {
+      isValid = false
+      message = negative
+    }
+
     if (state.numberOfDriversPerOtherNights.trim().length === 0) {
       isValid = false
       message = empty
     }
 
+    if (state.numberOfDriversPerOtherNights < 0) {
+      isValid = false
+      message = negative
+    }
+    
     return {
       success: isValid,
       message: message
@@ -251,6 +278,10 @@ export default class ScheduleContainer extends React.Component {
     ipcRenderer.send('browse-schedules')
   }
 
+  setScheduleException (data) {
+
+  }
+
   render () {
     return (
       <div id='schedule-page'>
@@ -262,6 +293,19 @@ export default class ScheduleContainer extends React.Component {
               this.createSchedule(this.state)
               AppActions.hidePreviousMonthDrivers()
             }} />
+          : null
+        }
+        {
+          this.state.showCreateScheduleException
+          ? <CreateScheduleException
+            day={undefined}
+            dayDrivers={2}
+            nocturnalDrivers={2}
+            selectableDays={this.state.selectableDays}
+            hideWindow={AppActions.hideCreateScheduleException}
+            // setScheduleException={}
+            // addScheduleException={}
+             />
           : null
         }
         <form id='schedule-form'>
@@ -338,6 +382,27 @@ export default class ScheduleContainer extends React.Component {
           </div>
           <hr />
 
+          <h3>Wyjątki</h3>
+          <ScheduleException
+            day={14}
+            month={this.state.month}
+            year={this.state.year}
+            dayDrivers={8}
+            nocturnalDrivers={10} />
+          <ScheduleException
+            day={15}
+            month={this.state.month}
+            year={this.state.year}
+            dayDrivers={8}
+            nocturnalDrivers={10} />
+          <ScheduleException
+            day={16}
+            month={this.state.month}
+            year={this.state.year}
+            dayDrivers={5}
+            nocturnalDrivers={7} />
+          <hr />
+
           <h3>Wiadomość dla kierowców</h3>
           <textarea
             style={{width: 488, height: 142}}
@@ -355,6 +420,12 @@ export default class ScheduleContainer extends React.Component {
           style={{width: 42, height: 42, margin: '70px 27px 0'}}
           onClick={this.browseSchedules}>
           <img src='app/assets/icon_folder.svg' />
+        </button>
+        <button
+          className='round-btn'
+          style={{width: 42, height: 42, margin: '125px 27px 0'}}
+          onClick={AppActions.showCreateScheduleException}>
+          <img src='app/assets/icon_dodaj.svg' />
         </button>
       </div>
     )
