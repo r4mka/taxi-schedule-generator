@@ -38,6 +38,7 @@ export default class ScheduleContainer extends React.Component {
     this._onChange = this._onChange.bind(this)
     this.prepareSchedule = this.prepareSchedule.bind(this)
     this.createSchedule = this.createSchedule.bind(this)
+    this.addScheduleException = this.addScheduleException.bind(this)
   }
 
   componentWillMount () {
@@ -124,7 +125,9 @@ export default class ScheduleContainer extends React.Component {
       showPreviousMonthDrivers:        ScheduleStore.showPreviousMonthDrivers,
       selectableDriversIds:            DriversStore.selectableDriversIds,
       showCreateScheduleException:     ScheduleStore.showCreateScheduleException,
-      selectableDays:                  ScheduleStore.selectableDays
+      selectableDays:                  ScheduleStore.selectableDays,
+      scheduleException:               ScheduleStore.scheduleException,
+      scheduleExceptions:              ScheduleStore.scheduleExceptions
     }
   }
 
@@ -181,89 +184,6 @@ export default class ScheduleContainer extends React.Component {
     })
   }
 
-  _validateScheduleInputs () {
-    let isValid = true
-    let message = ''
-    let state   = this.state
-
-    const empty    = 'Uzupełnij wszystkie pola.'
-    const negative = 'Liczba kierowców nie może być ujemna'
-
-    // Validate year
-    if (state.year.trim().length === 0) {
-      isValid = false
-      message = empty
-    } else {
-      const _now = new Date()
-      if (_now.getFullYear() > parseInt(state.year)) {
-        isValid = false
-        message = 'Wybrany rok jest niepoprawny'
-      }
-    }
-
-    // Validate month
-    if (state.month.trim().length === 0) {
-      isValid = false
-      message = empty
-    } else {
-      const _now = new Date()
-      if (_now.getMonth() > utils.monthToNum(state.month)) {
-        isValid = false
-        message = 'Wybrany miesiąc jest niepoprawny'
-      }
-    }
-
-    if (!state.previousScheduleDriver) {
-      isValid = false
-      message = empty
-    }
-
-    if (state.numberOfDriversPerAllDays.trim().length === 0) {
-      isValid = false
-      message = empty
-    }
-
-    if (state.numberOfDriversPerAllDays < 0) {
-      isValid = false
-      message = negative
-    } 
-
-    if (state.numberOfDriversPerFridayNight.trim().length === 0) {
-      isValid = false
-      message = empty
-    }
-
-    if (state.numberOfDriversPerFridayNight < 0) {
-      isValid = false
-      message = negative
-    }
-
-    if (state.numberOfDriversPerSaturdayNight.trim().length === 0) {
-      isValid = false
-      message = empty
-    }
-
-    if (state.numberOfDriversPerSaturdayNight < 0) {
-      isValid = false
-      message = negative
-    }
-
-    if (state.numberOfDriversPerOtherNights.trim().length === 0) {
-      isValid = false
-      message = empty
-    }
-
-    if (state.numberOfDriversPerOtherNights < 0) {
-      isValid = false
-      message = negative
-    }
-    
-    return {
-      success: isValid,
-      message: message
-    }
-  }
-
   browseSchedules () {
     ipcRenderer.once('browse-schedules-reply', (event) => {
       ScheduleService.checkSchedules((err) => {
@@ -278,8 +198,25 @@ export default class ScheduleContainer extends React.Component {
     ipcRenderer.send('browse-schedules')
   }
 
-  setScheduleException (data) {
+  setScheduleException (event) {
+    const name   = event.target.name
+    const value  = event.target.value
 
+    console.log('name: ' + name)
+    console.log('value: ' + value)
+
+    AppActions.setScheduleException({ [name]: value })
+  }
+
+  addScheduleException (exception) {
+    const validationResult = this._validateScheduleExceptionInput(exception)
+    if (!validationResult.success) {
+      this.validationPopup.description = validationResult.message
+      return AppActions.showPopup(this.validationPopup)
+    }
+
+    AppActions.addScheduleException(exception)
+    AppActions.hideCreateScheduleException()
   }
 
   render () {
@@ -298,14 +235,13 @@ export default class ScheduleContainer extends React.Component {
         {
           this.state.showCreateScheduleException
           ? <CreateScheduleException
-            day={undefined}
-            dayDrivers={2}
-            nocturnalDrivers={2}
+            dayDate={this.state.scheduleException.dayDate}
+            dayDrivers={this.state.scheduleException.dayDrivers}
+            nocturnalDrivers={this.state.scheduleException.nocturnalDrivers}
             selectableDays={this.state.selectableDays}
             hideWindow={AppActions.hideCreateScheduleException}
-            // setScheduleException={}
-            // addScheduleException={}
-             />
+            setScheduleException={this.setScheduleException}
+            addScheduleException={this.addScheduleException} />
           : null
         }
         <form id='schedule-form'>
@@ -321,7 +257,7 @@ export default class ScheduleContainer extends React.Component {
           <CommonSelector
             placeholder='Wybierz miesiąc'
             value={this.state.month}
-            onChange={AppActions.setScheduleMonth}
+            onChange={(e) => AppActions.setScheduleMonth(e.target.value)}
             options={this.state.selectableMonths} />
           <hr />
 
@@ -329,7 +265,7 @@ export default class ScheduleContainer extends React.Component {
           <CommonSelector
             placeholder='Wybierz kierowcę'
             value={this.state.previousScheduleDriver}
-            onChange={AppActions.setPreviousScheduleDriver}
+            onChange={(e) => AppActions.setPreviousScheduleDriver(e.target.value)}
             options={this.state.selectableDriversIds} />
           <hr />
 
@@ -383,25 +319,24 @@ export default class ScheduleContainer extends React.Component {
           <hr />
 
           <h3>Wyjątki</h3>
-          <ScheduleException
-            day={14}
-            month={this.state.month}
-            year={this.state.year}
-            dayDrivers={8}
-            nocturnalDrivers={10} />
-          <ScheduleException
-            day={15}
-            month={this.state.month}
-            year={this.state.year}
-            dayDrivers={8}
-            nocturnalDrivers={10} />
-          <ScheduleException
-            day={16}
-            month={this.state.month}
-            year={this.state.year}
-            dayDrivers={5}
-            nocturnalDrivers={7} />
-          <hr />
+          {
+            this.state.scheduleExceptions.map((exception) => (
+              <ScheduleException
+                key={exception.dayDate}
+                day={exception.dayDate}
+                month={this.state.month}
+                year={this.state.year}
+                dayDrivers={exception.dayDrivers}
+                nocturnalDrivers={exception.nocturnalDrivers}
+                deleteException={() => AppActions.deleteScheduleException(exception.dayDate)} />
+            ))
+          }
+          <p style={this.state.scheduleExceptions.length
+            ? {display: 'none'}
+            : {fontWeight: '100', color: 'rgba(0,0,0,0.4)', fontSize: 15}}>
+            Brak dodanych wyjątków
+          </p>
+          <hr style={{marginTop: 23.3}} />
 
           <h3>Wiadomość dla kierowców</h3>
           <textarea
@@ -429,5 +364,116 @@ export default class ScheduleContainer extends React.Component {
         </button>
       </div>
     )
+  }
+
+  _validateScheduleInputs () {
+    let isValid = true
+    let message = ''
+    let state   = this.state
+
+    const empty    = 'Uzupełnij wszystkie pola.'
+    const negative = 'Liczba kierowców nie może być ujemna'
+
+    // Validate year
+    if (state.year.trim().length === 0) {
+      isValid = false
+      message = empty
+    } else {
+      const _now = new Date()
+      if (_now.getFullYear() > parseInt(state.year)) {
+        isValid = false
+        message = 'Wybrany rok jest niepoprawny'
+      }
+    }
+
+    // Validate month
+    if (state.month.trim().length === 0) {
+      isValid = false
+      message = empty
+    } else {
+      const _now = new Date()
+      if (_now.getMonth() > utils.monthToNum(state.month)) {
+        isValid = false
+        message = 'Wybrany miesiąc jest niepoprawny'
+      }
+    }
+
+    if (!state.previousScheduleDriver) {
+      isValid = false
+      message = empty
+    }
+
+    if (state.numberOfDriversPerAllDays.trim().length === 0) {
+      isValid = false
+      message = empty
+    }
+
+    if (state.numberOfDriversPerAllDays < 0) {
+      isValid = false
+      message = negative
+    }
+
+    if (state.numberOfDriversPerFridayNight.trim().length === 0) {
+      isValid = false
+      message = empty
+    }
+
+    if (state.numberOfDriversPerFridayNight < 0) {
+      isValid = false
+      message = negative
+    }
+
+    if (state.numberOfDriversPerSaturdayNight.trim().length === 0) {
+      isValid = false
+      message = empty
+    }
+
+    if (state.numberOfDriversPerSaturdayNight < 0) {
+      isValid = false
+      message = negative
+    }
+
+    if (state.numberOfDriversPerOtherNights.trim().length === 0) {
+      isValid = false
+      message = empty
+    }
+
+    if (state.numberOfDriversPerOtherNights < 0) {
+      isValid = false
+      message = negative
+    }
+
+    return {
+      success: isValid,
+      message: message
+    }
+  }
+
+  _validateScheduleExceptionInput ({ dayDrivers, nocturnalDrivers }) {
+    let isValid    = true
+    let message    = ''
+    const empty    = 'Uzupełnij wszystkie pola.'
+    const negative = 'Liczba kierowców nie może być ujemna'
+
+    if (dayDrivers.trim().length === 0) {
+      isValid = false
+      message = empty
+    } else if (dayDrivers < 0) {
+      isValid = false
+      message = negative
+    }
+
+    if (nocturnalDrivers.trim().length === 0) {
+      isValid = false
+      message = empty
+    } else if (nocturnalDrivers < 0) {
+      isValid = false
+      message = negative
+    }
+
+    return {
+      success: isValid,
+      message: message
+    }
   }
 }

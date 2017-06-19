@@ -8,8 +8,9 @@ export default class CommonSelector extends React.Component {
         className='select'>
         <select
           required
+          name={this.props.name}
           value={this.props.value}
-          onChange={(e) => this.props.onChange(e.target.value)}>
+          onChange={this.props.onChange}>
           <option disabled selected hidden value=''>
             {this.props.placeholder}
           </option>

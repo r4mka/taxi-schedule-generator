@@ -3,49 +3,23 @@ import utils   from '../utils'
 import IconBtn from './IconBtn'
 
 export default class ScheduleException extends React.Component {
-  constructor (props) {
-    super(props)
-    const _month = utils.monthToNum(this.props.month)
-    const date = new Date(this.props.year, _month, this.props.day)
-
-    let dayString = ''
-    console.log(date)
-    switch (date.getDay()) {
-      case 0:
-        dayString = 'niedziela'
-        break
-      case 1:
-        dayString = 'poniedziałek'
-        break
-      case 2:
-        dayString = 'wtorek'
-        break
-      case 3:
-        dayString = 'środa'
-        break
-      case 4:
-        dayString = 'czwartek'
-        break
-      case 5:
-        dayString = 'piątek'
-        break
-      case 6:
-        dayString = 'sobota'
-        break
-    }
-    this.dayString = dayString
-    console.log(dayString)
-  }
   render () {
+    const { year, month, day } = this.props
+    let dayName
+
+    if (year && month && day) {
+      dayName = this._findDayName(year, month, day)
+    }
+
     return (
       <div style={{position: 'relative', marginBottom: 12}}>
         <div style={styles.dayContainer}>
           <span style={styles.day}>
             {this.props.day}
           </span>
-          <br/>
+          <br />
           <span style={{fontSize: 14}}>
-            {this.dayString}
+            {dayName}
           </span>
         </div>
         <div style={styles.container}>
@@ -73,32 +47,56 @@ export default class ScheduleException extends React.Component {
         <div style={styles.btnContainer}>
           <IconBtn
             icon='app/assets/icon_delete.svg'
-            disabled={this.props.isDriverNew}
-            onClick={this.handleDriverRemoval} />
+            onClick={this.props.deleteException} />
         </div>
       </div>
     )
   }
-}
 
-ScheduleException.propTypes = {
-  status:   React.PropTypes.oneOf(['pracuje', 'urlop', 'awaria']).isRequired,
-  onChange: React.PropTypes.func.isRequired
+  _findDayName (year, month, day) {
+    const date  = new Date(year, utils.monthToNum(month), day)
+    let dayName = ''
+
+    switch (date.getDay()) {
+      case 0:
+        dayName = 'niedziela'
+        break
+      case 1:
+        dayName = 'poniedziałek'
+        break
+      case 2:
+        dayName = 'wtorek'
+        break
+      case 3:
+        dayName = 'środa'
+        break
+      case 4:
+        dayName = 'czwartek'
+        break
+      case 5:
+        dayName = 'piątek'
+        break
+      case 6:
+        dayName = 'sobota'
+        break
+    }
+    return dayName
+  }
 }
 
 const styles = {
   dayContainer: {
-    display:         'inline-block',
-    color:           '#D0011B',
-    border:          '1px solid #D0011B',
-    textAlign:       'center',
-    padding:         3,
-    marginRight:     44,
-    borderRadius:    2,
-    width:           80
+    display:      'inline-block',
+    color:        '#D0011B',
+    border:       '1px solid #D0011B',
+    textAlign:    'center',
+    padding:      3,
+    marginRight:  44,
+    borderRadius: 2,
+    width:        90
   },
   day: {
-    fontSize:  18
+    fontSize: 18
   },
   input: {
     textAlign:       'center',
@@ -121,4 +119,3 @@ const styles = {
     transform: 'translateY(-50%)'
   }
 }
-

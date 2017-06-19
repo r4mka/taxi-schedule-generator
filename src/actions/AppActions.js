@@ -164,6 +164,27 @@ const Actions = {
     AppDispatcher.dispatch({
       actionType: AppActionTypes.HIDE_CREATE_SCHEDULE_EXCEPTION
     })
+  },
+  setScheduleException (exception) {
+    console.log('setScheduleException')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.SET_SCHEDULE_EXCEPTION,
+      exception:  exception
+    })
+  },
+  addScheduleException (exception) {
+    console.log('addScheduleException')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.ADD_SCHEDULE_EXCEPTION,
+      exception:  exception
+    })
+  },
+  deleteScheduleException (dayDate) {
+    console.log('deleteScheduleException')
+    AppDispatcher.dispatch({
+      actionType: AppActionTypes.DELETE_SCHEDULE_EXCEPTION,
+      dayDate:    dayDate
+    })
   }
 }
 

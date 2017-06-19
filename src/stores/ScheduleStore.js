@@ -11,7 +11,6 @@ class ScheduleStore extends BaseStore {
     this._year = _now.getFullYear().toString()
     this._month = utils.monthToString(_now.getMonth() + 1).toLowerCase()
     this._message = ''
-    // how to determine ?
     this._previousScheduleDriver = ''
     this._numberOfDriversPerAllDays = ''
     this._numberOfDriversPerFridayNight = ''
@@ -21,6 +20,11 @@ class ScheduleStore extends BaseStore {
     this._showCreateScheduleException = false
     this._previousMonthDrivers = []
     this._scheduleExceptions = []
+    this._scheduleException = {
+      dayDate:          '',
+      dayDrivers:       '',
+      nocturnalDrivers: ''
+    }
 
     this._selectableDays = this._populateSelectableDays(_now.getFullYear(), _now.getMonth() + 1)
     this._selectableMonths = [
@@ -97,10 +101,31 @@ class ScheduleStore extends BaseStore {
         this._showCreateScheduleException = false
         break
 
+      case AppActionTypes.SET_SCHEDULE_EXCEPTION:
+        this._setScheduleException(action.exception)
+        break
+
+      case AppActionTypes.ADD_SCHEDULE_EXCEPTION:
+        this._scheduleExceptions.push(action.exception)
+        break
+
+      case AppActionTypes.DELETE_SCHEDULE_EXCEPTION:
+        _.remove(this._scheduleExceptions, {dayDate: action.dayDate})
+        break
+
       default:
         return
     }
     this.emitChange()
+  }
+
+  _setScheduleException (exception) {
+    for (let property in exception) {
+      if (this._scheduleException.hasOwnProperty(property) &&
+          exception.hasOwnProperty(property)) {
+        this._scheduleException[property] = exception[property]
+      }
+    }
   }
 
   _populateSelectableDays (year, month) {
@@ -169,6 +194,14 @@ class ScheduleStore extends BaseStore {
 
   get selectableDays () {
     return this._selectableDays
+  }
+
+  get scheduleException () {
+    return this._scheduleException
+  }
+
+  get scheduleExceptions () {
+    return this._scheduleExceptions
   }
 }
 

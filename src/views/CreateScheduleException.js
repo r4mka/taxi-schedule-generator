@@ -12,7 +12,8 @@ export default class CreateScheduleException extends React.Component {
 
           <CommonSelector
             placeholder='Wybierz dzień'
-            value={this.props.day}
+            name='dayDate'
+            value={this.props.dayDate}
             onChange={this.props.setScheduleException}
             options={this.props.selectableDays} />
 
@@ -23,6 +24,7 @@ export default class CreateScheduleException extends React.Component {
             <input
               type='number'
               min='0'
+              name='dayDrivers'
               style={{width: 80}}
               className='text-input'
               value={this.props.dayDrivers}
@@ -36,6 +38,7 @@ export default class CreateScheduleException extends React.Component {
             <input
               type='number'
               min='0'
+              name='nocturnalDrivers'
               style={{width: 80}}
               className='text-input'
               value={this.props.nocturnalDrivers}
@@ -51,7 +54,11 @@ export default class CreateScheduleException extends React.Component {
             type='button'
             className='regular-btn'
             value='DODAJ'
-            onClick={this.props.addScheduleException} />
+            onClick={() => this.props.addScheduleException({
+              dayDate:          this.props.dayDate,
+              dayDrivers:       this.props.dayDrivers,
+              nocturnalDrivers: this.props.nocturnalDrivers
+            })} />
         </div>
       </div>
     )

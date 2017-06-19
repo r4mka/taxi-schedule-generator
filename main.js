@@ -105,15 +105,15 @@ ipcMain.on('browse-schedules', (event) => {
 function _createSchedulesDirectory (_path, done) {
   fs.stat(_path, (err, stats) => {
     if (err) {
-      if (err.code !== 'ENOENT') return done(err) 
+      if (err.code !== 'ENOENT') return done(err)
 
       fs.mkdir(_path, done)
     }
 
-    if (!stats.isDirectory()) {
+    if (stats && !stats.isDirectory()) {
       return done(new Error(_path + ' is not a directory'))
-    } 
-    
+    }
+
     done()
   })
 }
