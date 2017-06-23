@@ -23,9 +23,9 @@ export default class ScheduleException extends React.Component {
           </span>
         </div>
         <div style={styles.container}>
-          <div style={{display: 'inline-block', marginRight: 24}}>
-            <label style={{marginRight: 12}}>
-              d. dzienne
+          <div style={{display: 'inline-block', marginRight: 18}}>
+            <label style={{marginRight: 8}}>
+              dyżury dzienne
             </label>
             <input
               disabled
@@ -34,8 +34,8 @@ export default class ScheduleException extends React.Component {
               value={this.props.dayDrivers} />
           </div>
           <div style={{display: 'inline-block'}}>
-            <label style={{marginRight: 12}}>
-              d. nocne
+            <label style={{marginRight: 8}}>
+              dyżury nocne
             </label>
             <input
               disabled
@@ -91,7 +91,7 @@ const styles = {
     border:       '1px solid #D0011B',
     textAlign:    'center',
     padding:      3,
-    marginRight:  44,
+    marginRight:  18,
     borderRadius: 2,
     width:        90
   },

@@ -1,4 +1,3 @@
-import config       from 'config'
 import _            from 'lodash'
 import path         from 'path'
 import utils        from '../utils'
@@ -13,11 +12,11 @@ class StorageService {
     let dbPath
     if (process.env.NODE_ENV === 'production') {
       const userDataPath = remote.app.getPath('userData')
-      dbPath = path.join(userDataPath, 'datastore.bin')  
+      dbPath = path.join(userDataPath, 'datastore.bin')
     } else {
       dbPath = './app/datastore/datastore.bin'
     }
-    
+
     this.database = new Datastore({
       filename: dbPath,
       autoload: true
@@ -139,6 +138,7 @@ class StorageService {
     const scheduleDoc = {}
     scheduleDoc.docType = 'schedule'
     scheduleDoc.filename = options.filename
+    scheduleDoc.exceptions = options.scheduleExceptions
     scheduleDoc.date = {
       year:        options.year,
       month:       options.month,

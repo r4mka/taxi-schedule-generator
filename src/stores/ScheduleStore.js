@@ -132,15 +132,10 @@ class ScheduleStore extends BaseStore {
     const daysInMonth    = new Date(year, month + 1, 0).getDate()
     const selectableDays = []
 
-    console.log('year: ' + year)
-    console.log('month: ' + month)
-    console.log('days: ' + daysInMonth)
-
     for (let i = 1; i <= daysInMonth; i++) {
       selectableDays.push(i)
     }
 
-    console.log(selectableDays)
     return selectableDays
   }
 

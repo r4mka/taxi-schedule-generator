@@ -62,7 +62,7 @@ function createSchedule (options, done) {
           colsWidth.push(9)
         }
 
-        const margins = daysInMonth === 31 ? 6 : 15 
+        const margins = daysInMonth === 31 ? 6 : 15
         const pdfDefinition = {
           pageMargins: [ margins, 68, margins, 65 ],
           header:      [
@@ -117,11 +117,14 @@ function _createScheduleTable (scheduleDocument, done) {
   const year        = parseInt(scheduleDocument.date.year)
   const month       = utils.monthToNum(scheduleDocument.date.month)
   const daysInMonth = scheduleDocument.date.daysInMonth
+  const exceptions  = scheduleDocument.exceptions
   const days        = ['PT', 'SO', 'ND', 'PN', 'WT', 'SR', 'CZ']
 
   // console.log('year: ' + year)
   // console.log('month: ' + (parseInt(month) + 1))
   // console.log('daysInMonth: ' + daysInMonth)
+  console.log('Schedule exceptions:')
+  console.log(exceptions)
 
   // create schedule header
   const _header = _createScheduleHeader(year, month, daysInMonth)
@@ -140,6 +143,7 @@ function _createScheduleTable (scheduleDocument, done) {
   let nightsNum     = 0
   let dayOfTheMonth = -1
   let nextDay       = true
+  let currentDay    = 'PT'
 
   // start from spiecified driver
   let startFromIndex
@@ -163,31 +167,38 @@ function _createScheduleTable (scheduleDocument, done) {
     dayOfTheMonth = 0
     assignedNs = 0
     nightsNum = 0
-
-    // the number of drivers per nights
-    switch (day) {
-      case 'PT':
-        nightsNum = scheduleDocument.options.fridayNightNum
-        break
-      case 'SO':
-        nightsNum = scheduleDocument.options.saturdayNightNum
-        break
-      default:
-        nightsNum = scheduleDocument.options.otherNightsNum
-    }
-
-    nightsNum = parseInt(nightsNum)
-    // console.log('nightsNum: ' + nightsNum)
+    currentDay = day
 
     while (true) {
-      // console.log('dayOfTheMonth: ' + dayOfTheMonth)
+      console.log('dayOfTheMonth: ' + dayOfTheMonth)
       if (nextDay) {
         // find index of selected day in days row (body[3])
         dayOfTheMonth = _.indexOf(body[3], day, fromIndex)
-        if (dayOfTheMonth === -1) break
+        if (dayOfTheMonth === -1) break // search for another day name (PT, SO, ...)
+
+        const exc = _.find(exceptions, (exc) => parseInt(exc.dayDate) === dayOfTheMonth)
+        if (exc !== undefined) {
+          console.log('EXCEPTION !')
+          console.log(exc)
+
+          nightsNum = exc.nocturnalDrivers
+        } else {
+          // the number of drivers per nights
+          switch (currentDay) {
+            case 'PT':
+              nightsNum = scheduleDocument.options.fridayNightNum
+              break
+            case 'SO':
+              nightsNum = scheduleDocument.options.saturdayNightNum
+              break
+            default:
+              nightsNum = scheduleDocument.options.otherNightsNum
+          }
+        }
 
         nextDay = false
         fromIndex = dayOfTheMonth + 1
+        nightsNum = parseInt(nightsNum)
       } else {
         // start from first driver in table
         startFromIndex = 4
@@ -225,11 +236,9 @@ function _createScheduleTable (scheduleDocument, done) {
     }
   })
 
-  const previousMonthDrivers = scheduleDocument.options.previousMonthDrivers
-  // console.log('previousMonthDrivers: ')
-  // console.log(previousMonthDrivers)
-  const daysNum  = parseInt(scheduleDocument.options.allDaysNum)
+  let daysNum    = 0
   let assignedDs = 0
+  const previousMonthDrivers = scheduleDocument.options.previousMonthDrivers
 
   nextDay = true
   startFromIndex = 4
@@ -241,6 +250,16 @@ function _createScheduleTable (scheduleDocument, done) {
       dayOfTheMonth++
       // console.log('day: ' + dayOfTheMonth)
       if (dayOfTheMonth > daysInMonth) break
+
+      const exc = _.find(exceptions, (exc) => parseInt(exc.dayDate) === dayOfTheMonth)
+      if (exc !== undefined) {
+        console.log('EXCEPTION !')
+        console.log(exc)
+
+        daysNum = parseInt(exc.dayDrivers)
+      } else {
+        daysNum = parseInt(scheduleDocument.options.allDaysNum)
+      }
     } else {
       startFromIndex = 4
     }

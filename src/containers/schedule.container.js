@@ -1,4 +1,5 @@
 import React                   from 'react'
+import _                       from 'lodash'
 import utils                   from '../utils'
 import ScheduleStore           from '../stores/ScheduleStore'
 import StorageService          from '../services/StorageService'
@@ -201,9 +202,6 @@ export default class ScheduleContainer extends React.Component {
   setScheduleException (event) {
     const name   = event.target.name
     const value  = event.target.value
-
-    console.log('name: ' + name)
-    console.log('value: ' + value)
 
     AppActions.setScheduleException({ [name]: value })
   }
@@ -449,11 +447,18 @@ export default class ScheduleContainer extends React.Component {
     }
   }
 
-  _validateScheduleExceptionInput ({ dayDrivers, nocturnalDrivers }) {
+  _validateScheduleExceptionInput ({ dayDate, dayDrivers, nocturnalDrivers }) {
     let isValid    = true
     let message    = ''
     const empty    = 'Uzupełnij wszystkie pola.'
     const negative = 'Liczba kierowców nie może być ujemna'
+
+    const index = _.findIndex(this.state.scheduleExceptions,
+      (exc) => exc.dayDate === dayDate)
+    if (index !== -1) {
+      isValid = false
+      message = 'Wyjątek na ten dzień już istnieje'
+    }
 
     if (dayDrivers.trim().length === 0) {
       isValid = false
