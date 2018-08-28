@@ -15,7 +15,7 @@ const dialog        = electron.dialog
 
 const userDataPath  = (electron.app || electron.remote.app).getPath('userData')
 const schedulesPath = path.join(userDataPath)
-const fontsPath     = path.join(__dirname, '..', '..', 'fonts')
+const fontsPath     = path.join(__dirname, 'app', 'fonts')
 
 // const fontsPath = path.join(__dirname, 'app', 'fonts')
 // console.log(fontsPath)

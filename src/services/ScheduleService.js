@@ -57,15 +57,16 @@ function createSchedule (options, done) {
         if (err) return done(err)
 
         const colsWidth = []
-        colsWidth[0] = 15
+        colsWidth[0] = 18
 
         // set columns width to 'auto'
         for (let i = 1; i < daysInMonth + 1; i++) {
-          colsWidth.push(9)
+          colsWidth.push(8)
         }
 
+        const margins = daysInMonth === 31 ? 15 : 25
         const pdfDefinition = {
-          pageMargins: [ 15, 70, 15, 65 ],
+          pageMargins: [ margins, 68, margins, 65 ],
           header:      [
             {
               style: 'custom',
@@ -73,7 +74,7 @@ function createSchedule (options, done) {
                 widths: colsWidth,
                 body:   scheduleHeader
               },
-              margin: [ 15, 10, 15, 0 ]
+              margin: [ margins, 6, margins, 0 ]
             }
           ],
           footer: [
@@ -81,7 +82,7 @@ function createSchedule (options, done) {
               text:     options.message,
               fontSize: 12,
               bold:     true,
-              margin:   [15, 5, 15, 10]
+              margin:   [margins, 5, margins, 10]
             }
           ],
           content: [
