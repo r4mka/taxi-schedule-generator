@@ -179,6 +179,10 @@ function _createScheduleTable (scheduleDocument, done) {
     nightsNum = parseInt(nightsNum)
     // console.log('nightsNum: ' + nightsNum)
 
+    if (nightsNum === 0) {
+      return
+    }
+
     while (true) {
       // console.log('dayOfTheMonth: ' + dayOfTheMonth)
       if (nextDay) {
